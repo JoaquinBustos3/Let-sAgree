@@ -1,0 +1,12 @@
+export interface DeliveryCard {
+  name: string;
+  description: string;
+  cuisine: string;
+  priceRange: "$" | "$$" | "$$$";
+  deliveryTime: string; // e.g. "30–40 mins"
+  deliveryPlatform: string; // e.g. "Uber Eats"
+  rating: number;
+  distance: string;
+  imagePrompt: string;
+  imageUrl?: string;
+}

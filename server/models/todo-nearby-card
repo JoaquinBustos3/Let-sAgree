@@ -1,0 +1,12 @@
+export interface LocalActivityCard {
+  name: string;
+  description: string;
+  category: string; // "museum", "arcade", etc.
+  price: string;
+  distance: string;
+  rating: number;
+  hours: string; // e.g. "10am–8pm"
+  vibe: string;
+  imagePrompt: string;
+  imageUrl?: string;
+}

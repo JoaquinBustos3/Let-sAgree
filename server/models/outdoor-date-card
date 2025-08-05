@@ -1,0 +1,12 @@
+export interface OutdoorDateCard {
+  title: string;
+  description: string;
+  vibe: string;
+  cost: string;
+  distance: string;
+  duration: string;
+  bestTime: string; // "day", "sunset", etc.
+  locationType: string; // "park", "beach", etc.
+  imagePrompt: string;
+  imageUrl?: string;
+}

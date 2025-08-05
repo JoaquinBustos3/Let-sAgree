@@ -1,0 +1,12 @@
+export interface MovieCard {
+  title: string;
+  synopsis: string;
+  genre: string;
+  rating: string;
+  runtime: string;
+  releaseYear: number;
+  platform: string; // i.e. Netflix
+  vibe: string;
+  imageUrl?: string;
+  imagePrompt: string;
+}

@@ -1,0 +1,12 @@
+export interface RestaurantCard {
+  name: string;
+  description: string;
+  cuisine: string;
+  priceRange: "$" | "$$" | "$$$";
+  vibe: string;
+  distance: string;
+  location: string;
+  rating: number;
+  imageUrl?: string;      // Result of AI generation
+  imagePrompt: string;    // Prompt to generate image
+}

@@ -1,0 +1,12 @@
+export interface IndoorDateCard {
+  title: string;
+  description: string;
+  vibe: string;
+  cost: string; // e.g. "$", "Low"
+  duration: string;
+  supplies: string[];
+  idealTime: string; // "evening", "late night"
+  messLevel: "clean" | "some cleanup" | "very messy";
+  imagePrompt: string;
+  imageUrl?: string;
+}

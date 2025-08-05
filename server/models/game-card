@@ -1,0 +1,12 @@
+export interface GameCard {
+  title: string;
+  type: "board" | "video" | "card";
+  description: string;
+  vibe: string;
+  playerCount: string; // "2–4", "Multiplayer"
+  averagePlaytime: string; // "30 mins"
+  platform?: string; // if video game
+  difficulty: "easy" | "medium" | "hard";
+  imagePrompt: string;
+  imageUrl?: string;
+}

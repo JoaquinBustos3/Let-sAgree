@@ -1,0 +1,12 @@
+export interface WeekendTripCard {
+  destination: string;
+  description: string;
+  travelTime: string; // e.g. "2 hours"
+  vibe: string;
+  cost: string; // "$$", "$$$"
+  mainAttractions: string[];
+  season: string;
+  lodging: string; // "hotel", "Airbnb"
+  imagePrompt: string;
+  imageUrl?: string;
+}
