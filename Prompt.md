@@ -22,6 +22,13 @@ Follow these naming conventions for **all code**, across frontend and backend:
 
 ---
 
+## 🧑‍💻 Formatting & Style Conventions
+
+- Always follow the project's `.prettierrc` configuration for code formatting (e.g., 4 spaces for indentation, no tabs).
+- Ensure all code contributions are formatted consistently using Prettier or your editor's formatting tools.
+
+---
+
 ## 📝 Project: Let'sAgree
 
 **Let’sAgree** is a fast-paced, fun web app designed for couples, partners, or friends (with future group support). It helps users find agreement on a topic (e.g., what to eat, what to watch) through a decision-making game that combines generative AI and user interaction.
@@ -97,9 +104,13 @@ Follow these naming conventions for **all code**, across frontend and backend:
   - Animate final selection
 
 - **AI Request Layer (Express)**
-  - Preprocess prompts
-  - Send requests to AI
-  - Postprocess responses and validate against schemas
+  - Get chosen Category
+  - Get User input
+  - Use Mistral AI running locally (DEV) to transform input to structured Prompt-Input model
+  - Validate with Zod or other tool
+  - Use Mistral AI running locally (DEV) to transform Prompt-Input input into multiple outputs of the specific Category model
+  - Validate with Zod or other tool
+  - Return output to be used for Cards in UI
 
 - **Server (Express)** (Optional for MVP)
   - Could manage user sessions, multiplayer sync, saved sets, etc.

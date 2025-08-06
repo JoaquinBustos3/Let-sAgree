@@ -1,3 +1,22 @@
+import { z } from 'zod';
+
+export const deliveryCardSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  cuisine: z.string(),
+  priceRange: z.enum(['$', '$$', '$$$']),
+  deliveryTime: z.string(),
+  deliveryPlatform: z.string(),
+  rating: z.number(),
+  distance: z.string(),
+  imagePrompt: z.string(),
+  imageUrl: z.string().optional(),
+});
+
+export type DeliveryCard = z.infer<typeof deliveryCardSchema>;
+
+// JSON Shape of the Model
+/**
 export interface DeliveryCard {
   name: string;
   description: string;
@@ -10,3 +29,4 @@ export interface DeliveryCard {
   imagePrompt: string;
   imageUrl?: string;
 }
+ */

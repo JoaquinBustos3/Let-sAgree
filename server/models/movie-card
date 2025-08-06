@@ -1,3 +1,22 @@
+import { z } from 'zod';
+
+export const movieCardSchema = z.object({
+  title: z.string(),
+  synopsis: z.string(),
+  genre: z.string(),
+  rating: z.string(),
+  runtime: z.string(),
+  releaseYear: z.number(),
+  platform: z.string(),
+  vibe: z.string(),
+  imageUrl: z.string().optional(),
+  imagePrompt: z.string(),
+});
+
+export type MovieCard = z.infer<typeof movieCardSchema>;
+
+// JSON Shape of the Model
+/**
 export interface MovieCard {
   title: string;
   synopsis: string;
@@ -10,3 +29,4 @@ export interface MovieCard {
   imageUrl?: string;
   imagePrompt: string;
 }
+ */

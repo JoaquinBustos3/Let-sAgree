@@ -1,7 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const promptInputController = require('../controllers/prompt-input-controller');
+const promptInputController = require("../controllers/prompt-input-controller");
 
-router.post('/', promptInputController.receivePromptInput);
+// Accept category as a path variable
+router.post("/:category", promptInputController.receivePromptInput);
 
 module.exports = router;

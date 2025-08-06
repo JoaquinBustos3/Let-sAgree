@@ -1,3 +1,22 @@
+import { z } from 'zod';
+
+export const localActivityCardSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  category: z.string(),
+  price: z.string(),
+  distance: z.string(),
+  rating: z.number(),
+  hours: z.string(),
+  vibe: z.string(),
+  imagePrompt: z.string(),
+  imageUrl: z.string().optional(),
+});
+
+export type LocalActivityCard = z.infer<typeof localActivityCardSchema>;
+
+// JSON Shape of the Model
+/**
 export interface LocalActivityCard {
   name: string;
   description: string;
@@ -10,3 +29,4 @@ export interface LocalActivityCard {
   imagePrompt: string;
   imageUrl?: string;
 }
+ */

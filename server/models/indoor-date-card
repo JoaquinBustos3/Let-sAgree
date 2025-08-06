@@ -1,3 +1,22 @@
+import { z } from 'zod';
+
+export const indoorDateCardSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  vibe: z.string(),
+  cost: z.string(),
+  duration: z.string(),
+  supplies: z.array(z.string()),
+  idealTime: z.string(),
+  messLevel: z.enum(['clean', 'some cleanup', 'very messy']),
+  imagePrompt: z.string(),
+  imageUrl: z.string().optional(),
+});
+
+export type IndoorDateCard = z.infer<typeof indoorDateCardSchema>;
+
+// JSON Shape of the Model
+/**
 export interface IndoorDateCard {
   title: string;
   description: string;
@@ -10,3 +29,4 @@ export interface IndoorDateCard {
   imagePrompt: string;
   imageUrl?: string;
 }
+ */

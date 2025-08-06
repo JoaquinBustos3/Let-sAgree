@@ -1,3 +1,22 @@
+import { z } from 'zod';
+
+export const weekendTripCardSchema = z.object({
+  destination: z.string(),
+  description: z.string(),
+  travelTime: z.string(),
+  vibe: z.string(),
+  cost: z.string(),
+  mainAttractions: z.array(z.string()),
+  season: z.string(),
+  lodging: z.string(),
+  imagePrompt: z.string(),
+  imageUrl: z.string().optional(),
+});
+
+export type WeekendTripCard = z.infer<typeof weekendTripCardSchema>;
+
+// JSON Shape of the Model
+/**
 export interface WeekendTripCard {
   destination: string;
   description: string;
@@ -10,3 +29,4 @@ export interface WeekendTripCard {
   imagePrompt: string;
   imageUrl?: string;
 }
+ */

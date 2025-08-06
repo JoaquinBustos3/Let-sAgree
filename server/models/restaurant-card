@@ -1,3 +1,22 @@
+import { z } from 'zod';
+
+export const restaurantCardSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  cuisine: z.string(),
+  priceRange: z.enum(['$', '$$', '$$$']),
+  vibe: z.string(),
+  distance: z.string(),
+  location: z.string(),
+  rating: z.number(),
+  imageUrl: z.string().optional(),
+  imagePrompt: z.string(),
+});
+
+export type RestaurantCard = z.infer<typeof restaurantCardSchema>;
+
+// JSON Shape of the Model
+/**
 export interface RestaurantCard {
   name: string;
   description: string;
@@ -10,3 +29,4 @@ export interface RestaurantCard {
   imageUrl?: string;      // Result of AI generation
   imagePrompt: string;    // Prompt to generate image
 }
+ */

@@ -1,0 +1,32 @@
+import { z } from 'zod';
+
+export const showCardSchema = z.object({
+  title: z.string(),
+  synopsis: z.string(),
+  genre: z.string(),
+  seasons: z.number(),
+  episodeLength: z.string(),
+  platform: z.string(),
+  vibe: z.string(),
+  releaseYear: z.number(),
+  imagePrompt: z.string(),
+  imageUrl: z.string().optional(),
+});
+
+export type ShowCard = z.infer<typeof showCardSchema>;
+
+// JSON Shape of the Model
+/**
+export interface ShowCard {
+  title: string;
+  synopsis: string;
+  genre: string;
+  seasons: number;
+  episodeLength: string; // e.g. "30 mins"
+  platform: string;
+  vibe: string;
+  releaseYear: number;
+  imagePrompt: string;
+  imageUrl?: string;
+}
+ */

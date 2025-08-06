@@ -1,3 +1,22 @@
+import { z } from 'zod';
+
+export const outdoorDateCardSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  vibe: z.string(),
+  cost: z.string(),
+  distance: z.string(),
+  duration: z.string(),
+  bestTime: z.string(),
+  locationType: z.string(),
+  imagePrompt: z.string(),
+  imageUrl: z.string().optional(),
+});
+
+export type OutdoorDateCard = z.infer<typeof outdoorDateCardSchema>;
+
+// JSON Shape of the Model
+/**
 export interface OutdoorDateCard {
   title: string;
   description: string;
@@ -10,3 +29,4 @@ export interface OutdoorDateCard {
   imagePrompt: string;
   imageUrl?: string;
 }
+ */
