@@ -1,6 +1,7 @@
-const { preprocessPromptInput } = require("../ai/pre-process");
+import type { Request, Response } from "express";
+import { preprocessPromptInput } from "../ai/pre-process";
 
-exports.receivePromptInput = async (req, res) => {
+const receivePromptInput = async (req: Request, res: Response) => {
     const { category } = req.params;
     const { input } = req.body;
 
@@ -15,6 +16,7 @@ exports.receivePromptInput = async (req, res) => {
             .json({ error: "Input must be a non-empty string." });
     }
 
+    console.log("Invoking PREPROCESSING PROMPT INPUT");
     const result = await preprocessPromptInput(input, category);
 
     if (!result.ok) {
@@ -28,3 +30,5 @@ exports.receivePromptInput = async (req, res) => {
 
     res.json(result.data);
 };
+
+export default { receivePromptInput };

@@ -1,9 +1,9 @@
-const { promptInputSchema } = require("../models/prompt-input.ts");
-const fetch = require("node-fetch");
+import { promptInputSchema } from "../models/prompt-input";
+import fetch from "node-fetch"; // If using Node.js <18; for Node.js 18+, you can remove this line and use global fetch
 
-async function preprocessPromptInput(input, category) {
+export async function preprocessPromptInput(input: string, category: string) {
     // Compose the prompt for Mistral AI
-    //TODO: Narrow the AI prompt to peform exactly what we want
+    //TODO: Narrow the AI prompt to perform exactly what we want
     const prompt = `
 Transform the following user input into a structured JSON object that conforms to this TypeScript Zod schema:
 
@@ -15,7 +15,7 @@ Category: "${category}"
 Respond ONLY with the JSON object, no extra text.
 `;
 
-    let aiResponse;
+    let aiResponse: string;
     try {
         const response = await fetch("http://localhost:11434/api/generate", {
             method: "POST",
@@ -33,11 +33,12 @@ Respond ONLY with the JSON object, no extra text.
             throw new Error(`Mistral API error: ${response.status} ${response.statusText}`);
         }
 
-        const data = await response.json();
+        // Explicitly type the response as any to avoid TS error
+        const data: any = await response.json();
         aiResponse = data.response;
 
         // Try to parse the AI's response as JSON
-        let parsed;
+        let parsed: unknown;
         try {
             parsed = JSON.parse(aiResponse);
         } catch (err) {
@@ -53,12 +54,9 @@ Respond ONLY with the JSON object, no extra text.
             );
         }
 
+        console.log("AI response:", validated.data);
         return { ok: true, data: validated.data };
-    } catch (err) {
+    } catch (err: any) {
         return { ok: false, error: err.message };
     }
 }
-
-module.exports = {
-    preprocessPromptInput,
-};
