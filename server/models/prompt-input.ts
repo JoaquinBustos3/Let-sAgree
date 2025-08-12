@@ -1,23 +1,24 @@
 import { z } from "zod";
 
 export const promptInputSchema = z.object({
-    category: z.enum([
-        "Restaurants",
-        "Takeout/Delivery",
-        "Shows",
-        "Movies",
-        "Indoor Date Activites",
-        "Outdoor Date Activities, Things To Do Nearby",
-        "Weekend Trip Ideas",
-        "Games"
-    ]),
-    filters: z
-        .object({
-            priceRange: z.string().optional(),
-            vibe: z.string().optional(),
-            location: z.string().optional(),
-        })
-        .catchall(z.string().optional()), // ✅ allows any other string keys too
+  category: z.enum([
+    "Restaurants",
+    "Takeout/Delivery",
+    "Shows",
+    "Movies",
+    "Indoor Date Activites",
+    "Outdoor Date Activities, Things To Do Nearby",
+    "Weekend Trip Ideas",
+    "Games"
+  ]),
+  filters: z.intersection(
+    z.object({
+      priceRange: z.string().optional(),
+      vibe: z.string().optional(),
+      location: z.string().optional(),
+    }),
+    z.record(z.string(), z.string().optional()) // allows any other string keys with optional string values
+  ),
 });
 
 // Optional: infer the validated TS type

@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config({ path: __dirname + "/.env" });
+
 import express from "express";
 import type { Request, Response } from "express";
 import categoriesRouter from "./routes/categories";

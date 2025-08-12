@@ -1,13 +1,33 @@
 import { promptInputSchema } from "../models/prompt-input";
-import fetch from "node-fetch"; // If using Node.js <18; for Node.js 18+, you can remove this line and use global fetch
+import dotenv from "dotenv";
+import { OpenAI } from "openai";
+import { zodResponseFormat } from "openai/helpers/zod";
+import { z } from "zod";
+
+dotenv.config();
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 export async function preprocessPromptInput(input: string, category: string) {
-    // Compose the prompt for Mistral AI
-    //TODO: Narrow the AI prompt to perform exactly what we want
-    const prompt = `
-Transform the following user input into a structured JSON object that conforms to this TypeScript Zod schema:
 
-${promptInputSchema.toString()}
+ const simpleSchema = z.object({
+  answer: z.string(),
+});
+
+const promptJson = `export interface PromptInput {
+    category: "Restaurants" | "Takeout/Delivery" | "Shows" | "Movies" | "Indoor Date Activites" |
+        "Outdoor Date Activities, Things To Do Nearby" | "Weekend Trip Ideas" | "Games";
+    filters: {
+        priceRange?: string;
+        vibe?: string;
+        location?: string;
+        [key: string]: string | undefined;
+    };
+}`;
+
+const prompt = `
+Transform the following user input into a structured JSON object that conforms to this TypeScript interface:
+${promptJson}
 
 User input: "${input}"
 Category: "${category}"
@@ -15,32 +35,41 @@ Category: "${category}"
 Respond ONLY with the JSON object, no extra text.
 `;
 
-    let aiResponse: string;
     try {
-        const response = await fetch("http://localhost:11434/api/generate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                model: "mistral",
-                prompt,
-                max_tokens: 300,
-                temperature: 0.3,
-                stream: false,
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error(`Mistral API error: ${response.status} ${response.statusText}`);
+        if (!OPENAI_API_KEY) {
+            throw new Error("Missing OpenAI API key in environment variables.");
         }
 
-        // Explicitly type the response as any to avoid TS error
-        const data: any = await response.json();
-        aiResponse = data.response;
+        const client = new OpenAI({ apiKey: OPENAI_API_KEY });
+
+        const completion = await client.chat.completions.parse({
+            model: "gpt-4o-mini", // Use a model that supports structured output and refusals
+            messages: [
+                { role: "system", content: "You are a helpful assistant that only returns valid JSON." },
+                { role: "user", content: prompt }
+            ],
+            // response_format: zodResponseFormat(promptInputSchema, "prompt_input")
+            response_format: zodResponseFormat(simpleSchema, "simple_response"),
+            //TODO 
+        });
+        
+
+        const aiResponse = completion.choices?.[0]?.message?.content;
+        if (!aiResponse) {
+            throw new Error("No response from OpenAI.");
+        }
+
+        // Check for refusal in the message object
+        const messageObj = completion.choices?.[0]?.message as any;
+        if (messageObj && messageObj.refusal) {
+            console.log("AI refusal:", messageObj.refusal);
+            return { ok: false, error: messageObj.refusal };
+        }
 
         // Try to parse the AI's response as JSON
         let parsed: unknown;
         try {
-            parsed = JSON.parse(aiResponse);
+            parsed = typeof aiResponse === "string" ? JSON.parse(aiResponse) : aiResponse;
         } catch (err) {
             throw new Error("AI response is not valid JSON.");
         }

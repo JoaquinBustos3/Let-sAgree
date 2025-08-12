@@ -16,7 +16,6 @@ const receivePromptInput = async (req: Request, res: Response) => {
             .json({ error: "Input must be a non-empty string." });
     }
 
-    console.log("Invoking PREPROCESSING PROMPT INPUT");
     const result = await preprocessPromptInput(input, category);
 
     if (!result.ok) {
