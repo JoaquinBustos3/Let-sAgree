@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { preprocessPromptInput } from "../ai/pre-process";
+import { preprocessPromptInput } from "../ai/pre-process"; // Make sure this is a named import
 
 const receivePromptInput = async (req: Request, res: Response) => {
     const { category } = req.params;

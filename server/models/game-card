@@ -1,16 +1,16 @@
 import { z } from 'zod';
 
 export const gameCardSchema = z.object({
-  title: z.string(),
+  title: z.string().nullable(),
   type: z.enum(['board', 'video', 'card']),
-  description: z.string(),
-  vibe: z.string(),
-  playerCount: z.string(),
-  averagePlaytime: z.string(),
-  platform: z.string().optional(),
-  difficulty: z.enum(['easy', 'medium', 'hard']),
-  imagePrompt: z.string(),
-  imageUrl: z.string().optional(),
+  description: z.string().nullable(),
+  vibe: z.string().nullable(),
+  playerCount: z.string().nullable(),
+  averagePlaytime: z.string().nullable(),
+  platform: z.string().nullable(),
+  difficulty: z.enum(['easy', 'medium', 'hard']).nullable(),
+  imagePrompt: z.string().nullable(),
+  imageUrl: z.string().nullable(),
 });
 
 export type GameCard = z.infer<typeof gameCardSchema>;

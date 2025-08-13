@@ -1,16 +1,16 @@
 import { z } from 'zod';
 
 export const deliveryCardSchema = z.object({
-  name: z.string(),
-  description: z.string(),
-  cuisine: z.string(),
-  priceRange: z.enum(['$', '$$', '$$$']),
-  deliveryTime: z.string(),
-  deliveryPlatform: z.string(),
-  rating: z.number(),
-  distance: z.string(),
-  imagePrompt: z.string(),
-  imageUrl: z.string().optional(),
+  name: z.string().nullable(),
+  description: z.string().nullable(),
+  cuisine: z.string().nullable(),
+  priceRange: z.enum(['$', '$$', '$$$']).nullable(),
+  deliveryTime: z.string().nullable(),
+  deliveryPlatform: z.string().nullable(),
+  rating: z.number().nullable(),
+  distance: z.string().nullable(),
+  imagePrompt: z.string().nullable(),
+  imageUrl: z.string().nullable(),
 });
 
 export type DeliveryCard = z.infer<typeof deliveryCardSchema>;

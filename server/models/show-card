@@ -1,16 +1,16 @@
 import { z } from 'zod';
 
 export const showCardSchema = z.object({
-  title: z.string(),
-  synopsis: z.string(),
-  genre: z.string(),
-  seasons: z.number(),
-  episodeLength: z.string(),
-  platform: z.string(),
-  vibe: z.string(),
-  releaseYear: z.number(),
-  imagePrompt: z.string(),
-  imageUrl: z.string().optional(),
+  title: z.string().nullable(),
+  description: z.string().nullable(),
+  genre: z.string().nullable(),
+  seasons: z.number().nullable(),
+  episodeLength: z.string().nullable(),
+  platform: z.string().nullable(),
+  vibe: z.string().nullable(),
+  releaseYear: z.number().nullable(),
+  imagePrompt: z.string().nullable(),
+  imageUrl: z.string().nullable(),
 });
 
 export type ShowCard = z.infer<typeof showCardSchema>;
@@ -19,7 +19,7 @@ export type ShowCard = z.infer<typeof showCardSchema>;
 /**
 export interface ShowCard {
   title: string;
-  synopsis: string;
+  description: string;
   genre: string;
   seasons: number;
   episodeLength: string; // e.g. "30 mins"

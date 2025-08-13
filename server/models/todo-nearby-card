@@ -1,16 +1,16 @@
 import { z } from 'zod';
 
 export const localActivityCardSchema = z.object({
-  name: z.string(),
-  description: z.string(),
-  category: z.string(),
-  price: z.string(),
-  distance: z.string(),
-  rating: z.number(),
-  hours: z.string(),
-  vibe: z.string(),
-  imagePrompt: z.string(),
-  imageUrl: z.string().optional(),
+  name: z.string().nullable(),
+  description: z.string().nullable(),
+  category: z.string().nullable(),
+  price: z.string().nullable(),
+  distance: z.string().nullable(),
+  rating: z.number().nullable(),
+  hours: z.string().nullable(),
+  vibe: z.string().nullable(),
+  imagePrompt: z.string().nullable(),
+  imageUrl: z.string().nullable(),
 });
 
 export type LocalActivityCard = z.infer<typeof localActivityCardSchema>;

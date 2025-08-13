@@ -1,16 +1,16 @@
 import { z } from 'zod';
 
 export const movieCardSchema = z.object({
-  title: z.string(),
-  synopsis: z.string(),
-  genre: z.string(),
-  rating: z.string(),
-  runtime: z.string(),
-  releaseYear: z.number(),
-  platform: z.string(),
-  vibe: z.string(),
-  imageUrl: z.string().optional(),
-  imagePrompt: z.string(),
+  title: z.string().nullable(),
+  description: z.string().nullable(),
+  genre: z.string().nullable(),
+  rating: z.string().nullable(),
+  runtime: z.string().nullable(),
+  releaseYear: z.number().nullable(),
+  platform: z.string().nullable(),
+  vibe: z.string().nullable(),
+  imageUrl: z.string().nullable(),
+  imagePrompt: z.string().nullable(),
 });
 
 export type MovieCard = z.infer<typeof movieCardSchema>;
@@ -19,7 +19,7 @@ export type MovieCard = z.infer<typeof movieCardSchema>;
 /**
 export interface MovieCard {
   title: string;
-  synopsis: string;
+  description: string;
   genre: string;
   rating: string;
   runtime: string;

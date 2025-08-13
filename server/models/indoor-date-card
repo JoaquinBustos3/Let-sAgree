@@ -1,16 +1,16 @@
 import { z } from 'zod';
 
 export const indoorDateCardSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-  vibe: z.string(),
-  cost: z.string(),
-  duration: z.string(),
-  supplies: z.array(z.string()),
-  idealTime: z.string(),
-  messLevel: z.enum(['clean', 'some cleanup', 'very messy']),
-  imagePrompt: z.string(),
-  imageUrl: z.string().optional(),
+  title: z.string().nullable(),
+  description: z.string().nullable(),
+  vibe: z.string().nullable(),
+  cost: z.string().nullable(),
+  duration: z.string().nullable(),
+  supplies: z.array(z.string()).nullable(),
+  idealTime: z.string().nullable(),
+  messLevel: z.enum(['clean', 'some cleanup', 'very messy']).nullable(),
+  imagePrompt: z.string().nullable(),
+  imageUrl: z.string().nullable(),
 });
 
 export type IndoorDateCard = z.infer<typeof indoorDateCardSchema>;

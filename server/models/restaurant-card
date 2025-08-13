@@ -1,16 +1,16 @@
 import { z } from 'zod';
 
 export const restaurantCardSchema = z.object({
-  name: z.string(),
-  description: z.string(),
-  cuisine: z.string(),
-  priceRange: z.enum(['$', '$$', '$$$']),
-  vibe: z.string(),
-  distance: z.string(),
-  location: z.string(),
-  rating: z.number(),
-  imageUrl: z.string().optional(),
-  imagePrompt: z.string(),
+  name: z.string().nullable(),
+  description: z.string().nullable(),
+  cuisine: z.string().nullable(),
+  priceRange: z.enum(['$', '$$', '$$$']).nullable(),
+  vibe: z.string().nullable(),
+  distance: z.string().nullable(),
+  location: z.string().nullable(),
+  rating: z.number().nullable(),
+  imageUrl: z.string().nullable(),
+  imagePrompt: z.string().nullable()
 });
 
 export type RestaurantCard = z.infer<typeof restaurantCardSchema>;

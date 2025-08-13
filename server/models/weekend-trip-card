@@ -1,16 +1,16 @@
 import { z } from 'zod';
 
 export const weekendTripCardSchema = z.object({
-  destination: z.string(),
-  description: z.string(),
-  travelTime: z.string(),
-  vibe: z.string(),
-  cost: z.string(),
-  mainAttractions: z.array(z.string()),
-  season: z.string(),
-  lodging: z.string(),
-  imagePrompt: z.string(),
-  imageUrl: z.string().optional(),
+  destination: z.string().nullable(),
+  description: z.string().nullable(),
+  travelTime: z.string().nullable(),
+  vibe: z.string().nullable(),
+  cost: z.string().nullable(),
+  mainAttractions: z.array(z.string()).nullable(),
+  season: z.string().nullable(),
+  lodging: z.string().nullable(),
+  imagePrompt: z.string().nullable(),
+  imageUrl: z.string().nullable(),
 });
 
 export type WeekendTripCard = z.infer<typeof weekendTripCardSchema>;
