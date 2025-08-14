@@ -1,6 +1,7 @@
 import { PromptInput } from "../models/prompt-input";
 import { OpenAI } from "openai";
 import dotenv from "dotenv";
+import { validateAiOutput } from "../utils/ai-output-validation";
 
 dotenv.config();
 
@@ -43,16 +44,9 @@ export async function cardGeneration(category: string, promptInput: PromptInput)
                 { role: "user", content: promptForAI }
             ]
         });
-
-        //TODO extract these into a Utils function?
-
-            // Extract and check for the AI's text response
-
-            // Check for refusal in the message object
-
-            // Try to parse the AI's response as JSON
-
-            // Validate with Zod
+        
+        // Validate the AI's output against the category's card schema
+        const validated = validateAiOutput(completion, category);
 
         //Fallback logic if field(s) are null
        

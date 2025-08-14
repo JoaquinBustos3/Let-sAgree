@@ -1,8 +1,8 @@
-import { promptInputSchema } from "../models/prompt-input";
 import dotenv from "dotenv";
 import { OpenAI } from "openai";
 import { z } from "zod";
 import { cardGeneration } from "./categories-card-generation";
+import { validateAiOutput } from "../utils/ai-output-validation";
 
 dotenv.config();
 
@@ -40,7 +40,7 @@ const promptJsonModel =
   location: string;
   groupSize: number; 
   vibe: string; 
-  
+
   userInput: string; 
   }`;
 
@@ -57,6 +57,7 @@ Category: "${category}"
 `;
 
     try {
+
         if (!OPENAI_API_KEY) {
             throw new Error("Missing OpenAI API key in environment variables.");
         }
@@ -70,42 +71,19 @@ Category: "${category}"
                 { role: "user", content: promptForAI }
             ]
         });
-        
 
-        // Extract and check for the AI's text response
-        const aiResponse = completion.choices?.[0]?.message?.content;
-        if (!aiResponse) {
-            throw new Error("No response from OpenAI.");
-        }
-
-        // Check for refusal in the message object
-        const messageObj = completion.choices?.[0]?.message as any;
-        if (messageObj && messageObj.refusal) {
-            console.log("AI refusal:", messageObj.refusal);
-            return { ok: false, error: messageObj.refusal };
-        }
-
-        // Try to parse the AI's response as JSON
-        let parsed: unknown;
-        try {
-            parsed = typeof aiResponse === "string" ? JSON.parse(aiResponse) : aiResponse;
-        } catch (err) {
-            throw new Error("AI response is not valid JSON.");
-        }
-
-        // Validate with Zod
-        const validated = promptInputSchema.safeParse(parsed);
-        if (!validated.success) {
-            throw new Error(
-                "AI output did not conform to the PromptInput schema: " +
-                JSON.stringify(validated.error.issues)
-            );
+        // Validate the AI's output against the PromptInput schema
+        const validated = validateAiOutput(completion, "Prompt Input");
+        if (!validated.ok) {
+            throw new Error(validated.error.message);
         }
 
         console.log("AI response:", validated.data);
         
         // push results downstream to generate the Category's Cards
-        return cardGeneration(category, validated.data);
+        // return cardGeneration(category, validated.data);
+        return { ok: true, data: validated.data };
+
     } catch (err: any) {
         return { ok: false, error: err.message };
     }
