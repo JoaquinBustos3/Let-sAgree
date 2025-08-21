@@ -10,7 +10,7 @@ export const indoorDateCardSchema = z.object({
   idealTime: z.string().nullable(),
   messLevel: z.enum(['clean', 'some cleanup', 'very messy']).nullable(),
   imagePrompt: z.string().nullable(),
-  imageUrl: z.string().nullable(),
+  imageUrl: z.string().optional().nullable(),
 });
 
 export type IndoorDateCard = z.infer<typeof indoorDateCardSchema>;

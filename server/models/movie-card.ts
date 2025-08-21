@@ -9,7 +9,7 @@ export const movieCardSchema = z.object({
   releaseYear: z.number().nullable(),
   platform: z.string().nullable(),
   vibe: z.string().nullable(),
-  imageUrl: z.string().nullable(),
+  imageUrl: z.string().optional().nullable(),
   imagePrompt: z.string().nullable(),
 });
 

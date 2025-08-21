@@ -9,7 +9,7 @@ export const restaurantCardSchema = z.object({
   distance: z.string().nullable(),
   location: z.string().nullable(),
   rating: z.number().nullable(),
-  imageUrl: z.string().nullable(),
+  imageUrl: z.string().optional().nullable(),
   imagePrompt: z.string().nullable()
 });
 

@@ -10,7 +10,7 @@ export const weekendTripCardSchema = z.object({
   season: z.string().nullable(),
   lodging: z.string().nullable(),
   imagePrompt: z.string().nullable(),
-  imageUrl: z.string().nullable(),
+  imageUrl: z.string().optional().nullable(),
 });
 
 export type WeekendTripCard = z.infer<typeof weekendTripCardSchema>;

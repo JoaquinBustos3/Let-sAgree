@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import { OpenAI } from "openai";
 import { z } from "zod";
 import { cardGeneration } from "./categories-card-generation";
-import { validateAiOutput } from "../utils/ai-output-validation";
+import { validateAiOutput } from "../utils/validation-ai-output";
 
 dotenv.config();
 
@@ -16,10 +16,11 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
  * 
  * @param input - The raw text input from the user describing their preferences
  * @param category - The selected category (e.g., "Restaurants", "Movies") to contextualize the input
+ * @param location - An optional location object containing latitude and longitude
  * @returns A promise resolving to an object containing either generated cards (ok: true)
  *          or an error message (ok: false) if processing failed
  */
-export async function preprocessPromptInput(input: string, category: string) {
+export async function preprocessPromptInput(input: string, category: string, location: any) {
 
 // Hard coded JSON object for the prompt input
 const promptJsonModel = 
@@ -52,8 +53,10 @@ Instructions:
 - For fields with restricted values (enums), use only the allowed values.
 - If there is no corresponding value for a field, use null as the value.
 - Populate the condensedInput field with a concise sentence extracting key info from the user input.
+- If location is provided with a populated value, use it to fill the location field
 User input: "${input}"
 Category: "${category}"
+Location: "${location ? location : ""}"
 `;
 
     try {
@@ -77,12 +80,15 @@ Category: "${category}"
         if (!validated.ok) {
             throw new Error(validated.error.message);
         }
-
-        console.log("AI response:", validated.data);
         
         // push results downstream to generate the Category's Cards
-        // return cardGeneration(category, validated.data);
-        return { ok: true, data: validated.data };
+        const result = await cardGeneration(category, validated.data);
+        if (!result.ok) {
+            throw new Error(result.error);
+        }
+        
+        // Return only the data portion
+        return { ok: true, data: result.data };
 
     } catch (err: any) {
         return { ok: false, error: err.message };

@@ -20,7 +20,7 @@ export const promptInputSchema = z.object({
   priceRange: z.enum(["$", "$$", "$$$"]).nullable().transform((val) => val ?? undefined).default("$"), 
   // If null is passed, turn it into undefined so defaults can be applied
   vibe: z.string().nullable().transform((val) => val ?? undefined).default("casual"),
-  location: z.string().nullable().transform((val) => val ?? undefined).default("Milwaukee"),
+  location: z.string().nullable().transform((val) => val ?? undefined).default(""),
   groupSize: z.number().nullable().transform((val) => val ?? undefined).default(2),
 
   // Raw user input before transformation

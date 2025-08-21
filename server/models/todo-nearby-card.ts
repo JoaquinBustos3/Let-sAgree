@@ -10,7 +10,7 @@ export const localActivityCardSchema = z.object({
   hours: z.string().nullable(),
   vibe: z.string().nullable(),
   imagePrompt: z.string().nullable(),
-  imageUrl: z.string().nullable(),
+  imageUrl: z.string().optional().nullable(),
 });
 
 export type LocalActivityCard = z.infer<typeof localActivityCardSchema>;

@@ -10,7 +10,7 @@ export const outdoorDateCardSchema = z.object({
   bestTime: z.string().nullable(),
   locationType: z.string().nullable(),
   imagePrompt: z.string().nullable(),
-  imageUrl: z.string().nullable(),
+  imageUrl: z.string().optional().nullable(),
 });
 
 export type OutdoorDateCard = z.infer<typeof outdoorDateCardSchema>;

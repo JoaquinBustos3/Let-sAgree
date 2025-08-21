@@ -10,7 +10,7 @@ export const showCardSchema = z.object({
   vibe: z.string().nullable(),
   releaseYear: z.number().nullable(),
   imagePrompt: z.string().nullable(),
-  imageUrl: z.string().nullable(),
+  imageUrl: z.string().optional().nullable(),
 });
 
 export type ShowCard = z.infer<typeof showCardSchema>;

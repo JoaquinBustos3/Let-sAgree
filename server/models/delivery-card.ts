@@ -10,7 +10,7 @@ export const deliveryCardSchema = z.object({
   rating: z.number().nullable(),
   distance: z.string().nullable(),
   imagePrompt: z.string().nullable(),
-  imageUrl: z.string().nullable(),
+  imageUrl: z.string().optional().nullable(),
 });
 
 export type DeliveryCard = z.infer<typeof deliveryCardSchema>;

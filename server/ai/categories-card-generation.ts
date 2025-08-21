@@ -1,25 +1,28 @@
 import { PromptInput } from "../models/prompt-input";
 import { OpenAI } from "openai";
 import dotenv from "dotenv";
-import { validateAiOutput } from "../utils/ai-output-validation";
+import { validateAiOutput } from "../utils/validation-ai-output";
+import { applyFallbacks } from "../utils/fallbacks-ai-output";
 
 dotenv.config();
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 /**
- * Takes the validated PromptInput and generates a card based on the category
+ * Takes the validated PromptInput and generates 18 Cards based on the selected Category
+ * 
  * @param promptInput - The validated input data
- * @returns Object indicating success/failure and the generated card data
+ * @returns Object indicating success/failure and 12 generated Cards with all critical fields populated
  */
-export async function cardGeneration(category: string, promptInput: PromptInput) {
+export async function cardGeneration(category: string, promptInput: any) {
 
     const promptForAI = `
     Use the fields of this PromptInput object as search filters: "${JSON.stringify(promptInput)}", 
-    and use them to generate 12 JSON objects that conform to this TypeScript interface: ${await determineTsInterface(category)}
+    and use them to generate 18 JSON objects that conform to this TypeScript interface: ${await determineTsInterface(category)}
     Restrictions:
-    - Use PromptInput's fields as ordered in importance in finding results for the 12 objects you are populating
-    - Ideally, the 12 results should be varied and cover different aspects of the category
+    - Use PromptInput's fields as ordered in importance in finding results for the 18 objects you are populating
+    - If location is provided, find results that are relevant to that location (and by any distance away if specified)
+    - Ideally, the 18 results should be varied and cover different aspects of the category
     - Each object should be a valid JSON object with the ALL of the fields populated except imageUrl
     - Respond ONLY with the JSON object, no extra text.
     - If a field is less applicable, apply your best judgment to fill it with a reasonable value
@@ -28,8 +31,6 @@ export async function cardGeneration(category: string, promptInput: PromptInput)
     `
 
     try {
-
-        const { category, condensedInput, priceRange, vibe, location, groupSize, userInput } = promptInput;
         
         if (!OPENAI_API_KEY) {
             throw new Error("Missing OpenAI API key in environment variables.");
@@ -46,10 +47,23 @@ export async function cardGeneration(category: string, promptInput: PromptInput)
         });
         
         // Validate the AI's output against the category's card schema
+        console.log("Entering validation for card generation with category: ", category);
         const validated = validateAiOutput(completion, category);
+        if (!validated.ok) {
+            throw new Error(validated.error.message);
+        }
 
-        //Fallback logic if field(s) are null
-       
+        // Ensure we're working with an array 
+        const dataToFill = Array.isArray(validated.data) ? validated.data : [validated.data];
+        // Filter out cards that have missing values for critical fields
+        const filteredCards = applyFallbacks(category, dataToFill);
+        // Limit to the first 12 valid cards, out of the 18 possibly returned
+        const filledCards = filteredCards.slice(0, 12);
+        
+        console.log(`Generated ${filledCards.length} cards for category: ${category}`, filledCards);
+
+        return { ok: true, data: filledCards };
+        
     } catch (err: any) {
         return { ok: false, error: `Error generating card: ${err.message}` };
     }

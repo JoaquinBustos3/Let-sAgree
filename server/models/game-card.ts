@@ -10,7 +10,7 @@ export const gameCardSchema = z.object({
   platform: z.string().nullable(),
   difficulty: z.enum(['easy', 'medium', 'hard']).nullable(),
   imagePrompt: z.string().nullable(),
-  imageUrl: z.string().nullable(),
+  imageUrl: z.string().optional().nullable(),
 });
 
 export type GameCard = z.infer<typeof gameCardSchema>;
