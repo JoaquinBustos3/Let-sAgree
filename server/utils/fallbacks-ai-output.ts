@@ -1,11 +1,22 @@
-//TODO
 const criticalFields: Record<string, string[]> = {
-        Restaurants: ["name", "description", "cuisine", "priceRange", "distance"],
-        "Takeout/Delivery": ["name", "description", "cuisine", "priceRange", "deliveryTime"],
-        Shows: ["title", "platform", "releaseYear"],
-        Movies: ["title", "platform", "releaseYear"],
-        Games: ["title", "platform", "genre"],
-        // etc.
+        Restaurants: 
+            ["name", "description", "cuisine", "priceRange", "distance"],
+        "Takeout/Delivery": 
+            ["name", "description", "cuisine", "priceRange", "deliveryTime"],
+        Shows: 
+            ["title", "description", "genre", "releaseYear", "seasons"],
+        Movies: 
+            ["title", "description", "genre", "releaseYear", "runtime"],
+        Games: 
+            ["title", "description", "genre", "playerCount"],
+        "Indoor Date Activities": 
+            ["title", "description", "cost", "duration"],
+        "Outdoor Date Activities": 
+            ["title", "description", "cost", "duration", "distance"],
+        "Things To Do Nearby": 
+            ["name", "description", "price", "distance"],
+        "Weekend Trip Ideas": 
+            ["destination", "description", "distance", "cost"],
     };
 
 /**

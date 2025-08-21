@@ -28,16 +28,9 @@ export function validateAiOutput(completion: any, category: string) {
     try {
         
         // Extract and check for the AI's text response
-        const aiResponse = completion.choices?.[0]?.message?.content;
+        const aiResponse = completion.output_text;
         if (!aiResponse) {
             throw new Error("No response from OpenAI.");
-        }
-
-        // Check for refusal in the message object
-        const messageObj = completion.choices?.[0]?.message as any;
-        if (messageObj && messageObj.refusal) {
-            console.log("AI refusal:", messageObj.refusal);
-            return { ok: false, error: messageObj.refusal };
         }
 
         // Try to parse the AI's response as JSON
@@ -58,7 +51,8 @@ export function validateAiOutput(completion: any, category: string) {
         const validated = schemaToUse.safeParse(parsed);
         
         if (!validated.success) {
-            // Loop through objects to see issues in each
+
+            // LOGGING - Loop through objects to see issues in each
             if (isArrayInput && Array.isArray(parsed)) {
                 console.error(`Validation failed for category: ${category}`);
                 console.error(`Total items: ${parsed.length}`);

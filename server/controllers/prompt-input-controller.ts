@@ -3,7 +3,7 @@ import { preprocessPromptInput } from "../ai/pre-process"; // Make sure this is 
 
 const receivePromptInput = async (req: Request, res: Response) => {
     const { category } = req.params;
-    const { input, latitude, longitude } = req.body;
+    const { input, zipCode } = req.body;
 
     if (!category || typeof category !== "string") {
         return res
@@ -15,13 +15,15 @@ const receivePromptInput = async (req: Request, res: Response) => {
             .status(400)
             .json({ error: "Input must be a non-empty string." });
     }
-    if (!latitude || typeof latitude !== "number" || !longitude || typeof longitude !== "number") {
+    if (!zipCode || typeof zipCode !== "number") {
         return res
             .status(400)
-            .json({ error: "Lat/Long must be non-empty numbers." });
+            .json({ error: "Zip code must be a non-empty number." });
     }
 
-    const result = await preprocessPromptInput(input, category, {latitude, longitude});
+    console.log("Zip code received:", zipCode);
+
+    const result = await preprocessPromptInput(input, category, zipCode);
 
     if (!result.ok) {
         // 422 for validation, 500 for other errors

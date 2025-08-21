@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
 import { OpenAI } from "openai";
-import { z } from "zod";
 import { cardGeneration } from "./categories-card-generation";
 import { validateAiOutput } from "../utils/validation-ai-output";
 
@@ -20,7 +19,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
  * @returns A promise resolving to an object containing either generated cards (ok: true)
  *          or an error message (ok: false) if processing failed
  */
-export async function preprocessPromptInput(input: string, category: string, location: any) {
+export async function preprocessPromptInput(input: string, category: string, location: number) {
 
 // Hard coded JSON object for the prompt input
 const promptJsonModel = 
@@ -38,7 +37,7 @@ const promptJsonModel =
 
   condensedInput: string; 
   priceRange: "$" | "$$" | "$$$"; 
-  location: string;
+  location: number;
   groupSize: number; 
   vibe: string; 
 
@@ -53,10 +52,10 @@ Instructions:
 - For fields with restricted values (enums), use only the allowed values.
 - If there is no corresponding value for a field, use null as the value.
 - Populate the condensedInput field with a concise sentence extracting key info from the user input.
-- If location is provided with a populated value, use it to fill the location field
+- Take the longitude and latitude values from the location object (if non 0), and use them to fill the location's fields.
 User input: "${input}"
 Category: "${category}"
-Location: "${location ? location : ""}"
+Location: "${location}"
 `;
 
     try {
@@ -67,20 +66,17 @@ Location: "${location ? location : ""}"
 
         const client = new OpenAI({ apiKey: OPENAI_API_KEY });
 
-        const completion = await client.chat.completions.parse({
+        const completion = await client.responses.parse({
             model: "gpt-5-mini", 
-            messages: [
-                { role: "system", content: "You are a helpful assistant that only returns valid JSON." },
-                { role: "user", content: promptForAI }
-            ]
+            input: promptForAI
         });
-
-        // Validate the AI's output against the PromptInput schema
+        
+        // Validate the AI's output against the PromptInput schema using Zod (avoids hallucinations)
         const validated = validateAiOutput(completion, "Prompt Input");
         if (!validated.ok) {
             throw new Error(validated.error.message);
         }
-        
+
         // push results downstream to generate the Category's Cards
         const result = await cardGeneration(category, validated.data);
         if (!result.ok) {
