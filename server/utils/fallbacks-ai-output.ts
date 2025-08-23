@@ -16,7 +16,7 @@ const criticalFields: Record<string, string[]> = {
         "Things To Do Nearby": 
             ["name", "description", "price", "distance"],
         "Weekend Trip Ideas": 
-            ["destination", "description", "distance", "cost"],
+            ["destination", "description", "travelTime", "cost"],
     };
 
 /**

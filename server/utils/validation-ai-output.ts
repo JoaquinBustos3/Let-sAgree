@@ -43,6 +43,9 @@ export function validateAiOutput(completion: any, category: string) {
 
         // Validate with Zod
         let selectSchema = determineTsInterface(category);
+        if (!selectSchema) {
+            throw new Error(`No schema found for category: ${category}`);
+        }
         // Check if we're expecting an array of objects (Category Cards) or a single object (Prompt Input)
         const isArrayInput = Array.isArray(parsed);
         // Create array schema if needed
@@ -105,10 +108,10 @@ function determineTsInterface(category: string): z.ZodType {
         "Takeout/Delivery": deliveryCardSchema,
         "Shows": showCardSchema,
         "Movies": movieCardSchema,
-        "Indoor Dates": indoorDateCardSchema,
-        "Outdoor Dates": outdoorDateCardSchema,
-        "Local Activities": localActivityCardSchema,
-        "Weekend Trips": weekendTripCardSchema
+        "Indoor Date Activities": indoorDateCardSchema,
+        "Outdoor Date Activities": outdoorDateCardSchema,
+        "Things To Do Nearby": localActivityCardSchema,
+        "Weekend Trip Ideas": weekendTripCardSchema
     };
 
     return interfaces[category] || "";
