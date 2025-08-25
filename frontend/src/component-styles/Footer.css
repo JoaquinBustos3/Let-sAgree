@@ -16,22 +16,22 @@
 
 .footer-right {
   display: flex;
-  width: fit-content;
+  width: auto;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 1rem; /* Space between the name and LinkedIn logo */
 }
 
 .name {
-  width: 7rem;
-  font-size: 0.8rem;
+  width: 50%;
+  font-size: 0.68rem;
   color: black;
   font-weight: 400;
+  line-height: 0.9rem;
 }
 
 .footer-linkedin-logo {
   width: 1.5rem;
   height: 1.5rem;
-  object-fit: contain; /* Ensure the LinkedIn logo fits nicely */
-  padding-bottom: 0.2rem;
+  padding-top: 0.4rem;
 }

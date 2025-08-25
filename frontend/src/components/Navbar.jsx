@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "../component-styles/Navbar.css";
 import logo from "../images/logo.svg"; 
+import { smoothScrollTo } from "../utils/scrollUtils";
 
 function Navbar() {
 
   const [hideAmount, setHideAmount] = useState(0); // 0-1 value for partial hiding
   const [lastScrollY, setLastScrollY] = useState(0);
 
+  // Make Navbar hide on scroll down and show on scroll up
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -34,6 +36,11 @@ function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY, hideAmount]);
 
+  const handleNavLinkClick = (e, target) => {
+    e.preventDefault();
+    smoothScrollTo(target);
+  };
+
   return (
     <nav 
       className="navbar" 
@@ -45,8 +52,20 @@ function Navbar() {
         <img src={logo} alt="Logo" className="logo-image" /> 
       </div>
       <div className="navbar-right">
-        <a href="#categories" className="navbar-link">Categories</a>
-        <a href="#faq" className="navbar-link">FAQ</a>
+        <a 
+          href="#categories" 
+          className="navbar-link"
+          onClick={(e) => handleNavLinkClick(e, '.categories-container')}
+        >
+          Categories
+        </a>
+        <a 
+          href="#faq" 
+          className="navbar-link"
+          onClick={(e) => handleNavLinkClick(e, '.faq-container')}
+        >
+          FAQ
+        </a>
         <div className="beta-box">Beta</div>
       </div>
     </nav>

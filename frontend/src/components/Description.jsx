@@ -1,41 +1,10 @@
 import "../component-styles/Description.css";
+import { smoothScrollTo } from "../utils/scrollUtils";
 
 function Description() {
-
-  // Custom slow scroll function with adjustable duration
+  // Use the shared utility function
   const scrollToCategories = () => {
-    // Calculate a higher scroll position (40% instead of 60%)
-    // This will position Categories higher on the screen
-    const scrollTarget = window.innerHeight * 0.74;
-    
-    // Start position
-    const startPosition = window.pageYOffset;
-    // Total distance to scroll
-    const distance = scrollTarget - startPosition;
-    // Duration in milliseconds (longer for slower animation)
-    const duration = 1500; // 1.5 seconds (slower transition)
-    
-    let start = null;
-    
-    // Animation function
-    function animation(currentTime) {
-      if (start === null) start = currentTime;
-      const timeElapsed = currentTime - start;
-      const progress = Math.min(timeElapsed / duration, 1);
-      
-      // Easing function for smoother animation
-      const easeInOutQuad = (t) => 
-        t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-      
-      window.scrollTo(0, startPosition + distance * easeInOutQuad(progress));
-      
-      if (timeElapsed < duration) {
-        requestAnimationFrame(animation);
-      }
-    }
-    
-    // Start the animation
-    requestAnimationFrame(animation);
+    smoothScrollTo('.categories-container');
   };
 
   return (
@@ -55,7 +24,7 @@ function Description() {
       </p>
     </div>
   );
-  
 }
 
 export default Description;
+      

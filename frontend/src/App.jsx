@@ -3,6 +3,7 @@ import './App.css';
 import Navbar from './components/Navbar.jsx';
 import Description from './components/Description.jsx';
 import Categories from './components/Categories.jsx';
+import FAQ from './components/FAQ.jsx'; // Import the FAQ component
 import Footer from './components/Footer.jsx';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
         <Description />
       </div>
       <Categories />
+      <FAQ /> {/* Add the FAQ component here, between Categories and Footer */}
       <Footer />
     </div>
   );

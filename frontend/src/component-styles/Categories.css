@@ -8,59 +8,104 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: misty-shadow 5s ease-in-out infinite; 
-}
-
-@keyframes misty-shadow {
-    0% {
-        box-shadow: -70px 0px 80px rgba(150, 175, 194, 0.5), 70px 0px 80px rgba(150, 175, 194, 0.5); /* Extend shadow further left and right */
-    }
-    50% {
-        box-shadow: -80px 0px 90px rgba(150, 175, 194, 0.4), 80px 0px 90px rgba(150, 175, 194, 0.4); /* Extend shadow further left and right */
-    }
-    100% {
-        box-shadow: -70px 0px 80px rgba(150, 175, 194, 0.5), 70px 0px 80px rgba(150, 175, 194, 0.5); /* Extend shadow further left and right */
-    }
 }
 
 .inner-container {
     width: 99%; /* Fill the container except the edges */
     height: 98%;
-    border-radius: 0.3rem; /* Match the parent container's border-radius */
-    background-color: inherit;
+    border-radius: 0.3rem;
+    background-color: #FAFAE5; /* Match container background for consistent look */
+    position: relative;
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 columns */
     grid-template-rows: repeat(3, 1fr); /* 3 rows */
     gap: 0.5rem; /* Thin gap between boxes */
-    /* padding: 0.5rem; */
     box-sizing: border-box;
+    z-index: 1;
 }
 
 .box {
-    background-color: #7FA1BA;
+    position: relative;
     border-radius: 0.3rem;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     font-size: 1.2rem;
     font-weight: bold;
     color: #333;
+    gap: 0.75rem;
+    padding: 1rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    overflow: hidden; /* Keep gradient contained */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
 }
 
-.split-box {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem; /* Thin gap between the split sections */
+/* Add gradient to each box individually */
+.box::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        -45deg,
+        #7FA1BA,
+        #9CBDCF,
+        #7FA1BA,
+        #5E809A
+    );
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease infinite;
+    z-index: -1; /* Behind the content */
+    transition: opacity 0.3s ease; /* Add transition for smooth hover effect */
 }
 
-.split-box-top,
-.split-box-bottom {
-    border-radius: 0.5rem;
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1rem;
-    font-weight: bold;
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+.box:hover::before {
+    /* Change the gradient colors on hover instead of using background-color */
+    background: linear-gradient(
+        -45deg,
+        #4F6C88,
+        #5A7795,
+        #4F6C88,
+        #405A73
+    );
+    background-size: 200% 200%;
+}
+
+.box:hover {
+    transform: scale(1.025);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.category-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    object-fit: contain;
+    z-index: 2; /* Ensure icon stays above gradient */
+}
+
+.category-name {
+    font-size: 0.8rem;
+    font-weight: 600;
     color: #333;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    z-index: 2; /* Ensure text stays above gradient */
 }
