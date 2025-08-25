@@ -1,0 +1,37 @@
+.footer-container {
+  width: 95%; /* Footer spans 95% of the width */
+  height: 4rem;
+  border-top: 0.1px solid black;
+  margin: 0 auto; /* Center the footer horizontally */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Space out the elements */
+}
+
+.footer-logo {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain; /* Ensure the logo fits nicely */
+}
+
+.footer-right {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem; /* Space between the name and LinkedIn logo */
+}
+
+.name {
+  width: 7rem;
+  font-size: 0.8rem;
+  color: black;
+  font-weight: 400;
+}
+
+.footer-linkedin-logo {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain; /* Ensure the LinkedIn logo fits nicely */
+  padding-bottom: 0.2rem;
+}

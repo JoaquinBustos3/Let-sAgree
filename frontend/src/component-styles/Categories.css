@@ -1,0 +1,66 @@
+.categories-container {
+    width: 85%; /* Take up most of the screen */
+    height: 90vh; /* Dynamically size based on viewport height */
+    margin: 3rem auto; /* Reduced margin to come in sooner */
+    border-radius: 0.5rem; /* Rounded edges */
+    background-color: #FAFAE5;
+    border: 1px solid #5A7D9A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: misty-shadow 5s ease-in-out infinite; 
+}
+
+@keyframes misty-shadow {
+    0% {
+        box-shadow: -70px 0px 80px rgba(150, 175, 194, 0.5), 70px 0px 80px rgba(150, 175, 194, 0.5); /* Extend shadow further left and right */
+    }
+    50% {
+        box-shadow: -80px 0px 90px rgba(150, 175, 194, 0.4), 80px 0px 90px rgba(150, 175, 194, 0.4); /* Extend shadow further left and right */
+    }
+    100% {
+        box-shadow: -70px 0px 80px rgba(150, 175, 194, 0.5), 70px 0px 80px rgba(150, 175, 194, 0.5); /* Extend shadow further left and right */
+    }
+}
+
+.inner-container {
+    width: 99%; /* Fill the container except the edges */
+    height: 98%;
+    border-radius: 0.3rem; /* Match the parent container's border-radius */
+    background-color: inherit;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    grid-template-rows: repeat(3, 1fr); /* 3 rows */
+    gap: 0.5rem; /* Thin gap between boxes */
+    /* padding: 0.5rem; */
+    box-sizing: border-box;
+}
+
+.box {
+    background-color: #7FA1BA;
+    border-radius: 0.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.split-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* Thin gap between the split sections */
+}
+
+.split-box-top,
+.split-box-bottom {
+    border-radius: 0.5rem;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+}
