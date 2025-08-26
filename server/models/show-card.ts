@@ -5,7 +5,7 @@ export const showCardSchema = z.object({
   description: z.string().nullable(),
   genre: z.string().nullable(),
   seasons: z.number().nullable(),
-  episodeLength: z.string().nullable(),
+  rating: z.string().nullable(),
   platform: z.string().nullable(),
   vibe: z.string().nullable(),
   releaseYear: z.number().nullable(),
@@ -22,7 +22,7 @@ export interface ShowCard {
   description: string;
   genre: string;
   seasons: number;
-  episodeLength: string; // e.g. "30 mins"
+  rating: string; // e.g. "4.5"
   platform: string;
   vibe: string;
   releaseYear: number;

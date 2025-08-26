@@ -1,7 +1,7 @@
 const criticalFields: Record<string, string[]> = {
         Restaurants: 
             ["name", "description", "cuisine", "priceRange", "distance"],
-        "Takeout/Delivery": 
+        "Takeout-Delivery": 
             ["name", "description", "cuisine", "priceRange", "deliveryTime"],
         Shows: 
             ["title", "description", "genre", "releaseYear", "seasons"],

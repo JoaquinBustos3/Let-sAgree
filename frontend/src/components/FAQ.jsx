@@ -22,7 +22,7 @@ function FAQ() {
     },
     {
       question: "What's to come?",
-      answer: "In the future, you can expect the capability to synchronously swipe with your peer, specify any category, save sets of generated results, and more!"
+      answer: "In the future, you can expect the capability to synchronously swipe with your peer, specify any category, include more than 2 people, save sets of generated results, and more!"
     }
   ];
 

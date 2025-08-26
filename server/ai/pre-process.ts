@@ -26,7 +26,7 @@ const promptJsonModel =
 `export interface PromptInput {
   category:
     | "Restaurants"
-    | "Takeout/Delivery"
+    | "Takeout-Delivery"
     | "Shows"
     | "Movies"
     | "Indoor Date Activities"
@@ -48,11 +48,11 @@ const promptForAI = `
 Map the following user input into a structured JSON object that conforms to this TypeScript interface:
 ${promptJsonModel}
 Instructions: 
+- If the category does not match the User Input (i.e. Restaurants != "Find me a movie..."), then immediately return an empty string ("").
 - Respond ONLY with the JSON object, no extra text.
 - For fields with restricted values (enums), use only the allowed values.
 - If there is no corresponding value for a field, use null as the value.
 - Populate the condensedInput field with a concise sentence extracting key info from the user input.
-- Take the longitude and latitude values from the location object (if non 0), and use them to fill the location's fields.
 User input: "${input}"
 Category: "${category}"
 Location: "${location}"
@@ -66,10 +66,18 @@ Location: "${location}"
 
         const client = new OpenAI({ apiKey: OPENAI_API_KEY });
 
+        // Start timing the OpenAI call
+        const openAiLabel = `[preprocess] OpenAI call for input length=${input.length}`;
+        const openAiStart = Date.now();
+
         const completion = await client.responses.parse({
             model: "gpt-5-mini", 
             input: promptForAI
         });
+
+        // Log how long the API call took (in seconds)
+        const openAiDurationSec = ((Date.now() - openAiStart) / 1000).toFixed(2);
+        console.log(`${openAiLabel} took ${openAiDurationSec}s`);
         
         // Validate the AI's output against the PromptInput schema using Zod (avoids hallucinations)
         const validated = validateAiOutput(completion, "Prompt Input");

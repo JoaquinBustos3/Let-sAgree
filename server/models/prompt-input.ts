@@ -3,7 +3,7 @@ import { z } from "zod";
 export const promptInputSchema = z.object({
   category: z.enum([
     "Restaurants",
-    "Takeout/Delivery",
+    "Takeout-Delivery",
     "Shows",
     "Movies",
     "Indoor Date Activities",

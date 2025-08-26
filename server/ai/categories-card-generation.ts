@@ -8,19 +8,24 @@ dotenv.config();
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 /**
- * Takes the validated PromptInput and generates 18 Cards based on the selected Category
+ * Takes the validated PromptInput and generates 15 Cards based on the selected Category
  * 
  * @param promptInput - The validated input data
  * @returns Object indicating success/failure and 12 generated Cards with all critical fields populated
  */
 export async function cardGeneration(category: string, promptInput: any) {
 
+    const compactPromptInput = {
+      ...promptInput,
+      userInput: null
+    };
+
     const promptForAI = `
-    Use the fields of this PromptInput object as search filters: "${JSON.stringify(promptInput)}", 
-    and use them to generate 18 JSON objects that conform to this TypeScript interface: ${await determineTsInterface(category)}
+    Use the following as search filters: ${JSON.stringify(compactPromptInput)}
+    and use them to generate 15 JSON objects that conform to this TypeScript interface: ${await determineTsInterface(category)}
     Restrictions:
     - If location (zip code) is provided (non 0) and the category requires a location, search online using web_search for real results centered around that zip code
-    - Ideally, the 18 results should be varied and cover different aspects of the category
+    - Ideally, the 15 results should be varied and cover different aspects of the category
     - Each object should be a valid JSON object with the ALL of the fields populated except imageUrl
     - If a field is less applicable, apply your best judgment to fill it with a reasonable value
     - Respond ONLY with the JSON object, no extra text.
@@ -30,7 +35,7 @@ export async function cardGeneration(category: string, promptInput: any) {
 
     try {
 
-        console.log("Prompt generating the cards: ", promptInput);
+        console.log("Prompt generating the cards: ", compactPromptInput);
         
         if (!OPENAI_API_KEY) {
             throw new Error("Missing OpenAI API key in environment variables.");
@@ -38,12 +43,20 @@ export async function cardGeneration(category: string, promptInput: any) {
         
         const client = new OpenAI({ apiKey: OPENAI_API_KEY });
 
+        // Start timing the OpenAI call used for card generation
+        const openAiLabel = `[cardGeneration] OpenAI call for category=${category}`;
+        const openAiStart = Date.now();
+
         const completion = await client.responses.parse({
             model: "gpt-5-mini",
             input: promptForAI,
             tools: [{ type: "web_search_preview" }]
         });
-        
+
+        // Log how long the API call took ( in seconds)
+        const openAiDurationSec = ((Date.now() - openAiStart) / 1000).toFixed(2);
+        console.log(`${openAiLabel} took ${openAiDurationSec}s`);
+
         // Validate the AI's output against the category's card schema
         console.log("Entering validation for card generation with category: ", category);
         const validated = validateAiOutput(completion, category);
@@ -55,7 +68,7 @@ export async function cardGeneration(category: string, promptInput: any) {
         const dataToFill = Array.isArray(validated.data) ? validated.data : [validated.data];
         // Filter out cards that have missing values for critical fields
         const filteredCards = applyFallbacks(category, dataToFill);
-        // Limit to the first 12 valid cards, out of the 18 possibly returned
+        // Limit to the first 12 valid cards, out of the 15 possibly returned
         const filledCards = filteredCards.slice(0, 12);
         
         console.log(`Generated ${filledCards.length} cards for category: ${category}`, filledCards);
@@ -78,22 +91,22 @@ async function determineTsInterface(category: string): Promise<string> {
             cuisine: string;
             priceRange: "$" | "$$" | "$$$";
             vibe: string;
-            distance: string;
+            distance: string; //e.g. "2 mi"
             location: string;
-            rating: number;
+            rating: number; //e.g. "4.5"
             imageUrl?: string;    
             imagePrompt: string;   
             }`,
-        "Takeout/Delivery": 
+        "Takeout-Delivery": 
             `export interface DeliveryCard {
             name: string;
             description: string;
             cuisine: string;
             priceRange: "$" | "$$" | "$$$";
             deliveryTime: string; // e.g. "30–40 mins"
-            deliveryPlatform: string; // e.g. "Uber Eats"
-            rating: number;
-            distance: string;
+            deliveryPlatform: string; // e.g. "Uber Eats, DoorDash"
+            rating: number; //e.g. "4.5"
+            distance: string; //e.g. "2 mi"
             imagePrompt: string;
             imageUrl?: string;
             }`,
@@ -102,9 +115,9 @@ async function determineTsInterface(category: string): Promise<string> {
             title: string;
             description: string;
             genre: string;
-            seasons: number;
-            episodeLength: string; // e.g. "30 mins"
-            platform: string;
+            seasons: number; // e.g. 3
+            rating: string; // e.g. "4.5"
+            platform: string; // e.g. Netflix, Hulu
             vibe: string;
             releaseYear: number;
             imagePrompt: string;
@@ -115,8 +128,8 @@ async function determineTsInterface(category: string): Promise<string> {
             title: string;
             description: string;
             genre: string;
-            rating: string;
-            runtime: string;
+            rating: string; //e.g. "4.5"
+            runtime: string; // e.g. "120 mins"
             releaseYear: number;
             platform: string; // i.e. Netflix
             vibe: string;
@@ -128,10 +141,10 @@ async function determineTsInterface(category: string): Promise<string> {
             title: string;
             description: string;
             vibe: string;
-            cost: string; // e.g. "$", "Low"
-            duration: string;
+            cost: string; // e.g. "$50-100"
+            duration: string; // e.g. "2 hours"
             supplies: string[];
-            idealTime: string; // "evening", "late night"
+            idealTime: string; // "evening"
             messLevel: "clean" | "some cleanup" | "very messy";
             imagePrompt: string;
             imageUrl?: string;
@@ -141,9 +154,9 @@ async function determineTsInterface(category: string): Promise<string> {
             title: string;
             description: string;
             vibe: string;
-            cost: string;
-            distance: string;
-            duration: string;
+            cost: string; // e.g. "$50-100"
+            distance: string; //e.g. "2 mi"
+            duration: string; // e.g. "2 hours"
             bestTime: string; // "day", "sunset", etc.
             locationType: string; // "park", "beach", etc.
             imagePrompt: string;
@@ -154,9 +167,9 @@ async function determineTsInterface(category: string): Promise<string> {
             name: string;
             description: string;
             category: string; // "museum", "arcade", etc.
-            price: string;
-            distance: string;
-            rating: number;
+            price: string; // e.g. "$50-100"
+            distance: string; //e.g. "2 mi"
+            rating: number; //e.g. "4.5"
             hours: string; // e.g. "10am–8pm"
             vibe: string;
             imagePrompt: string;
@@ -168,7 +181,7 @@ async function determineTsInterface(category: string): Promise<string> {
             description: string;
             travelTime: string; // e.g. "2 hours"
             vibe: string;
-            cost: string; // "$$", "$$$"
+            cost: string; // e.g. "$50-100"
             mainAttractions: string[];
             season: string;
             lodging: string; // "hotel", "Airbnb"
@@ -181,9 +194,9 @@ async function determineTsInterface(category: string): Promise<string> {
             type: "board" | "video" | "card";
             description: string;
             vibe: string;
-            playerCount: string; // "2–4", "Multiplayer"
+            playerCount: string; // "2–4"
             averagePlaytime: string; // "30 mins"
-            platform?: string; // if video game
+            platform?: string; // Playstation, Xbox (if video game)
             difficulty: "easy" | "medium" | "hard";
             imagePrompt: string;
             imageUrl?: string;
