@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "../component-styles/Navbar.css";
 import logo from "../images/logo.svg"; 
 import { smoothScrollTo } from "../utils/scrollUtils";
 
-function Navbar() {
-
+function Navbar({ isBlue }) {
+  const navigate = useNavigate(); // Initialize the navigate function
   const [hideAmount, setHideAmount] = useState(0); // 0-1 value for partial hiding
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -36,14 +37,15 @@ function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY, hideAmount]);
 
+  // Use Utils function for smooth scrolling to sections
   const handleNavLinkClick = (e, target) => {
     e.preventDefault();
-    smoothScrollTo(target);
+    smoothScrollTo(target, 1500, navigate); // Pass the navigate function to smoothScrollTo
   };
 
   return (
     <nav 
-      className="navbar" 
+      className={isBlue ? "navbar blue" : "navbar"} 
       style={{ 
         transform: `translateY(-${hideAmount * 100}%)` 
       }}
@@ -70,7 +72,6 @@ function Navbar() {
       </div>
     </nav>
   );
-  
 }
 
 export default Navbar;

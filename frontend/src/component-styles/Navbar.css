@@ -7,6 +7,7 @@
   width: 100%;
   height: 4rem;
   background-color: #FAFAE5;
+  color: #6c6c6c;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -16,10 +17,14 @@
   top: 0;
   left: 0;
   z-index: 1000;
-  color: black;
   /* border-bottom: 0.5px solid black; */
   transition: transform 0.3s ease-out;
   will-change: transform;
+}
+
+.navbar.blue{
+  background-color: #7FA1BA;
+  color: white;
 }
 
 .navbar-left,
@@ -36,6 +41,7 @@
   border: 0.1px solid lightgrey;
   border-radius: 0.4rem;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1); 
+  color: inherit; /* This will now work properly */
 }
 
 .logo-image {
@@ -46,7 +52,7 @@
 
 .navbar-link {
   text-decoration: none;
-  color: #6c6c6c; /* Color of text for the tabs/links */
+  color: inherit; /* Will now work properly */
   transition: color 0.3s;
   position: relative; /* Enable positioning for the hover effect */
 }
@@ -69,7 +75,7 @@
 
 .beta-box {
   background-color: transparent; 
-  color: #333; 
+  color: #333;
   padding: 0.3rem 0.8rem;
   border: 2px solid black; 
   border-radius: 1rem;

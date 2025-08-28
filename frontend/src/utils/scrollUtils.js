@@ -2,8 +2,20 @@
  * Smoothly scrolls to a specific target element or position
  * @param {string|number} target - Either a selector string or a vertical scroll position
  * @param {number} duration - Duration of scroll animation in milliseconds
+ * @param {function} navigate - Navigation function from react-router's useNavigate
  */
-export const smoothScrollTo = (target, duration = 1500) => {
+export const smoothScrollTo = (target, duration = 1500, navigate = null) => {
+
+  // Ensure we are in landing page if navigate function is provided
+  if (navigate && window.location.pathname !== '/') {
+    navigate('/');
+    // Wait a moment for the page to render
+    setTimeout(() => {
+      smoothScrollTo(target, duration);
+    }, 300);
+    return;
+  }
+  
   // Calculate the scroll target position
   let scrollTarget;
   

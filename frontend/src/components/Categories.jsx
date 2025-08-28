@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../component-styles/Categories.css';
 // Import your icons
 import RestaurantIcon from '../images/restaurant.png';
@@ -12,24 +13,34 @@ import WeekendIcon from '../images/weekend.png';
 import GamesIcon from '../images/games.png';
 
 function Categories() {
-  // Define categories and their icons
+  const navigate = useNavigate();
+
+  // Define categories and their icons with URL-friendly slugs
   const categories = [
-    { name: "RESTAURANTS", icon: RestaurantIcon },
-    { name: "TAKE-OUT/DELIVERY", icon: TakeoutIcon },
-    { name: "SHOWS", icon: ShowsIcon },
-    { name: "MOVIES", icon: MoviesIcon },
-    { name: "INDOOR DATE ACTIVITIES", icon: IndoorDateIcon },
-    { name: "OUTDOOR DATE ACTIVITIES", icon: OutdoorDateIcon },
-    { name: "THINGS TO DO NEARBY", icon: NearbyIcon },
-    { name: "WEEKEND TRIP IDEAS", icon: WeekendIcon },
-    { name: "GAMES", icon: GamesIcon },
+    { name: "RESTAURANTS", icon: RestaurantIcon, slug: "restaurants" },
+    { name: "TAKEOUT/DELIVERY", icon: TakeoutIcon, slug: "takeout-delivery" },
+    { name: "SHOWS", icon: ShowsIcon, slug: "shows" },
+    { name: "MOVIES", icon: MoviesIcon, slug: "movies" },
+    { name: "INDOOR DATE ACTIVITIES", icon: IndoorDateIcon, slug: "indoor-date-activities" },
+    { name: "OUTDOOR DATE ACTIVITIES", icon: OutdoorDateIcon, slug: "outdoor-date-activities" },
+    { name: "THINGS TO DO NEARBY", icon: NearbyIcon, slug: "things-to-do-nearby" },
+    { name: "WEEKEND TRIP IDEAS", icon: WeekendIcon, slug: "weekend-trip-ideas" },
+    { name: "GAMES", icon: GamesIcon, slug: "games" },
   ];
+
+  const handleCategoryClick = (category) => {
+    navigate(`/category/${category.slug}`, { state: category });
+  };
 
   return (
     <div className="categories-container">
       <div className="inner-container">
         {categories.map((category, index) => (
-          <div className="box" key={index}>
+          <div 
+            className="box" 
+            key={index}
+            onClick={() => handleCategoryClick(category)}
+          >
             <img src={category.icon} alt={category.name} className="category-icon" />
             <span className="category-name">{category.name}</span>
           </div>
