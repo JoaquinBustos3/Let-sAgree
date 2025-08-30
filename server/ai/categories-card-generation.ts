@@ -22,10 +22,10 @@ export async function cardGeneration(category: string, promptInput: any) {
 
     const promptForAI = `
     Use the following as search filters: ${JSON.stringify(compactPromptInput)}
-    and use them to generate 15 JSON objects that conform to this TypeScript interface: ${await determineTsInterface(category)}
+    and use them to generate 12 JSON objects that conform to this TypeScript interface: ${await determineTsInterface(category)}
     Restrictions:
     - If location (zip code) is provided (non 0) and the category requires a location, search online using web_search for real results centered around that zip code
-    - Ideally, the 15 results should be varied and cover different aspects of the category
+    - Ideally, the 12 results should be varied and cover different aspects of the category
     - Each object should be a valid JSON object with the ALL of the fields populated except imageUrl
     - If a field is less applicable, apply your best judgment to fill it with a reasonable value
     - Respond ONLY with the JSON object, no extra text.
@@ -68,12 +68,8 @@ export async function cardGeneration(category: string, promptInput: any) {
         const dataToFill = Array.isArray(validated.data) ? validated.data : [validated.data];
         // Filter out cards that have missing values for critical fields
         const filteredCards = applyFallbacks(category, dataToFill);
-        // Limit to the first 12 valid cards, out of the 15 possibly returned
-        const filledCards = filteredCards.slice(0, 12);
-        
-        console.log(`Generated ${filledCards.length} cards for category: ${category}`, filledCards);
 
-        return { ok: true, data: filledCards };
+        return { ok: true, data: filteredCards };
         
     } catch (err: any) {
         return { ok: false, error: `Error generating card: ${err.message}` };
@@ -88,25 +84,25 @@ async function determineTsInterface(category: string): Promise<string> {
             `export interface RestaurantCard {
             name: string;
             description: string;
-            cuisine: string;
             priceRange: "$" | "$$" | "$$$";
+            rating: number; // i.e. "4.5"
+            distance: string; // i.e. "2 mi"
+            location: string; // (short address of general area)
+            cuisine: string; // i.e. "Italian", "Mexican"
             vibe: string;
-            distance: string; //e.g. "2 mi"
-            location: string;
-            rating: number; //e.g. "4.5"
-            imageUrl?: string;    
-            imagePrompt: string;   
+            imageUrl?: string;      
+            imagePrompt: string; 
             }`,
         "Takeout-Delivery": 
             `export interface DeliveryCard {
             name: string;
-            description: string;
-            cuisine: string;
+            description: string; 
             priceRange: "$" | "$$" | "$$$";
-            deliveryTime: string; // e.g. "30–40 mins"
-            deliveryPlatform: string; // e.g. "Uber Eats, DoorDash"
-            rating: number; //e.g. "4.5"
-            distance: string; //e.g. "2 mi"
+            rating: number; // i.e. "4.5"
+            distance: string; // i.e. "2 mi"
+            deliveryPlatform: string; // i.e. "Uber Eats"
+            cuisine: string; // i.e. "Italian", "Chinese"
+            deliveryTime: string; // i.e. "30–40 Min"
             imagePrompt: string;
             imageUrl?: string;
             }`,
@@ -114,12 +110,12 @@ async function determineTsInterface(category: string): Promise<string> {
             `export interface ShowCard {
             title: string;
             description: string;
-            genre: string;
-            seasons: number; // e.g. 3
-            rating: string; // e.g. "4.5"
-            platform: string; // e.g. Netflix, Hulu
+            seasons: number; // i.e. "2 Seasons"
+            rating: string; // i.e. "8.3 IMDB" (imdb rating)
+            releaseYear: number; // i.e. "2023"
+            platform: string; // i.e. "Netflix, Hulu, Max"
+            genre: string; // i.e. "Drama", "Comedy"
             vibe: string;
-            releaseYear: number;
             imagePrompt: string;
             imageUrl?: string;
             }`,
@@ -127,11 +123,11 @@ async function determineTsInterface(category: string): Promise<string> {
             `export interface MovieCard {
             title: string;
             description: string;
-            genre: string;
-            rating: string; //e.g. "4.5"
-            runtime: string; // e.g. "120 mins"
-            releaseYear: number;
-            platform: string; // i.e. Netflix
+            rating: string; // i.e. "7.5 IMDB" (imdb rating)
+            runtime: string; // i.e. "2h 30m"
+            releaseYear: number; // i.e. "2023"
+            platform: string; // i.e. "Netflix, Hulu, Max"
+            genre: string; // i.e. "Action", "Comedy"
             vibe: string;
             imageUrl?: string;
             imagePrompt: string;
@@ -140,12 +136,12 @@ async function determineTsInterface(category: string): Promise<string> {
             `export interface IndoorDateCard {
             title: string;
             description: string;
+            cost: string; // i.e. "$50-100"
+            duration: string; // i.e. "1-2 Hrs"
+            idealTime: string; // i.e. "Evening", "Late Night"
+            supplies: string; // i.e. "Chocolate, Strawberries, Candles" (limit to 5 items)
+            messLevel: "Clean" | "Some Cleanup" | "Very Messy";
             vibe: string;
-            cost: string; // e.g. "$50-100"
-            duration: string; // e.g. "2 hours"
-            supplies: string[];
-            idealTime: string; // "evening"
-            messLevel: "clean" | "some cleanup" | "very messy";
             imagePrompt: string;
             imageUrl?: string;
             }`,
@@ -153,12 +149,12 @@ async function determineTsInterface(category: string): Promise<string> {
             `export interface OutdoorDateCard {
             title: string;
             description: string;
+            cost: string; // i.e. "$50-100"
+            duration: string; // i.e. "1-2 Hrs"
+            distance: string; // i.e. "5.2 mi"
+            location: string; // (short address or general area)
+            idealTime: string; // i.e. "Evening", "Late Night"
             vibe: string;
-            cost: string; // e.g. "$50-100"
-            distance: string; //e.g. "2 mi"
-            duration: string; // e.g. "2 hours"
-            bestTime: string; // "day", "sunset", etc.
-            locationType: string; // "park", "beach", etc.
             imagePrompt: string;
             imageUrl?: string;
             }`,
@@ -166,11 +162,11 @@ async function determineTsInterface(category: string): Promise<string> {
             `export interface LocalActivityCard {
             name: string;
             description: string;
-            category: string; // "museum", "arcade", etc.
-            price: string; // e.g. "$50-100"
-            distance: string; //e.g. "2 mi"
-            rating: number; //e.g. "4.5"
-            hours: string; // e.g. "10am–8pm"
+            price: string; // i.e. "$50-100"
+            rating: number; // i.e. "4.5"
+            distance: string; // i.e. "2 mi"
+            location: string; // (short address or general area)
+            hours: string; // i.e. "10am–8pm"
             vibe: string;
             imagePrompt: string;
             imageUrl?: string;
@@ -179,25 +175,25 @@ async function determineTsInterface(category: string): Promise<string> {
             `export interface WeekendTripCard {
             destination: string;
             description: string;
-            travelTime: string; // e.g. "2 hours"
+            cost: string; // i.e. "$500-1000"
+            distance: string; // i.e. "100 mi"
+            lodging: string; // i.e. "Hotel", "Airbnb"
+            mainAttractions: string; // i.e. "Roller Coasters, Water Rides"
+            season: string; // i.e. "Summer", "Winter"
             vibe: string;
-            cost: string; // e.g. "$50-100"
-            mainAttractions: string[];
-            season: string;
-            lodging: string; // "hotel", "Airbnb"
             imagePrompt: string;
             imageUrl?: string;
             }`,
         "Games": 
             `export interface GameCard {
             title: string;
-            type: "board" | "video" | "card";
             description: string;
+            playerCount: string; // i.e. "2–4 Players", "1 Player"
+            averagePlaytime: string; // i.e. "8 Hrs", "30 Min"
+            type: "Board Game" | "Video Game" | "Card Game";
+            platform?: string; // i.e. "PS5, Xbox, PC" (if video game)
+            difficulty: "Easy" | "Medium" | "Hard";
             vibe: string;
-            playerCount: string; // "2–4"
-            averagePlaytime: string; // "30 mins"
-            platform?: string; // Playstation, Xbox (if video game)
-            difficulty: "easy" | "medium" | "hard";
             imagePrompt: string;
             imageUrl?: string;
             }`

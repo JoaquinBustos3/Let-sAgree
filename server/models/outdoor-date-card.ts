@@ -3,12 +3,12 @@ import { z } from 'zod';
 export const outdoorDateCardSchema = z.object({
   title: z.string().nullable(),
   description: z.string().nullable(),
-  vibe: z.string().nullable(),
   cost: z.string().nullable(),
-  distance: z.string().nullable(),
   duration: z.string().nullable(),
-  bestTime: z.string().nullable(),
-  locationType: z.string().nullable(),
+  distance: z.string().nullable(),
+  location: z.string().nullable(),
+  idealTime: z.string().nullable(),
+  vibe: z.string().nullable(),
   imagePrompt: z.string().nullable(),
   imageUrl: z.string().optional().nullable(),
 });
@@ -20,12 +20,12 @@ export type OutdoorDateCard = z.infer<typeof outdoorDateCardSchema>;
 export interface OutdoorDateCard {
   title: string;
   description: string;
+  cost: string; // i.e. "$50-100"
+  duration: string; // i.e. "1-2 Hrs"
+  distance: string; // i.e. "5.2 mi"
+  location: string; // (short address or general area)
+  idealTime: string; // i.e. "Evening", "Late Night"
   vibe: string;
-  cost: string;
-  distance: string;
-  duration: string;
-  bestTime: string; // "day", "sunset", etc.
-  locationType: string; // "park", "beach", etc.
   imagePrompt: string;
   imageUrl?: string;
 }
