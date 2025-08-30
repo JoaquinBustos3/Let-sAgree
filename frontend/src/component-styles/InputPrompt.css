@@ -26,10 +26,10 @@
 
 .form-container {
   width: 50%;
-  height: 60%;
+  height: 50%;
   min-height: fit-content;
-  background-color: #374C5F;
-  border: 2px solid white;
+  background-color: #333;
+  border: 2px solid #FAFAE5;
   border-radius: 1rem;
   padding: 0.5rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -56,6 +56,7 @@
   width: 100%; 
   box-sizing: border-box;
   background-color: transparent;
+  color: white;
   border: none;
   padding: 0.75rem;
   font-size: 1rem;
@@ -80,6 +81,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem;
+    padding-left: 0;
 }
 
 button[type="submit"] {
@@ -96,4 +98,9 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
   background-color: #4F6C88;
+}
+
+.form-group textarea:focus,
+.form-group input:focus {
+  outline: none;
 }

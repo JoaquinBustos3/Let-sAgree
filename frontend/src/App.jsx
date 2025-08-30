@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
 import Navbar from './components/Navbar.jsx';
 import Description from './components/Description.jsx';
 import Categories from './components/Categories.jsx';
 import InputPrompt from './components/InputPrompt.jsx';
+import CardGeneration from './components/CardGeneration.jsx';
 import FAQ from './components/FAQ.jsx';
 import Footer from './components/Footer.jsx';
 
 function App() {
   const [descriptionOpacity, setDescriptionOpacity] = useState(1);
+  const descriptionRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -53,6 +55,17 @@ function App() {
             isBlue={true}
             />
             <InputPrompt />
+            <Footer />
+          </div>
+        } />
+
+        {/* Card generation route */}
+        <Route path="/card-generation" element={
+          <div className="root-background card-generation-page">
+            <Navbar 
+            isBlue={false}
+            />
+            <CardGeneration />
             <Footer />
           </div>
         } />

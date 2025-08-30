@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import '../component-styles/InputPrompt.css';
 
 function InputPrompt() {
   const { categoryName } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const category = location.state || {};
   const [userInput, setUserInput] = useState('');
   const [zipCode, setZipCode] = useState('');
@@ -16,8 +17,16 @@ function InputPrompt() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Submitting:', { category: categoryName, input: userInput, zipCode: zipCode || 0 });
-    // Will add API call here later
+    console.log('Submitting:', { category: formattedName, input: userInput, zipCode: zipCode || 0 });
+
+    // Navigate to the card-generation route and pass data via state
+    navigate('/card-generation', {
+      state: {
+        category: formattedName,
+        userInput,
+        zipCode: zipCode || 0,
+      },
+    });
   };
   
   return (
@@ -42,7 +51,7 @@ function InputPrompt() {
                     id="zipCode"
                     value={zipCode}
                     onChange={(e) => setZipCode(e.target.value.replace(/\D/g, ''))}
-                    placeholder="Enter zip code"
+                    placeholder="Enter zip code..."
                     maxLength={5}
                 />
             </div>

@@ -1,0 +1,23 @@
+.card-stack {
+  position: relative;
+  width: 100%;
+  height: 86%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.stack-indicator {
+  position: absolute;
+  bottom: -45px; /* Position below the cards instead of overlapping */
+  left: 50%;
+  transform: translateX(-50%); /* Center horizontally */
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  color: #333;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 100; /* Lower z-index so it's not above cards */
+}
