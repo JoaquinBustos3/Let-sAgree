@@ -25,10 +25,16 @@
 
 .card-content {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  box-sizing: border-box; /* Ensure padding is included in width/height */
   padding: 20px;
   height: 100%;
-  overflow-y: auto;
+  overflow-y: scroll;
+  overflow-x: hidden; /* Prevent horizontal overflow at the content level */
   color: #333;
+  position: relative; /* Enable positioning of child elements */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .card-content h1, .card-content p {
@@ -36,23 +42,35 @@
     margin-bottom: 1rem;
     max-height: 48px;
     overflow: auto;
-    color: #333;
+    color: white;
+    /* text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); */
 }
 
 .card-content h1 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 700;
     margin-bottom: 0.2rem;
     max-height: 72px;
 }
 
+.card-text-overlay {
+  position: absolute;
+  top: 20.5px; /* Match existing padding */
+  left: 22px; /* Match existing padding */
+  right: 22px;
+  z-index: 5;
+  padding: 0.5rem;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 10%, rgba(0,0,0,0.4) 60%, transparent 100%); /* Add gradient overlay just behind text */
+  border-radius: 0.45rem;
+}
+
 .card-image {
-    width: 100%;
-    height: 40%;
-    max-height: 50%;
+    width: 99%;
+    height: 67%;
+    max-height: 72%;
     object-fit: cover;
     border-radius: 0.5rem;
-    border: 2px solid #FAFAE5;
+    border: 0.5px solid #FAFAE5;
     pointer-events: none; /* Prevents image from being dragged */
     user-select: none; /* Prevents image selection */
     -webkit-user-drag: none; /* Prevents image dragging in Safari/Chrome */
@@ -61,41 +79,45 @@
     -ms-user-select: none; /* IE/Edge */
 }
 
-.card-stats {
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-.card-second-row {
-    overflow-x: scroll;
-}
-
 .card-stats, .card-final-row-info {
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: center;
+    width: 100%; /* Use full width of parent */
     margin: 1rem 0;
     overflow-x: auto; /* Enable horizontal scrolling */
     white-space: nowrap; /* Prevent text wrapping */
     scrollbar-width: thin; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
-    padding-bottom: 4px; /* Space for the scrollbar */
-    gap: 12px; /* Space between items */
+    padding: 4px 0; /* Space for the scrollbar */
+    gap: 0.5rem; /* Space between items */
+    box-sizing: border-box; /* Include padding in width calculation */
+    max-width: fit-content; /* Prevent expanding beyond container */
 }
 
-/* Hide scrollbar but keep functionality
-/* .card-stats::-webkit-scrollbar, 
-.card-final-row-info::-webkit-scrollbar,
-.card-second-row::-webkit-scrollbar {
-    height: 1px;
-} 
+.card-stats {
+    font-weight: 600;
+}
 
-.card-stats::-webkit-scrollbar-thumb, 
-.card-final-row-info::-webkit-scrollbar-thumb,
-.card-second-row::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
-} */
+.card-final-row-info {
+  margin-bottom: 0;
+}
+
+.card-final-row-info > *, .card-second-row, .card-stats > * {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.5rem;
+  width: fit-content;
+}
+
+.card-second-row {
+  overflow-x: scroll;
+}
 
 /* Remove transform-origin properties since we're not rotating anymore */
 .card-current {
@@ -158,3 +180,47 @@
 .swiping-down {
   animation: swipe-down 0.5s forwards;
 }
+
+/* Heart overlay styling */
+.heart-overlay, .trash-overlay {
+  position: absolute;
+  top: -8;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.heart-overlay img, .trash-overlay img {
+  width: 10rem;
+  height: 10rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.trash-overlay img {
+  width: 11rem;
+  height: 11rem;
+  padding-top: 2rem;
+}
+
+.liked-indicator, .disliked-indicator {
+  position: absolute;
+  bottom: calc(100% - 65%); /* Position at the bottom of the image */
+  right: 30px; /* Distance from right edge */
+  width: 2.5rem;
+  height: 2.5rem;
+  z-index: 6; /* Above other elements */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.liked-indicator {
+  width: 2rem;
+  height: 2rem;
+  padding: 0 0.2rem 0.2rem 0;
+}
+
+

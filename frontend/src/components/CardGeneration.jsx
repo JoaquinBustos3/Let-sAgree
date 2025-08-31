@@ -34,22 +34,23 @@ function CardGeneration() {
         //include category type in each card
         const cardsWithType = data.map(card => ({
             ...card,
-            type: category
+            type: category,
+            isLiked: null
         }))
         setCards(cardsWithType);
       } catch (error) {
         console.error('Error fetching cards:', error);
         // Provide fallback data for testing
         setCards([
-          { name: 'Longer Name Card 1', description: 'Description for card 1', priceRange: '$$', rating: '4.4 Stars', distance: '4.3 mi', location: '123 Main St, City, State', cuisine: 'Italian', vibe: 'fancy, cool', type: "Restaurant" },
-          { name: 'Longer Longer Name Card 2', description: 'Actually long description for card 2 that describes the item more clearly more more mroe more more more ', priceRange: '$', rating: '4.0 Stars', distance: '2.1 mi', location: '456 Elm St, City, State', cuisine: 'Mexican, Latino', vibe: 'casual, vibrant, epic, awesome', type: "Restaurant" },
-          { name: 'Card 3', description: 'Description for card 3', priceRange: '$$$', rating: '4.8 Stars', distance: '3.5 mi', location: '789 Oak St, City, State', cuisine: 'Japanese', vibe: 'elegant, serene', type: "Restaurant" },
-          { name: 'Card 4', description: 'Description for card 4', priceRange: '$$', rating: '4.4 Stars', distance: '4.3 mi', location: '123 Main St, City, State', cuisine: 'Italian', vibe: 'fancy, cool', type: "Restaurant" },
-          { name: 'Card 5', description: 'Description for card 5', priceRange: '$', rating: '4.0 Stars', distance: '2.1 mi', location: '456 Elm St, City, State', cuisine: 'Mexican', vibe: 'casual, vibrant', type: "Restaurant" },
-          { name: 'Card 6', description: 'Description for card 6', priceRange: '$$$', rating: '4.8 Stars', distance: '3.5 mi', location: '789 Oak St, City, State', cuisine: 'Japanese', vibe: 'elegant, serene', type: "Restaurant" },
-          { name: 'Card 7', description: 'Description for card 7', priceRange: '$$', rating: '4.4 Stars', distance: '4.3 mi', location: '123 Main St, City, State', cuisine: 'Italian', vibe: 'fancy, cool', type: "Restaurant" },
-          { name: 'Card 8', description: 'Description for card 8', priceRange: '$', rating: '4.0 Stars', distance: '2.1 mi', location: '456 Elm St, City, State', cuisine: 'Mexican', vibe: 'casual, vibrant', type: "Restaurant" },
-          { name: 'Card 9', description: 'Description for card 9', priceRange: '$$$', rating: '4.8 Stars', distance: '3.5 mi', location: '789 Oak St, City, State', cuisine: 'Japanese', vibe: 'elegant, serene', type: "Restaurant" },
+          { name: 'Longer Name Card 1', description: 'Description for card 1', priceRange: '$$', rating: '4.4 stars', distance: '4.3 mi', location: '123 Main St, City, State', cuisine: 'Italian', vibe: 'fancy, cool', type: "Restaurants", isLiked: null },
+          { name: 'Longer Longer Name Card 2', description: 'Actually long description for card 2 that describes the item more clearly more more mroe more more more ', priceRange: '$', rating: '4.0 stars', distance: '2.1 mi', location: '456 Elm St, City, State', cuisine: 'Mexican, Latino', vibe: 'casual, vibrant, epic, awesome, more awesome', type: "Restaurants", isLiked: null },
+          { name: 'Card 3', description: 'Description for card 3', priceRange: '$$$', rating: '4.8 stars', distance: '3.5 mi', location: '789 Oak St, City, State', cuisine: 'Japanese', vibe: 'elegant, serene', type: "Restaurants", isLiked: null },
+          { name: 'Card 4', description: 'Description for card 4', priceRange: '$$', rating: '4.4 stars', distance: '4.3 mi', location: '123 Main St, City, State', cuisine: 'Italian', vibe: 'fancy, cool', type: "Restaurants", isLiked: null },
+          { name: 'Card 5', description: 'Description for card 5', priceRange: '$', rating: '4.0 stars', distance: '2.1 mi', location: '456 Elm St, City, State', cuisine: 'Mexican', vibe: 'casual, vibrant', type: "Restaurants", isLiked: null },
+          { name: 'Card 6', description: 'Description for card 6', priceRange: '$$$', rating: '4.8 stars', distance: '3.5 mi', location: '789 Oak St, City, State', cuisine: 'Japanese', vibe: 'elegant, serene', type: "Restaurants", isLiked: null },
+          { name: 'Card 7', description: 'Description for card 7', priceRange: '$$', rating: '4.4 stars', distance: '4.3 mi', location: '123 Main St, City, State', cuisine: 'Italian', vibe: 'fancy, cool', type: "Restaurants", isLiked: null },
+          { name: 'Card 8', description: 'Description for card 8', priceRange: '$', rating: '4.0 stars', distance: '2.1 mi', location: '456 Elm St, City, State', cuisine: 'Mexican', vibe: 'casual, vibrant', type: "Restaurants", isLiked: null },
+          { name: 'Card 9', description: 'Description for card 9', priceRange: '$$$', rating: '4.8 stars', distance: '3.5 mi', location: '789 Oak St, City, State', cuisine: 'Japanese', vibe: 'elegant, serene', type: "Restaurants", isLiked: null },
 
         // { title: 'Card 1', type: "video", description: 'Description for card 1', vibe: "fancy, cool", playerCount: "2-4", averagePlaytime: "1 hr", platform: "PS5", difficulty: "Hard", type: "Game" },
         // { title: 'Card 2', type: "video", description: 'Description for card 2', vibe: "casual, vibrant", playerCount: "1-2", averagePlaytime: "30 min", platform: "PC", difficulty: "Easy", type: "Game" },
@@ -82,9 +83,9 @@ function CardGeneration() {
 
   return (
     <div className="card-generation-container">
-      <p>{category}: <strong>Partner 1 Turn</strong></p>
+      {/* <p>{category}: <strong>Partner 1 Turn</strong></p> */}
       <CardStack 
-      cards={cards} 
+      cardsReceived={cards} 
       />
     </div>
   );

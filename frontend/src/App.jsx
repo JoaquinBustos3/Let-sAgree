@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
 import Navbar from './components/Navbar.jsx';
@@ -11,7 +11,6 @@ import Footer from './components/Footer.jsx';
 
 function App() {
   const [descriptionOpacity, setDescriptionOpacity] = useState(1);
-  const descriptionRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {

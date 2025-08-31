@@ -1,41 +1,85 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from './Card';
 import '../component-styles/CardStack.css';
+import Fireworks from "react-canvas-confetti/dist/presets/fireworks"
 
-function CardStack({ cards }) {
+
+function CardStack({ cardsReceived }) {
+
+  const [cards, setCards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [swipeDirection, setSwipeDirection] = useState(null);
-  const startX = useRef(0);
-  const startY = useRef(0);
+  //turn 1, turn 2, turn 3 (for choosing how to continue game)
+  const [currentTurn, setCurrentTurn] = useState(0);
+  const [isFinished, setIsFinished] = useState(false);
+  const [tempLikedCards, setTempLikedCards] = useState([]);
+  const [matches, setMatches] = useState([]);   
 
-  const handleTouchStart = (e) => {
-    startX.current = e.touches[0].clientX;
-    startY.current = e.touches[0].clientY;
-  };
-  
-  const handleTouchMove = (e) => {
-    if (!startX.current || !startY.current) return;
-    const currentX = e.touches[0].clientX;
-    const currentY = e.touches[0].clientY;
-    const diffX = currentX - startX.current;
-    const diffY = currentY - startY.current;
-    
-    if (Math.abs(diffX) > 50) {
-      setSwipeDirection(diffX > 0 ? 'right' : 'left');
-    } else if (Math.abs(diffY) > 50) {
-      setSwipeDirection(diffY > 0 ? 'down' : 'up');
+  useEffect(() => {
+    if (cardsReceived && cardsReceived.length > 0) {
+      setCards(cardsReceived);
     }
-  };
-  
-  const handleTouchEnd = () => {
-    if (swipeDirection) {
-      handleSwipe(swipeDirection);
+  }, [cardsReceived]);
+
+  const handleTurn3 = (numOption) => {
+    //options - 1) choose together, 2) random option, 3) onto another round
+    if (numOption == 1) {
+        //current index card is chosen
+        setIsFinished(true);
     }
-    startX.current = 0;
-    startY.current = 0;
-    setSwipeDirection(null);
-  };
-  
+    else if (numOption == 2) {
+        //random option from matches
+        if (cards.length <= 1) {
+          // No need to randomize if there's only one card
+          return;
+        }
+        
+        // Generate initial random index
+        let randomIndex = Math.floor(Math.random() * cards.length);
+        
+        // If the random index happens to be the current index, move to adjacent card
+        if (randomIndex === currentIndex) {
+          // Choose next card circularly (if at end, wrap to beginning)
+          if (currentIndex === cards.length - 1) {
+            randomIndex = 0;
+          } else {
+            randomIndex = currentIndex + 1;
+          }
+        }
+        
+        console.log("Random index chosen: ", randomIndex);
+        setCurrentIndex(randomIndex);
+    }
+    else{
+        //another round
+        setCurrentIndex(0);
+        setCurrentTurn(0);
+        setMatches([]);
+        setTempLikedCards([]);
+    }
+  }
+
+  const finishTurn = () => {
+    console.log("Finishing turn of: ", currentTurn);
+    //end of turn 1
+    if (currentTurn == 0) {
+        setMatches(tempLikedCards); //will match with tempLikedCards next turn
+        setCurrentIndex(0);
+        setTempLikedCards([]);
+        setCurrentTurn(1);
+        setCards(cards.map(card => ({ ...card, isLiked: null }))); //reset isLiked for all cards
+    }
+    //end of turn 2
+    else if (currentTurn == 1) {
+        setCurrentIndex(0);
+        setCurrentTurn(2);
+        //find matches
+        const newMatches = cards.filter(card => tempLikedCards.includes(card) && matches.includes(card));
+        setMatches(newMatches);
+        setTempLikedCards([]);
+        setCards(matches);
+    }
+  }
+
   const handleSwipe = (direction) => {
     switch(direction) {
       case 'left':
@@ -43,6 +87,7 @@ function CardStack({ cards }) {
         if (currentIndex < cards.length - 1) {
           setCurrentIndex(currentIndex + 1);
         }
+        //reached last card
         break;
         
       case 'right':
@@ -53,51 +98,106 @@ function CardStack({ cards }) {
         break;
         
       case 'up':
-        // Accept current card
-        console.log(`Card accepted: ${cards[currentIndex]?.name || cards[currentIndex]?.title}`);
+        // Mark as liked and accept current card
+        setCards(cards.map((card, index) => 
+          index === currentIndex ? { ...card, isLiked: true } : card
+        ));
+        setTempLikedCards([...tempLikedCards, cards[currentIndex]]);
+        console.log(`Temp liked cards: ${tempLikedCards.map(card => card.name || card.title).join(', ')}`);
+
         // If last card, do nothing; otherwise move to next
         if (currentIndex < cards.length - 1) {
           setCurrentIndex(currentIndex + 1);
         }
+
         break;
         
       case 'down':
-        // Reject current card
-        console.log(`Card rejected: ${cards[currentIndex]?.name || cards[currentIndex]?.title}`);
+        // Mark as disliked and reject current card
+        setCards(cards.map((card, index) => 
+          index === currentIndex ? { ...card, isLiked: false } : card
+        ));
+        setTempLikedCards([...tempLikedCards.filter(card => card !== cards[currentIndex])]);
+        console.log(`Temp liked cards: ${tempLikedCards.map(card => card.name || card.title).join(', ')}`);
+
         // If last card, do nothing; otherwise move to next
         if (currentIndex < cards.length - 1) {
           setCurrentIndex(currentIndex + 1);
         }
+
         break;
     }
   };
   
+  // Show better loading indicator when cards array is empty
   if (!cards || cards.length === 0) {
-    return <div className="no-cards">No cards available</div>;
+    return (
+      <div className="no-cards">
+        {cardsReceived ? "No cards found" : "Loading cards..."}
+      </div>
+    );
   }
 
-  // Calculate visible range for improved performance
-  const startIdx = Math.max(0, currentIndex - 2);
-  const endIdx = Math.min(cards.length - 1, currentIndex + 2);
-  const visibleCards = cards.slice(startIdx, endIdx + 1);
+  if (isFinished) {
+    return (
+        <>
+            <Fireworks autorun={{ speed: 2}}/>
+            <h1 className='final-agreement'>Congratulations! You Agreed on {cards[currentIndex].name}</h1>
+            <div className="card-stack">
+                <Card 
+                index = {currentIndex}
+                data={cards[currentIndex]}
+                currentIndex={currentIndex}
+                onSwipe={handleSwipe}
+                finishTurn={finishTurn}
+                turn3={handleTurn3}
+                />
+            </div>
+        </>
+    );
+  }
 
   return (
-    <div className="card-stack">
-      {/* Render all cards but only the ones close to current index will be visible */}
-      {cards.map((card, index) => (
-        <Card 
-          key={index}
-          data={card}
-          index={index}
-          currentIndex={currentIndex}
-          onSwipe={handleSwipe}
-        />
-      ))}
-      
-      <div className="stack-indicator">
-        {currentIndex + 1} of {cards.length}
-      </div>
-    </div>
+    <>
+        {
+            currentTurn < 2 ?  
+            <p>{cards[0].type}: <strong>User {currentTurn + 1}'s Turn</strong></p> : 
+            <div className ="turn3-info-container">
+                <p>Congrats! You have <strong>{cards.length} {cards.length > 1 ? "matches!" : "match!"}</strong></p>
+                <div onClick={() => handleTurn3(1)} className="turn3-button choose">Agree on Current</div>
+                <div onClick={() => handleTurn3(2)} className="turn3-button random">Random Pick</div>
+                <div onClick={() => handleTurn3(3)} className="turn3-button next">Next Round</div>
+            </div>
+        }
+        <div className="card-stack">
+            {/* Render all cards but only the ones close to current index will be visible */}
+            {cards.map((card, index) => (
+                <Card 
+                key={index}
+                data={card}
+                index={index}
+                currentIndex={currentIndex}
+                onSwipe={handleSwipe}
+                finishTurn={finishTurn}
+                turn3={handleTurn3}
+                />
+            ))}
+            
+            {
+                (currentIndex === cards.length - 1 && currentTurn != 2) ? 
+                (
+                    <div onClick={() => finishTurn()} className="end-turn-button">
+                        Finish Turn
+                    </div>
+                ) : 
+                (
+                    <div className="stack-indicator">
+                        {currentIndex + 1} of {cards.length}
+                    </div>
+                )
+            }
+        </div>
+    </>
   );
 }
 

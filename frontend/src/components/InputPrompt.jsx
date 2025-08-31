@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../component-styles/InputPrompt.css';
 
 function InputPrompt() {
-  const { categoryName } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const category = location.state || {};

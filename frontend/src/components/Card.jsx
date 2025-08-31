@@ -1,17 +1,19 @@
 import React, { useState, useRef } from 'react';
 import '../component-styles/Card.css';
+import filledHeart from '../images/heart-filled.svg';
+import xBubble from '../images/x-bubble.svg';
 
-function Card({ data, index, currentIndex, onSwipe }) {
+function Card({ data, index, currentIndex, onSwipe, finishTurn, turn3 }) {
   // State for tracking drag movement
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
+  const [heartOpacity, setHeartOpacity] = useState(0);
+  const [trashOpacity, setTrashOpacity] = useState(0);
   const startPos = useRef({ x: 0, y: 0 });
-  
-  console.log(data.type);
 
   const schemaFieldMap = {
-    Restaurant: ["name", "description", "priceRange", "rating", "distance", "location", "cuisine", "vibe"],
-    Game: ["title", "type", "description", "vibe", "playerCount", "averagePlaytime", "platform", "difficulty"],
+    Restaurants: ["name", "description", "priceRange", "rating", "distance", "location", "cuisine", "vibe"],
+    Games: ["title", "type", "description", "vibe", "playerCount", "averagePlaytime", "platform", "difficulty"],
   };
   const fields = schemaFieldMap[data.type] || [];
   
@@ -88,6 +90,22 @@ function Card({ data, index, currentIndex, onSwipe }) {
     const deltaY = clientY - startPos.current.y;
     
     setDragOffset({ x: deltaX, y: deltaY });
+    
+    // Calculate heart/x-bubble opacity based on vertical movement
+    if (deltaY < 0) {
+      // Map deltaY from [0, -SWIPE_THRESHOLD] to [0, 1] for opacity
+      const newOpacity = Math.min(1, Math.abs(deltaY) / SWIPE_THRESHOLD);
+      setHeartOpacity(newOpacity);
+      setTrashOpacity(0);
+    } else if (deltaY > 0) {
+      // Map deltaY from [0, SWIPE_THRESHOLD] to [0, 1] for x-bubble opacity
+      const newOpacity = Math.min(1, Math.abs(deltaY) / SWIPE_THRESHOLD);
+      setTrashOpacity(newOpacity);
+      setHeartOpacity(0);
+    } else {
+      setHeartOpacity(0);
+      setTrashOpacity(0);
+    }
   };
   
   // Handle end of drag/touch
@@ -106,6 +124,10 @@ function Card({ data, index, currentIndex, onSwipe }) {
         onSwipe(dragOffset.y > 0 ? 'down' : 'up');
       }
     }
+    
+    // Reset heart and trash opacity
+    setHeartOpacity(0);
+    setTrashOpacity(0);
     
     // Reset state
     setIsDragging(false);
@@ -144,9 +166,48 @@ function Card({ data, index, currentIndex, onSwipe }) {
       onTouchEnd={index === currentIndex ? handleDragEnd : undefined}
     >
       <div className="card-content">
-        <h1>{data[fields[0]] ? data[fields[0]].toUpperCase() : ""}</h1>
-        <p>{data[fields[1]] ? data[fields[1]] : ""}</p>
         <img className="card-image" src="https://picsum.photos/200/300" alt="result"></img>
+        
+        {/* Add the liked/disliked indicator overlay here */}
+        {
+            (data.isLiked && data.isLiked != null) ? 
+            (<img 
+                src={filledHeart} 
+                alt="Liked" 
+                className="liked-indicator" 
+            />) : (!data.isLiked && data.isLiked != null) ? 
+            (<img 
+                src={xBubble} 
+                alt="Disliked" 
+                className="disliked-indicator" 
+            />) : <></>
+        }
+        
+        {/* Heart overlay - only visible when being dragged upward */}
+        {index === currentIndex && (
+          <div 
+            className="heart-overlay"
+            style={{ opacity: heartOpacity }}
+          >
+            <img src={filledHeart} alt="Like" />
+          </div>
+        )}
+        
+        {/* X Bubble overlay - only visible when being dragged downward */}
+        {index === currentIndex && (
+          <div 
+            className="trash-overlay"
+            style={{ opacity: trashOpacity }}
+          >
+            <img src={xBubble} alt="Dislike" />
+          </div>
+        )}
+        
+        <div className="card-text-overlay">
+          <h1>{data[fields[0]] ? data[fields[0]].toUpperCase() : ""}</h1>
+          <p>{data[fields[1]] ? data[fields[1]] : ""}</p>
+        </div>
+
         <div className="card-stats">
           <div>{data[fields[2]] ? data[fields[2]] : ""}</div>
           •
