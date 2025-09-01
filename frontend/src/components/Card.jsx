@@ -3,7 +3,7 @@ import '../component-styles/Card.css';
 import filledHeart from '../images/heart-filled.svg';
 import xBubble from '../images/x-bubble.svg';
 
-function Card({ data, index, currentIndex, onSwipe, finishTurn, turn3 }) {
+function Card({ data, index, currentIndex, onSwipe }) {
   // State for tracking drag movement
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -166,6 +166,7 @@ function Card({ data, index, currentIndex, onSwipe, finishTurn, turn3 }) {
       onTouchEnd={index === currentIndex ? handleDragEnd : undefined}
     >
       <div className="card-content">
+        
         <img className="card-image" src="https://picsum.photos/200/300" alt="result"></img>
         
         {/* Add the liked/disliked indicator overlay here */}

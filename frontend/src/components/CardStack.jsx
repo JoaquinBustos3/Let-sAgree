@@ -102,7 +102,9 @@ function CardStack({ cardsReceived }) {
         setCards(cards.map((card, index) => 
           index === currentIndex ? { ...card, isLiked: true } : card
         ));
-        setTempLikedCards([...tempLikedCards, cards[currentIndex]]);
+        if (!tempLikedCards.includes(cards[currentIndex])) {
+          setTempLikedCards([...tempLikedCards, cards[currentIndex]]);
+        }
         console.log(`Temp liked cards: ${tempLikedCards.map(card => card.name || card.title).join(', ')}`);
 
         // If last card, do nothing; otherwise move to next
@@ -117,7 +119,11 @@ function CardStack({ cardsReceived }) {
         setCards(cards.map((card, index) => 
           index === currentIndex ? { ...card, isLiked: false } : card
         ));
-        setTempLikedCards([...tempLikedCards.filter(card => card !== cards[currentIndex])]);
+        setTempLikedCards(tempLikedCards.filter((card) => { 
+            const firstKey = Object.keys(card)[0];
+            return (card[firstKey] !== (cards[currentIndex][firstKey]));
+        }));
+        console.log(`current index is ${currentIndex} and card is ${cards[currentIndex].name || cards[currentIndex].title}`);
         console.log(`Temp liked cards: ${tempLikedCards.map(card => card.name || card.title).join(', ')}`);
 
         // If last card, do nothing; otherwise move to next
@@ -161,7 +167,7 @@ function CardStack({ cardsReceived }) {
     <>
         {
             currentTurn < 2 ?  
-            <p>{cards[0].type}: <strong>User {currentTurn + 1}'s Turn</strong></p> : 
+            <p>Swipe up or down on the {cards[0].type}! <strong>User {currentTurn + 1}'s Turn.</strong></p> : 
             <div className ="turn3-info-container">
                 <p>Congrats! You have <strong>{cards.length} {cards.length > 1 ? "matches!" : "match!"}</strong></p>
                 <div onClick={() => handleTurn3(1)} className="turn3-button choose">Agree on Current</div>

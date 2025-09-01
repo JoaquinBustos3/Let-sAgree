@@ -199,12 +199,12 @@
   width: 10rem;
   height: 10rem;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+  padding-top: 2rem;
 }
 
 .trash-overlay img {
   width: 11rem;
   height: 11rem;
-  padding-top: 2rem;
 }
 
 .liked-indicator, .disliked-indicator {
