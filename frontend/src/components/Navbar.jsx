@@ -50,7 +50,7 @@ function Navbar({ isBlue }) {
         transform: `translateY(-${hideAmount * 100}%)` 
       }}
     >
-      <div className="navbar-left">
+      <div onClick={() => navigate('/')} className="navbar-left">
         <img src={logo} alt="Logo" className="logo-image" /> 
       </div>
       <div className="navbar-right">

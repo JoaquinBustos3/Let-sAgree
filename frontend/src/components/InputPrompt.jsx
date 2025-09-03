@@ -14,6 +14,8 @@ function InputPrompt() {
     ?.toLowerCase()
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
+  const zipCodeCategories = ["Restaurants", "Indoor Date Activities", "Outdoor Date Activities", "Takeout/Delivery", "Things To Do Nearby", "Weekend Trip Ideas"];
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Submitting:', { category: formattedName, input: userInput, zipCode: zipCode || 0 });
@@ -45,14 +47,15 @@ function InputPrompt() {
 
         <div className="bottom-row-form">
             <div className="form-group">
-                <input 
+                {zipCodeCategories.includes(formattedName) &&
+                    <input 
                     type="text"
                     id="zipCode"
                     value={zipCode}
                     onChange={(e) => setZipCode(e.target.value.replace(/\D/g, ''))}
                     placeholder="Enter zip code..."
                     maxLength={5}
-                />
+                />}
             </div>
             <button type="submit">Find Agreements</button>
         </div>

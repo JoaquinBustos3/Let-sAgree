@@ -44,10 +44,14 @@
   color: inherit; /* This will now work properly */
 }
 
+.navbar-left {
+  cursor: pointer; /* Indicate it's clickable */
+}
+
 .logo-image {
   width: 2.2rem;
   height: 2.2rem; 
-  /* padding-top: 0.4rem; */
+  padding-top: 0.4rem;
 }
 
 .navbar-link {
@@ -57,7 +61,7 @@
   position: relative; /* Enable positioning for the hover effect */
 }
 
-.navbar-link:hover {
+.navbar-link:hover, .navbar-link:active {
   color: #aaa;
 }
 
@@ -83,7 +87,7 @@
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
 }
 
-.beta-box:hover {
+.beta-box:hover, .beta-box:active {
   animation: gentle-pulse 3s ease-in-out infinite;
 }
 
@@ -96,4 +100,39 @@
     transform: scale(1.05);
     opacity: 0.9;
   }
+}
+
+@media (max-width: 480px) {
+
+  .navbar {
+    justify-items: auto;
+    font-size: 0.9rem;
+    padding: 1rem 1rem;
+  }
+
+  .navbar-right {
+    gap: 1rem;
+    padding: 0.3rem 1rem;
+  }
+
+  .logo-image {
+    width: 1.8rem;
+    height: 1.8rem; 
+  }
+
+  .beta-box {
+    padding: 0.1rem 0.6rem;
+  }
+
+  .navbar-link:hover::before {
+    top: -0.2rem;
+    left: -0.5rem;
+    right: -0.5rem;
+    bottom: -0.2rem;
+  }
+
+body {
+  -webkit-touch-callout: none;
+}
+
 }

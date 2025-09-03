@@ -27,7 +27,7 @@
     color: white;
 }
 
-.end-turn-button:hover, .turn3-button:hover {
+.end-turn-button:hover, .card-button:hover {
   background-color: #4F6C88;;
   cursor: pointer;
 }
@@ -39,7 +39,7 @@
     gap: 1rem;
 }
 
-.turn3-button {
+.card-button {
   background-color: #7FA1BA;
   color: white!important;
   padding: 5px 12px;
@@ -50,6 +50,18 @@
   margin-bottom: 0.6rem;
 }
 
+.no-matches-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.card-button.no-matches {
+    width: 5rem;
+    margin-top: 0.5rem;
+}
 
 .no-cards {
   color: #555;
@@ -63,6 +75,12 @@
     margin-bottom: 2rem;
     font-weight: bold;
     animation: growHeader 5s forwards;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.user-turn {
+    animation: growHeader 2s forwards;
     opacity: 0;
     transform: scale(0.8);
 }

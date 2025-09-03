@@ -110,3 +110,9 @@
     letter-spacing: 0.05em;
     z-index: 2; /* Ensure text stays above gradient */
 }
+
+@media (max-width: 480px) {
+
+
+    
+}

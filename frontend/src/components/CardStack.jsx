@@ -13,12 +13,31 @@ function CardStack({ cardsReceived }) {
   const [isFinished, setIsFinished] = useState(false);
   const [tempLikedCards, setTempLikedCards] = useState([]);
   const [matches, setMatches] = useState([]);   
+  const [prevMatches, setPrevMatches] = useState([]);  //used to try again when there are no matches in the round
 
   useEffect(() => {
     if (cardsReceived && cardsReceived.length > 0) {
       setCards(cardsReceived);
     }
   }, [cardsReceived]);
+
+  //determines if arr contains object with same first key value as obj
+  const contains = (arr, obj) => {
+    const firstKey = Object.keys(obj)[0]; // e.g. "id", "title", etc.
+    return arr.some((each) => each[firstKey] === obj[firstKey]);
+  }
+
+  const resetCurrentCardsLikes = () => {
+    setCards(cards.map(card => ({ ...card, isLiked: null })));
+  }
+
+  const handleRetry = () => {
+    setCurrentIndex(0);
+    setCurrentTurn(0);
+    setMatches([]);
+    setTempLikedCards([]);
+    setCards(prevMatches.map(card => ({ ...card, isLiked: null }))); //have to perform atomically since setCards() is asynchronous in nature
+  }
 
   const handleTurn3 = (numOption) => {
     //options - 1) choose together, 2) random option, 3) onto another round
@@ -50,11 +69,12 @@ function CardStack({ cardsReceived }) {
         setCurrentIndex(randomIndex);
     }
     else{
-        //another round
+        //another round - cards already set by finishTurn() turn 2
         setCurrentIndex(0);
         setCurrentTurn(0);
         setMatches([]);
         setTempLikedCards([]);
+        resetCurrentCardsLikes();
     }
   }
 
@@ -66,17 +86,23 @@ function CardStack({ cardsReceived }) {
         setCurrentIndex(0);
         setTempLikedCards([]);
         setCurrentTurn(1);
-        setCards(cards.map(card => ({ ...card, isLiked: null }))); //reset isLiked for all cards
+        resetCurrentCardsLikes();
     }
     //end of turn 2
     else if (currentTurn == 1) {
         setCurrentIndex(0);
         setCurrentTurn(2);
         //find matches
-        const newMatches = cards.filter(card => tempLikedCards.includes(card) && matches.includes(card));
-        setMatches(newMatches);
+        const newMatches = cards.filter(card => contains(tempLikedCards, card) && contains(matches, card));
+        
+        //set matches only if there are matches, else for later on logic - we will retry
+        if (newMatches.length == 0)
+            setPrevMatches(cards);
+
+        setMatches(newMatches); 
         setTempLikedCards([]);
-        setCards(matches);
+        setCards(newMatches); 
+
     }
   }
 
@@ -97,12 +123,13 @@ function CardStack({ cardsReceived }) {
         }
         break;
         
-      case 'up':
+      case 'up': {
         // Mark as liked and accept current card
         setCards(cards.map((card, index) => 
           index === currentIndex ? { ...card, isLiked: true } : card
         ));
-        if (!tempLikedCards.includes(cards[currentIndex])) {
+
+        if (!contains(tempLikedCards, cards[currentIndex])) {
           setTempLikedCards([...tempLikedCards, cards[currentIndex]]);
         }
         console.log(`Temp liked cards: ${tempLikedCards.map(card => card.name || card.title).join(', ')}`);
@@ -113,7 +140,7 @@ function CardStack({ cardsReceived }) {
         }
 
         break;
-        
+    }
       case 'down':
         // Mark as disliked and reject current card
         setCards(cards.map((card, index) => 
@@ -139,7 +166,14 @@ function CardStack({ cardsReceived }) {
   if (!cards || cards.length === 0) {
     return (
       <div className="no-cards">
-        {cardsReceived ? "No cards found" : "Loading cards..."}
+        {cardsReceived ? 
+        <div className='no-matches-block'>
+            <strong>No Matches...</strong>
+            Let's try again. There's something we can agree on!
+            <div onClick={() => handleRetry()} className='card-button no-matches'> Try Again </div>
+        </div> : 
+        <div><strong>Loading cards...</strong></div>
+        }
       </div>
     );
   }
@@ -167,12 +201,15 @@ function CardStack({ cardsReceived }) {
     <>
         {
             currentTurn < 2 ?  
-            <p>Swipe up or down on the {cards[0].type}! <strong>User {currentTurn + 1}'s Turn.</strong></p> : 
-            <div className ="turn3-info-container">
+            // Add a unique key based on currentTurn to force re-rendering and animation restart
+            <p key={`turn-${currentTurn}`} className="user-turn">
+              Swipe up or down on the {cards[0].type}! <strong>User {currentTurn + 1}'s Turn.</strong>
+            </p> : 
+            <div className="turn3-info-container">
                 <p>Congrats! You have <strong>{cards.length} {cards.length > 1 ? "matches!" : "match!"}</strong></p>
-                <div onClick={() => handleTurn3(1)} className="turn3-button choose">Agree on Current</div>
-                <div onClick={() => handleTurn3(2)} className="turn3-button random">Random Pick</div>
-                <div onClick={() => handleTurn3(3)} className="turn3-button next">Next Round</div>
+                <div onClick={() => handleTurn3(1)} className="card-button choose">Agree on Current</div>
+                <div onClick={() => handleTurn3(2)} className="card-button random">Random Pick</div>
+                <div onClick={() => handleTurn3(3)} className="card-button next">Next Round</div>
             </div>
         }
         <div className="card-stack">
