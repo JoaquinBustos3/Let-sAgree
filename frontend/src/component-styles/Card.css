@@ -223,4 +223,12 @@
   padding: 0 0.2rem 0.2rem 0;
 }
 
+@media (max-width: 480px) { 
 
+  .card {
+    width: 80%;
+    left: 50%;
+    margin-left: -40%;
+  }
+
+}

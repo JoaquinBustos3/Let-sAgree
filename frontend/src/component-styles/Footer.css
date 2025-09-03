@@ -35,3 +35,11 @@
   height: 1.5rem;
   padding-top: 0.4rem;
 }
+
+@media (max-width: 480px) {
+
+  .footer-right {
+    gap: 0.6rem;
+  }
+
+}

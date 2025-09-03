@@ -113,6 +113,23 @@
 
 @media (max-width: 480px) {
 
+    .inner-container {
+        width: 96%;
+        grid-template-columns: repeat(2, 1fr); /* 2 columns */
+        grid-auto-rows: 1fr;
+    }
 
+    .box:last-child {
+        width: 205%;
+    }
+
+    .category-name {
+        font-size: 0.6rem;
+    }
+
+    .category-icon {
+        width: 1.9rem;
+        height: 1.9rem;
+    }
     
 }

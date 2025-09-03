@@ -37,3 +37,22 @@
     transform: rotate(-360deg); /* Negative value for counterclockwise rotation */
   }
 }
+
+@media (max-width: 480px) { 
+
+  .card-generation-container h1 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-generation-container p {
+    font-size: 0.8rem;
+    margin-bottom: 0.3rem;
+  }
+  
+  .category-loading-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+}
