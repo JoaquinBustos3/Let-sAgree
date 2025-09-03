@@ -13,6 +13,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   display: flex;
@@ -26,4 +32,18 @@ body {
     #F2E8C9 50%,    /* mid beige, noticeably darker */
     #E6D9B8 100%    /* richest beige, warm undertone */
   );
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  a, button {
+    touch-action: manipulation; /* disables delay on taps */
+  }
+
+  * {
+  -webkit-tap-highlight-color: transparent;
+  }
 }

@@ -1,14 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
 import Navbar from './components/Navbar.jsx';
 import Description from './components/Description.jsx';
 import Categories from './components/Categories.jsx';
-import FAQ from './components/FAQ.jsx'; // Import the FAQ component
+import InputPrompt from './components/InputPrompt.jsx';
+import CardGeneration from './components/CardGeneration.jsx';
+import FAQ from './components/FAQ.jsx';
 import Footer from './components/Footer.jsx';
 
 function App() {
   const [descriptionOpacity, setDescriptionOpacity] = useState(1);
-  const descriptionRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,19 +30,46 @@ function App() {
   }, []);
 
   return (
-    <div className="root-background">
-      <Navbar />
-      <div 
-        ref={descriptionRef}
-        className="description-wrapper"
-        style={{ opacity: descriptionOpacity }}
-      >
-        <Description />
-      </div>
-      <Categories />
-      <FAQ /> {/* Add the FAQ component here, between Categories and Footer */}
-      <Footer />
-    </div>
+    <Router>
+      <Routes>
+        {/* Home route */}
+        <Route path="/" element={
+          <div className="root-background">
+            <Navbar 
+            isBlue={false}
+            />
+            <div className="description-wrapper" style={{ opacity: descriptionOpacity }}>
+              <Description />
+            </div>
+            <Categories />
+            <FAQ />
+            <Footer />
+          </div>
+        } />
+        
+        {/* Category routes */}
+        <Route path="/category/:categoryName" element={
+          <div className="root-background prompt-page">
+            <Navbar 
+            isBlue={true}
+            />
+            <InputPrompt />
+            <Footer />
+          </div>
+        } />
+
+        {/* Card generation route */}
+        <Route path="/card-generation" element={
+          <div className="root-background card-generation-page">
+            <Navbar 
+            isBlue={false}
+            />
+            <CardGeneration />
+            <Footer />
+          </div>
+        } />
+      </Routes>
+    </Router>
   );
 }
 

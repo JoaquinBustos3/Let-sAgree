@@ -1,0 +1,234 @@
+.card {
+  position: absolute;
+  width: 30%;
+  height: 100%;
+  border-radius: 1rem;
+  background-color: #7FA1BA;
+  border: 2px solid #FAFAE5;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  cursor: grab;
+  /* Center the transform origin to scale cards uniformly */
+  transform-origin: center center;
+  /* Center all cards horizontally within container */
+  left: 50%;
+  margin-left: -15%; /* Half of card width (30%) for perfect centering */
+  /* Ensure all cards have a minimum visibility */
+  user-select: none; /* Prevent text selection during drag */
+  touch-action: none; /* Prevent browser handling of touch gestures */
+}
+
+.card.dragging {
+  cursor: grabbing;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Enhanced shadow when dragging */
+}
+
+.card-content {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  box-sizing: border-box; /* Ensure padding is included in width/height */
+  padding: 20px;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden; /* Prevent horizontal overflow at the content level */
+  color: #333;
+  position: relative; /* Enable positioning of child elements */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-content h1, .card-content p {
+    margin: 0;
+    margin-bottom: 1rem;
+    max-height: 48px;
+    overflow: auto;
+    color: white;
+    /* text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); */
+}
+
+.card-content h1 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+    max-height: 72px;
+}
+
+.card-text-overlay {
+  position: absolute;
+  top: 20.5px; /* Match existing padding */
+  left: 22px; /* Match existing padding */
+  right: 22px;
+  z-index: 5;
+  padding: 0.5rem;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 10%, rgba(0,0,0,0.4) 60%, transparent 100%); /* Add gradient overlay just behind text */
+  border-radius: 0.45rem;
+}
+
+.card-image {
+    width: 99%;
+    height: 67%;
+    max-height: 72%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    border: 0.5px solid #FAFAE5;
+    pointer-events: none; /* Prevents image from being dragged */
+    user-select: none; /* Prevents image selection */
+    -webkit-user-drag: none; /* Prevents image dragging in Safari/Chrome */
+    -webkit-user-select: none; /* Ensures no selection in WebKit browsers */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE/Edge */
+}
+
+.card-stats, .card-final-row-info {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%; /* Use full width of parent */
+    margin: 1rem 0;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent text wrapping */
+    scrollbar-width: thin; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    padding: 4px 0; /* Space for the scrollbar */
+    gap: 0.5rem; /* Space between items */
+    box-sizing: border-box; /* Include padding in width calculation */
+    max-width: fit-content; /* Prevent expanding beyond container */
+}
+
+.card-stats {
+    font-weight: 600;
+}
+
+.card-final-row-info {
+  margin-bottom: 0;
+}
+
+.card-final-row-info > *, .card-second-row, .card-stats > * {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.5rem;
+  width: fit-content;
+}
+
+.card-second-row {
+  overflow-x: scroll;
+}
+
+/* Remove transform-origin properties since we're not rotating anymore */
+.card-current {
+  /* Current card is centered */
+  z-index: 10;
+  overflow: hidden;
+}
+
+.card-previous {
+  /* Previous cards stack to the left */
+  z-index: 9;
+  overflow: hidden;
+}
+
+.card-next {
+  /* Next cards stack to the right */
+  z-index: 8;
+  overflow: hidden;
+}
+
+.card-hidden {
+  /* Cards outside the visible range */
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Visual cues for drag direction */
+.card.drag-up {
+  box-shadow: 0 -10px 20px rgba(76, 175, 80, 0.3); /* Green glow for accept */
+}
+
+.card.drag-down {
+  box-shadow: 0 10px 20px rgba(255, 82, 82, 0.3); /* Red glow for reject */
+}
+
+/* Remove the button styles since we don't need them anymore */
+.card-actions {
+  display: none;
+}
+
+/* Add animation for vertical swipes */
+@keyframes swipe-up {
+  to {
+    transform: translateY(-150%) rotate(-5deg);
+    opacity: 0;
+  }
+}
+
+@keyframes swipe-down {
+  to {
+    transform: translateY(150%) rotate(5deg);
+    opacity: 0;
+  }
+}
+
+.swiping-up {
+  animation: swipe-up 0.5s forwards;
+}
+
+.swiping-down {
+  animation: swipe-down 0.5s forwards;
+}
+
+/* Heart overlay styling */
+.heart-overlay, .trash-overlay {
+  position: absolute;
+  top: -8;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.heart-overlay img, .trash-overlay img {
+  width: 10rem;
+  height: 10rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+  padding-top: 2rem;
+}
+
+.trash-overlay img {
+  width: 11rem;
+  height: 11rem;
+}
+
+.liked-indicator, .disliked-indicator {
+  position: absolute;
+  bottom: calc(100% - 65%); /* Position at the bottom of the image */
+  right: 30px; /* Distance from right edge */
+  width: 2.5rem;
+  height: 2.5rem;
+  z-index: 6; /* Above other elements */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.liked-indicator {
+  width: 2rem;
+  height: 2rem;
+  padding: 0 0.2rem 0.2rem 0;
+}
+
+@media (max-width: 480px) { 
+
+  .card {
+    width: 80%;
+    left: 50%;
+    margin-left: -40%;
+  }
+
+}

@@ -3,12 +3,12 @@ import { z } from 'zod';
 export const weekendTripCardSchema = z.object({
   destination: z.string().nullable(),
   description: z.string().nullable(),
-  travelTime: z.string().nullable(),
-  vibe: z.string().nullable(),
   cost: z.string().nullable(),
-  mainAttractions: z.array(z.string()).nullable(),
-  season: z.string().nullable(),
+  distance: z.string().nullable(),
   lodging: z.string().nullable(),
+  mainAttractions: z.string().nullable(),
+  season: z.string().nullable(),
+  vibe: z.string().nullable(),
   imagePrompt: z.string().nullable(),
   imageUrl: z.string().optional().nullable(),
 });
@@ -20,12 +20,12 @@ export type WeekendTripCard = z.infer<typeof weekendTripCardSchema>;
 export interface WeekendTripCard {
   destination: string;
   description: string;
-  travelTime: string; // e.g. "2 hours"
+  cost: string; // i.e. "$500-1000"
+  distance: string; // i.e. "100 mi"
+  lodging: string; // i.e. "Hotel", "Airbnb"
+  mainAttractions: string; // i.e. "Roller Coasters, Water Rides"
+  season: string; // i.e. "Summer", "Winter"
   vibe: string;
-  cost: string; // "$$", "$$$"
-  mainAttractions: string[];
-  season: string;
-  lodging: string; // "hotel", "Airbnb"
   imagePrompt: string;
   imageUrl?: string;
 }

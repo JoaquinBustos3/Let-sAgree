@@ -1,7 +1,7 @@
 .faq-container {
   width: 85%;
   margin: 2rem auto 4rem auto;
-  padding: 2rem;
+  /* padding: 2rem; */
   background-color: inherit;
   /* border: 1px solid #5A7D9A; */
   border-radius: 0.5rem;
@@ -87,4 +87,23 @@
 .faq-answer p {
   margin: 0;
   line-height: 1.6;
+}
+
+@media (max-width: 480px) {
+
+  .faq-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .faq-question {
+    font-size: 0.8rem;
+    padding: 0.7rem;
+  }
+
+  .faq-answer {
+    font-size: 0.8rem;
+    padding: 0 0.7rem;
+  }
+
 }

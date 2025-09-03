@@ -3,12 +3,12 @@ import { z } from 'zod';
 export const restaurantCardSchema = z.object({
   name: z.string().nullable(),
   description: z.string().nullable(),
-  cuisine: z.string().nullable(),
   priceRange: z.enum(['$', '$$', '$$$']).nullable(),
-  vibe: z.string().nullable(),
+  rating: z.number().nullable(),
   distance: z.string().nullable(),
   location: z.string().nullable(),
-  rating: z.number().nullable(),
+  cuisine: z.string().nullable(),
+  vibe: z.string().nullable(),
   imageUrl: z.string().optional().nullable(),
   imagePrompt: z.string().nullable()
 });
@@ -20,13 +20,13 @@ export type RestaurantCard = z.infer<typeof restaurantCardSchema>;
 export interface RestaurantCard {
   name: string;
   description: string;
-  cuisine: string;
   priceRange: "$" | "$$" | "$$$";
+  rating: number; // i.e. "4.5"
+  distance: string; // i.e. "2 mi"
+  location: string; // (short address of general area)
+  cuisine: string; // i.e. "Italian", "Mexican"
   vibe: string;
-  distance: string;
-  location: string;
-  rating: number;
-  imageUrl?: string;      // Result of AI generation
-  imagePrompt: string;    // Prompt to generate image
+  imageUrl?: string;      
+  imagePrompt: string; 
 }
  */

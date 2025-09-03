@@ -30,7 +30,7 @@ export function validateAiOutput(completion: any, category: string) {
         // Extract and check for the AI's text response
         const aiResponse = completion.output_text;
         if (!aiResponse) {
-            throw new Error("No response from OpenAI.");
+            throw new Error("No response from OpenAI. Likely from mismatch Category and User Input (i.e. Restaurants != 'Find me a movie...').");
         }
 
         // Try to parse the AI's response as JSON
@@ -105,7 +105,7 @@ function determineTsInterface(category: string): z.ZodType {
     const interfaces: Record<string, any> = {
         "Prompt Input": promptInputSchema,
         "Restaurants": restaurantCardSchema,
-        "Takeout/Delivery": deliveryCardSchema,
+        "Takeout-Delivery": deliveryCardSchema,
         "Shows": showCardSchema,
         "Movies": movieCardSchema,
         "Indoor Date Activities": indoorDateCardSchema,
