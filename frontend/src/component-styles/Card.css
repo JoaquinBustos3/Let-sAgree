@@ -68,6 +68,7 @@
     width: 99%;
     height: 67%;
     max-height: 72%;
+    min-height: 10rem;
     object-fit: cover;
     border-radius: 0.5rem;
     border: 0.5px solid #FAFAE5;
@@ -93,6 +94,8 @@
     gap: 0.5rem; /* Space between items */
     box-sizing: border-box; /* Include padding in width calculation */
     max-width: fit-content; /* Prevent expanding beyond container */
+    min-height: 2rem; /* Minimum height to prevent vertical squishing */
+    flex-shrink: 0; /* Prevent container from shrinking */
 }
 
 .card-stats {
@@ -113,10 +116,14 @@
   padding: 0.2rem 0.6rem;
   border-radius: 0.5rem;
   width: fit-content;
+  min-height: 1.5rem; /* Minimum height for each item */
+  flex-shrink: 0; /* Prevent items from shrinking */
 }
 
 .card-second-row {
   overflow-x: scroll;
+  min-height: 2rem; /* Minimum height to prevent vertical squishing */
+  flex-shrink: 0; /* Prevent element from shrinking */
 }
 
 /* Remove transform-origin properties since we're not rotating anymore */
@@ -192,7 +199,7 @@
   justify-content: center;
   align-items: center;
   pointer-events: none;
-  z-index: 3;
+  z-index: 10; /* Increased z-index to appear above card content and text-overlay */
 }
 
 .heart-overlay img, .trash-overlay img {
@@ -223,12 +230,80 @@
   padding: 0 0.2rem 0.2rem 0;
 }
 
-@media (max-width: 480px) { 
-
+@media (max-width: 550px) { 
   .card {
-    width: 80%;
+    width: 75%;
+    height: 80%;
     left: 50%;
-    margin-left: -40%;
+    margin-left: -37.5%;
   }
 
+  .card-content h1, .card-content p {
+    max-height: 65px;
+  }
+
+  .card-content h1 {
+    font-size: 1rem;
+  }
+
+  .card-content p {
+    font-size: 0.7rem;
+  }
+
+  .card-final-row-info > *, .card-second-row, .card-stats > * {
+    font-size: 0.8rem;
+  }
+
+  /* Position cards closer to the current card */
+  .card-previous,
+  .card-next {
+    transform: translateX(0) !important; /* Override the JS-set transform */
+  }
+
+  /* Move previous cards closer */
+  .card-previous {
+    transform: translateX(-14%) scale(0.94) !important; /* Closer positioning */
+  }
+
+  /* Move next cards closer */
+  .card-next {
+    transform: translateX(14%) scale(0.94) !important; /* Closer positioning */
+  }
+
+  /* Hide the third row of cards (cards at distance 2 or greater) */
+  .card:not(.card-current):not(.card-previous):not(.card-next),
+  .card[style*="distance: 2"],
+  .card[style*="distance:2"] {
+    display: none !important;
+  }
+
+  .heart-overlay, .trash-overlay {
+    top: 0;
+  }
+
+  .heart-overlay > img, .trash-overlay > img{
+    padding: 0;
+    margin-top: 5rem;
+    height: 7rem;
+    width: 7rem;
+  }
+
+  .liked-indicator, .disliked-indicator {
+    top: 1.6rem;
+    right: 27px; /* Distance from right edge */
+  }
+
+  .liked-indicator, .disliked-indicator {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+@media (min-width: 551px) and (max-width: 1000px) {
+  .card {
+    width: 50%;
+    height: 85%;
+    left: 50%;
+    margin-left: -25%;
+  }
 }

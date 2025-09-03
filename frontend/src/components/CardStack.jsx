@@ -108,7 +108,7 @@ function CardStack({ cardsReceived }) {
 
   const handleSwipe = (direction) => {
     switch(direction) {
-      case 'left':
+      case 'up': //left
         // Next card
         if (currentIndex < cards.length - 1) {
           setCurrentIndex(currentIndex + 1);
@@ -116,14 +116,14 @@ function CardStack({ cardsReceived }) {
         //reached last card
         break;
         
-      case 'right':
+      case 'down': //right
         // Previous card
         if (currentIndex > 0) {
           setCurrentIndex(currentIndex - 1);
         }
         break;
         
-      case 'up': {
+      case 'right': { //up
         // Mark as liked and accept current card
         setCards(cards.map((card, index) => 
           index === currentIndex ? { ...card, isLiked: true } : card
@@ -141,7 +141,7 @@ function CardStack({ cardsReceived }) {
 
         break;
     }
-      case 'down':
+      case 'left': //down
         // Mark as disliked and reject current card
         setCards(cards.map((card, index) => 
           index === currentIndex ? { ...card, isLiked: false } : card
@@ -203,13 +203,15 @@ function CardStack({ cardsReceived }) {
             currentTurn < 2 ?  
             // Add a unique key based on currentTurn to force re-rendering and animation restart
             <p key={`turn-${currentTurn}`} className="user-turn">
-              Swipe up or down on the {cards[0].type}! <strong>User {currentTurn + 1}'s Turn.</strong>
+              See FAQ on how to swipe on the {cards[0].type}! <strong>User {currentTurn + 1}'s Turn.</strong>
             </p> : 
             <div className="turn3-info-container">
                 <p>Congrats! You have <strong>{cards.length} {cards.length > 1 ? "matches!" : "match!"}</strong></p>
-                <div onClick={() => handleTurn3(1)} className="card-button choose">Agree on Current</div>
-                <div onClick={() => handleTurn3(2)} className="card-button random">Random Pick</div>
-                <div onClick={() => handleTurn3(3)} className="card-button next">Next Round</div>
+                <div className="turn3-buttons-container">
+                  <div onClick={() => handleTurn3(1)} className="card-button choose">Agree on Current</div>
+                  <div onClick={() => handleTurn3(2)} className="card-button random">Random Pick</div>
+                  <div onClick={() => handleTurn3(3)} className="card-button next">Next Round</div>
+                </div>
             </div>
         }
         <div className="card-stack">
