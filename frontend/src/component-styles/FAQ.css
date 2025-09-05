@@ -1,8 +1,8 @@
 .faq-container {
   width: 85%;
-  margin: 2rem auto 4rem auto;
-  /* padding: 2rem; */
-  background-color: inherit;
+  margin: auto auto 4rem auto;
+  padding: 0 2rem 4rem 2rem;
+  background: #EDEDED;
   /* border: 1px solid #5A7D9A; */
   border-radius: 0.5rem;
 }
@@ -23,7 +23,7 @@
 }
 
 .faq-item {
-  background-color: #FAFAE5;
+  background-color: white;
   border-radius: 0.3rem;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -51,7 +51,7 @@
   );
   background-size: 200% 200%;
   animation: faq-gradient-shift 8s ease infinite;
-  color: white;
+  /* color: white; */
 }
 
 @keyframes faq-gradient-shift {

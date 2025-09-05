@@ -223,12 +223,12 @@
   z-index: 6; /* Above other elements */
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
 }
-
+/* 
 .liked-indicator {
   width: 2rem;
   height: 2rem;
   padding: 0 0.2rem 0.2rem 0;
-}
+} */
 
 @media (max-width: 550px) { 
   .card {

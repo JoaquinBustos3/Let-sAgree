@@ -29,8 +29,8 @@
   width: 50%;
   height: 50%;
   min-height: fit-content;
-  background-color: #333;
-  border: 2px solid #FAFAE5;
+  background-color: #EDEDED;
+  border: 2px solid white;
   border-radius: 1rem;
   padding: 0.5rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -58,7 +58,7 @@
   width: 100%; 
   box-sizing: border-box;
   background-color: transparent;
-  color: white;
+  color: #333;
   border: none;
   padding: 0.75rem;
   font-size: 1rem;
@@ -78,7 +78,7 @@
 }
 
 .form-group textarea::placeholder, .form-group input::placeholder {
-    color: lightgrey;
+    color: grey;
     font-size: 1rem;
 }
 

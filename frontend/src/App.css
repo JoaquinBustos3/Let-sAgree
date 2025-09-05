@@ -9,19 +9,36 @@
   align-items: center;
   background-color: inherit;
   overflow-y: auto; /* Enable vertical scrolling */
-  background: linear-gradient(
-    180deg,
-    #FAFAE5 10%,     /* lightest beige */
-    #F2E8C9 50%,    /* mid beige, noticeably darker */
-    #E6D9B8 100%    /* richest beige, warm undertone */
-  );
+  background-color: white;
 }
 
 .root-background.prompt-page {
   background: linear-gradient(
-    180deg,
-    #7FA1BA 10%,
-    #5E809A 50%,
-    #4F6C88 100%
+    -45deg,
+    #7FA1BA,
+    #9CBDCF,
+    #7FA1BA,
+    #5E809A
   );
+  background-size: 200% 200%;
+  animation: root-gradient-shift 8s ease infinite;
+  transition: opacity 0.3s ease;
+}
+
+/* Add keyframes for the root background animation */
+@keyframes root-gradient-shift {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+.description-wrapper {
+  width: 85%;
+  /* margin-bottom: 2rem; */
 }

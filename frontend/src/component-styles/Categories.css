@@ -3,18 +3,19 @@
     height: 90vh; /* Dynamically size based on viewport height */
     margin: 3rem auto; /* Reduced margin to come in sooner */
     border-radius: 0.5rem; /* Rounded edges */
-    background-color: #FAFAE5;
+    background-color: white;
     border: 1px solid #5A7D9A;
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1;
 }
 
 .inner-container {
     width: 99%; /* Fill the container except the edges */
     height: 98%;
     border-radius: 0.3rem;
-    background-color: #FAFAE5; /* Match container background for consistent look */
+    background-color: white; /* Match container background for consistent look */
     position: relative;
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 columns */

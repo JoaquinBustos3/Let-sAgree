@@ -5,13 +5,30 @@
   flex-direction: column;
   padding: 2rem; 
   margin-top: 2rem; 
+  border-radius: 0.5rem;
   box-sizing: border-box; 
-  background-color: inherit;
-  overflow-y: auto; 
+  background-color: #EDEDED;
+  /* overflow-y: auto;  */
   align-items: center;
   font-family: Inter, sans-serif; 
   font-weight: 500;
+  position: relative; /* allow pseudo-element positioning */
+  z-index: 0;         /* ensure container is above its ::after (-1) */
+  
 }
+
+/* .description-container::after {
+  z-index: -1; 
+  content: "";
+  position: absolute;
+  bottom: -6.2rem; 
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: #EDEDED; 
+  clip-path: polygon(0 0, 50% 90%, 100% 0);
+  pointer-events: none; 
+} */
 
 .large-text {
   margin: 0; 
