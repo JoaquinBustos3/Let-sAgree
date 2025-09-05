@@ -1,8 +1,8 @@
 .faq-container {
   width: 85%;
-  margin: auto auto 4rem auto;
+  margin: auto auto 3rem auto;
   padding: 0 2rem 4rem 2rem;
-  background: #EDEDED;
+  background: #F4F8FB;
   /* border: 1px solid #5A7D9A; */
   border-radius: 0.5rem;
 }
