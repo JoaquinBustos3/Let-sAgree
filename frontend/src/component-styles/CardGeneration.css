@@ -72,6 +72,11 @@
     width: 2.5rem;
     height: 2.5rem;
   }
+
+  .card-generation-container::before {
+    display: none;
+  }
+
 }
 
 /* Ensure the background stays visible in all viewport heights */
