@@ -33,6 +33,7 @@ export function validateAiOutput(completion: any, category: string) {
             throw new Error("No response from OpenAI. Likely from mismatch Category and User Input (i.e. Restaurants != 'Find me a movie...').");
         }
 
+        console.log("Parsing AI response as JSON")
         // Try to parse the AI's response as JSON
         let parsed: unknown;
         try {
@@ -40,7 +41,8 @@ export function validateAiOutput(completion: any, category: string) {
         } catch (err) {
             throw new Error("AI response is not valid JSON.");
         }
-
+        
+        console.log("validating parse JSON against ZOD Schema");
         // Validate with Zod
         let selectSchema = determineTsInterface(category);
         if (!selectSchema) {

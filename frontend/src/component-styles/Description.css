@@ -5,12 +5,14 @@
   flex-direction: column;
   padding: 2rem; 
   margin-top: 2rem; 
+  border-radius: 0.5rem;
   box-sizing: border-box; 
-  background-color: inherit;
-  overflow-y: auto; 
+  background-color: white;
+  /* overflow-y: auto;  */
   align-items: center;
   font-family: Inter, sans-serif; 
   font-weight: 500;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 .large-text {

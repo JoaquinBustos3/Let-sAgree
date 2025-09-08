@@ -6,11 +6,15 @@ function FAQ() {
   const faqItems = [
     {
       question: "What is Let's Agree?",
-      answer: "Let's Agree is a platform designed to help people come to agreements on contentious everyday decisions by providing options based on preferences and finding matches that both parties will enjoy."
+      answer: "Let's Agree is a platform designed to help people come to agreements on contentious everyday decisions by providing options based on your preferences and finding matches that both parties will enjoy."
     },
     {
       question: "How does the matching process work?",
-      answer: "After you and your partner/friend select a category, you'll input your preferences for results you'd like to see. Our algorithm will then generate options and let you both swipe on what you like. With your match(es), you can make a decision you both agree on or continue onto another round of swiping!"
+      answer: "After you and your partner/friend select a category, you'll input your preferences for results you'd like to see. Our algorithm will then generate options and let you both swipe on what you like. With your matches, you can make a decision you both agree on or continue onto another round of swiping!"
+    },
+    {
+      question: "Which way do I swipe?",
+      answer: "Swiping left indicates a dislike, while swiping right indicates a like. Swiping up simply navigates to the next card without indicating a like or dislike, while swiping down navigates to the previous card."
     },
     {
       question: "How accurate are the recommendations?",

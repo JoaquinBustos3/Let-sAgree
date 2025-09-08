@@ -1,12 +1,30 @@
 .card-generation-container {
-  height: 80vh;
+  height: 82.2vh;
   width: 100%;
   margin-top: 4.7rem;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0 1rem 0;
   text-align: center;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   overflow: scroll;
-  
+  position: relative; /* Create positioning context for pseudo-element */
+  z-index: 1; /* Give container a stacking context */
+}
+
+/* Fix the pseudo background to make it visible */
+.card-generation-container::before {
+  content: "";
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95.5%; /* Smaller width than the container */
+  height: 100%;
+  background-color: #EDF3F7;
+  z-index: -1; /* Position behind the content */
+  border-radius: 0.5rem; /* Optional: rounded corners */
+  /* box-shadow: 0 0 10px rgba(0,0,0,0.1); */
+  pointer-events: none; /* Ensure it doesn't block interactions */
+  display: block; /* Force display */
 }
 
 .card-generation-container h1 {
@@ -38,7 +56,7 @@
   }
 }
 
-@media (max-width: 480px) { 
+@media (max-width: 550px) { 
 
   .card-generation-container h1 {
     font-size: 1.1rem;
@@ -46,7 +64,7 @@
   }
 
   .card-generation-container p {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     margin-bottom: 0.3rem;
   }
   
@@ -55,4 +73,23 @@
     height: 2.5rem;
   }
 
+  .card-generation-container::before {
+    display: none;
+  }
+
+}
+
+/* Ensure the background stays visible in all viewport heights */
+@media (min-height: 850px) {
+  .card-generation-container {
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .card-generation-container::before {
+    height: 100%; /* Ensure full height in tall viewports */
+  }
 }

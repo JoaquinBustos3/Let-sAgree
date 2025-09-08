@@ -9,8 +9,7 @@ export const showCardSchema = z.object({
   platform: z.string().nullable(),
   genre: z.string().nullable(),
   vibe: z.string().nullable(),
-  imagePrompt: z.string().nullable(),
-  imageUrl: z.string().optional().nullable(),
+  images: z.array(z.string()).nullable()
 });
 
 export type ShowCard = z.infer<typeof showCardSchema>;
@@ -19,14 +18,13 @@ export type ShowCard = z.infer<typeof showCardSchema>;
 /**
 export interface ShowCard {
   title: string;
-  description: string;
+  description: string; // 1-2 sentence description
   seasons: number; // i.e. "2 Seasons"
   rating: string; // i.e. "8.3 IMDB" (imdb rating)
   releaseYear: number; // i.e. "2023"
   platform: string; // i.e. "Netflix, Hulu, Max"
   genre: string; // i.e. "Drama", "Comedy"
-  vibe: string;
-  imagePrompt: string;
-  imageUrl?: string;
+  vibe: string; // 1-3 comma separated adjectives
+  images: string[];
 }
  */

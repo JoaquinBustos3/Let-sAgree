@@ -1,6 +1,7 @@
 .footer-container {
   width: 95%; /* Footer spans 95% of the width */
   height: 4rem;
+  position: relative;
   border-top: 0.1px solid black;
   margin: 0 auto; /* Center the footer horizontally */
   display: flex;

@@ -83,7 +83,6 @@ function CardGeneration() {
 
   return (
     <div className="card-generation-container">
-      {/* <p>{category}: <strong>Partner 1 Turn</strong></p> */}
       <CardStack 
       cardsReceived={cards} 
       />

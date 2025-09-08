@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #FAFAE5;
+  background-color: #EDF3F7;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -26,12 +26,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
 
-  background: linear-gradient(
-    180deg,
-    #FAFAE5 10%,     /* lightest beige */
-    #F2E8C9 50%,    /* mid beige, noticeably darker */
-    #E6D9B8 100%    /* richest beige, warm undertone */
-  );
+  background: #EDF3F7;
 }
 
 * {

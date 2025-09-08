@@ -9,8 +9,7 @@ export const weekendTripCardSchema = z.object({
   mainAttractions: z.string().nullable(),
   season: z.string().nullable(),
   vibe: z.string().nullable(),
-  imagePrompt: z.string().nullable(),
-  imageUrl: z.string().optional().nullable(),
+  images: z.array(z.string()).nullable()
 });
 
 export type WeekendTripCard = z.infer<typeof weekendTripCardSchema>;
@@ -19,14 +18,13 @@ export type WeekendTripCard = z.infer<typeof weekendTripCardSchema>;
 /**
 export interface WeekendTripCard {
   destination: string;
-  description: string;
+  description: string; // 1-2 sentence description
   cost: string; // i.e. "$500-1000"
   distance: string; // i.e. "100 mi"
   lodging: string; // i.e. "Hotel", "Airbnb"
   mainAttractions: string; // i.e. "Roller Coasters, Water Rides"
   season: string; // i.e. "Summer", "Winter"
-  vibe: string;
-  imagePrompt: string;
-  imageUrl?: string;
+  vibe: string; // 1-3 comma separated adjectives
+  images: string[];
 }
  */

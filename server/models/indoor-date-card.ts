@@ -9,8 +9,7 @@ export const indoorDateCardSchema = z.object({
   supplies: z.string().nullable(),
   messLevel: z.enum(['Clean', 'Some Cleanup', 'Very Messy']).nullable(),
   vibe: z.string().nullable(),
-  imagePrompt: z.string().nullable(),
-  imageUrl: z.string().optional().nullable(),
+  images: z.array(z.string()).nullable()
 });
 
 export type IndoorDateCard = z.infer<typeof indoorDateCardSchema>;
@@ -19,14 +18,13 @@ export type IndoorDateCard = z.infer<typeof indoorDateCardSchema>;
 /**
 export interface IndoorDateCard {
   title: string;
-  description: string;
+  description: string; // 1-2 sentence description
   cost: string; // i.e. "$50-100"
   duration: string; // i.e. "1-2 Hrs"
   idealTime: string; // i.e. "Evening", "Late Night"
   supplies: string; // i.e. "Chocolate, Strawberries, Candles" (limit to 5 items)
   messLevel: "Clean" | "Some Cleanup" | "Very Messy";
-  vibe: string;
-  imagePrompt: string;
-  imageUrl?: string;
+  vibe: string; // 1-3 comma separated adjectives
+  images: string[];
 }
  */

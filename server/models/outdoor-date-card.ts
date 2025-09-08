@@ -9,8 +9,7 @@ export const outdoorDateCardSchema = z.object({
   location: z.string().nullable(),
   idealTime: z.string().nullable(),
   vibe: z.string().nullable(),
-  imagePrompt: z.string().nullable(),
-  imageUrl: z.string().optional().nullable(),
+  images: z.array(z.string()).nullable()
 });
 
 export type OutdoorDateCard = z.infer<typeof outdoorDateCardSchema>;
@@ -19,14 +18,13 @@ export type OutdoorDateCard = z.infer<typeof outdoorDateCardSchema>;
 /**
 export interface OutdoorDateCard {
   title: string;
-  description: string;
+  description: string; // 1-2 sentence description
   cost: string; // i.e. "$50-100"
   duration: string; // i.e. "1-2 Hrs"
   distance: string; // i.e. "5.2 mi"
   location: string; // (short address or general area)
   idealTime: string; // i.e. "Evening", "Late Night"
-  vibe: string;
-  imagePrompt: string;
-  imageUrl?: string;
+  vibe: string; // 1-3 comma separated adjectives
+  images: string[];
 }
  */

@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import '../component-styles/Card.css';
 import filledHeart from '../images/heart-filled.svg';
 import xBubble from '../images/x-bubble.svg';
+import { stopPropagationProps } from '../utils/eventHelper';
 
 function Card({ data, index, currentIndex, onSwipe }) {
   // State for tracking drag movement
@@ -91,15 +92,15 @@ function Card({ data, index, currentIndex, onSwipe }) {
     
     setDragOffset({ x: deltaX, y: deltaY });
     
-    // Calculate heart/x-bubble opacity based on vertical movement
-    if (deltaY < 0) {
-      // Map deltaY from [0, -SWIPE_THRESHOLD] to [0, 1] for opacity
-      const newOpacity = Math.min(1, Math.abs(deltaY) / SWIPE_THRESHOLD);
+    // Calculate heart/x-bubble opacity based on horizontal movement (changed from vertical)
+    if (deltaX > 0) {
+      // Map deltaX from [0, SWIPE_THRESHOLD] to [0, 1] for heart opacity
+      const newOpacity = Math.min(1, Math.abs(deltaX) / SWIPE_THRESHOLD);
       setHeartOpacity(newOpacity);
       setTrashOpacity(0);
-    } else if (deltaY > 0) {
-      // Map deltaY from [0, SWIPE_THRESHOLD] to [0, 1] for x-bubble opacity
-      const newOpacity = Math.min(1, Math.abs(deltaY) / SWIPE_THRESHOLD);
+    } else if (deltaX < 0) {
+      // Map deltaX from [0, -SWIPE_THRESHOLD] to [0, 1] for trash opacity
+      const newOpacity = Math.min(1, Math.abs(deltaX) / SWIPE_THRESHOLD);
       setTrashOpacity(newOpacity);
       setHeartOpacity(0);
     } else {
@@ -217,7 +218,7 @@ function Card({ data, index, currentIndex, onSwipe }) {
           <div>{data[fields[4]] ? data[fields[4]] : ""}</div>
         </div>
         <div className='card-second-row'>{data[fields[5]] ? data[fields[5]] : ""}</div>
-        <div className="card-final-row-info">
+        <div {...stopPropagationProps()} className="card-final-row-info">
           <div>{data[fields[6]] ? data[fields[6]] : ""}</div>
           •
           <div>{data[fields[7]] ? data[fields[7]] : ""}</div>

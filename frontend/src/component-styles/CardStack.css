@@ -37,6 +37,17 @@
     justify-content: center;
     align-items: center;
     gap: 1rem;
+    position: relative; /* Add position relative */
+    z-index: 200; /* Give it a high z-index */
+    pointer-events: auto; /* Ensure clicks work */
+    overflow: scroll;
+}
+
+.turn3-buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
 }
 
 .card-button {
@@ -48,6 +59,10 @@
   color: #333;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin-bottom: 0.6rem;
+  position: relative; /* Add position relative */
+  z-index: 201; /* Give buttons even higher z-index */
+  pointer-events: auto; /* Ensure clicks work */
+  cursor: pointer; /* Explicitly set cursor */
 }
 
 .no-matches-block {
@@ -69,10 +84,11 @@
 
 .final-agreement{
     margin-top: 0;
-    font-size: 2rem;
+    font-size: 2rem!important;
     color: #333;
     text-align: center;
     margin-bottom: 2rem;
+    padding: 0 2rem;
     font-weight: bold;
     animation: growHeader 5s forwards;
     opacity: 0;
@@ -102,4 +118,59 @@
     opacity: 1;
     transform: scale(1);
   }
+}
+
+@media (max-width: 550px) {  
+
+  .stack-indicator, .end-turn-button {
+    bottom: 0;
+  }
+
+  .turn3-info-container {
+    flex-direction: column;
+    bottom: 0; /* Change from -2.5rem which might be causing issues */
+    z-index: 1000; /* Much higher z-index on mobile */
+  }
+
+  .turn3-buttons-container {
+    position: relative;
+    z-index: 1001; /* Higher than container */
+    margin-top: 0.5rem; /* Add some spacing */
+  }
+
+  .user-turn, .turn3-info-container, .final-agreement {
+    position: relative;
+    bottom: -2.5rem;
+  }
+
+  .user-turn, .turn3-info-container > p{
+    font-size: 1rem!important;
+  }
+
+  .card-button {
+    font-size: 0.9rem;
+    padding: 8px 11px; 
+    z-index: 1002; /* Ensure they're at the top layer */
+    transform: translateZ(0); /* Force hardware acceleration */
+  }
+
+  .card-button.no-matches {
+    width: 6rem;
+  }
+
+  .final-agreement {
+    font-size: 1.5rem!important;
+  }
+}
+
+@media (min-width: 551px) and (max-width: 950px) {
+  .stack-indicator, .end-turn-button {
+    bottom: -10px;
+  }
+  
+  .user-turn{
+    position: relative;
+    bottom: -2rem;
+  }
+
 }
