@@ -9,8 +9,7 @@ export const movieCardSchema = z.object({
   platform: z.string().nullable(),
   genre: z.string().nullable(),
   vibe: z.string().nullable(),
-  imageUrl: z.string().optional().nullable(),
-  imagePrompt: z.string().nullable(),
+  images: z.array(z.string()).nullable()
 });
 
 export type MovieCard = z.infer<typeof movieCardSchema>;
@@ -19,14 +18,13 @@ export type MovieCard = z.infer<typeof movieCardSchema>;
 /**
 export interface MovieCard {
   title: string;
-  description: string;
+  description: string; // 1-2 sentence description
   rating: string; // i.e. "7.5 IMDB" (imdb rating)
   runtime: string; // i.e. "2h 30m"
   releaseYear: number; // i.e. "2023"
   platform: string; // i.e. "Netflix, Hulu, Max"
   genre: string; // i.e. "Action", "Comedy"
-  vibe: string;
-  imageUrl?: string;
-  imagePrompt: string;
+  vibe: string; // 1-3 comma separated adjectives
+  images: string[];
 }
  */

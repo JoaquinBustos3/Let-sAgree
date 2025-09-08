@@ -9,8 +9,7 @@ export const gameCardSchema = z.object({
   platform: z.string().nullable(),
   difficulty: z.enum(['Easy', 'Medium', 'Hard']).nullable(),
   vibe: z.string().nullable(),
-  imagePrompt: z.string().nullable(),
-  imageUrl: z.string().optional().nullable(),
+  images: z.array(z.string()).nullable()
 });
 
 export type GameCard = z.infer<typeof gameCardSchema>;
@@ -19,14 +18,13 @@ export type GameCard = z.infer<typeof gameCardSchema>;
 /**
 export interface GameCard {
   title: string;
-  description: string;
+  description: string; // 1-2 sentence description
   playerCount: string; // i.e. "2–4 Players", "1 Player"
   averagePlaytime: string; // i.e. "8 Hrs", "30 Min"
   type: "Board Game" | "Video Game" | "Card Game";
   platform?: string; // i.e. "PS5, Xbox, PC" (if video game)
   difficulty: "Easy" | "Medium" | "Hard";
-  vibe: string;
-  imagePrompt: string;
-  imageUrl?: string;
+  vibe: string; // 1-3 comma separated adjectives
+  images: string[];
 }
  */

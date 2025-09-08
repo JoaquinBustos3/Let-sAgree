@@ -34,6 +34,7 @@ const receivePromptInput = async (req: Request, res: Response) => {
         return res.status(status).json({ error: result.error });
     }
 
+    console.log("PRINTING RETURNED VALUE FROM CONTROLLER: ", result.data);
     res.json(result.data);
 };
 
