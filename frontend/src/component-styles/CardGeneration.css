@@ -14,15 +14,15 @@
 .card-generation-container::before {
   content: "";
   position: absolute;
-  top: 0;
+  top: -1rem;
   left: 50%;
   transform: translateX(-50%);
   width: 95.5%; /* Smaller width than the container */
-  height: 98%;
-  background-color: #F4F8FB;
+  height: 100%;
+  background-color: #EDF3F7;
   z-index: -1; /* Position behind the content */
   border-radius: 0.5rem; /* Optional: rounded corners */
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  /* box-shadow: 0 0 10px rgba(0,0,0,0.1); */
   pointer-events: none; /* Ensure it doesn't block interactions */
   display: block; /* Force display */
 }

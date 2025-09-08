@@ -9,7 +9,7 @@
   align-items: center;
   background-color: inherit;
   overflow-y: auto; /* Enable vertical scrolling */
-  background-color: white;
+  background-color: #EDF3F7;
 }
 
 .root-background.prompt-page {
