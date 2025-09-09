@@ -24,7 +24,7 @@ export interface LocalActivityCard {
   distance: string; // i.e. "2 mi"
   location: string; // (short address or general area)
   hours: string; // i.e. "10am–8pm"
-  vibe: string; // 1-3 comma separated adjectives
+  vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
   images: string[];
 }
  */

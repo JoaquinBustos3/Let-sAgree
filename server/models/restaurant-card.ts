@@ -24,7 +24,7 @@ export interface RestaurantCard {
   distance: string; // i.e. "2 mi"
   location: string; // (short address of general area)
   cuisine: string; // i.e. "Italian", "Mexican"
-  vibe: string; // 1-3 comma separated adjectives
+  vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
   images: string[];
 }
  */

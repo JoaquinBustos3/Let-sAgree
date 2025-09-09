@@ -5,10 +5,10 @@ export const deliveryCardSchema = z.object({
   description: z.string().nullable(),
   priceRange: z.enum(['$', '$$', '$$$']).nullable(),
   rating: z.number().nullable(),
-  distance: z.string().nullable(),
+  deliveryTime: z.string().nullable(),
   deliveryPlatform: z.string().nullable(),
   cuisine: z.string().nullable(),
-  deliveryTime: z.string().nullable(),
+  vibe: z.string().nullable(),
   images: z.array(z.string()).nullable()
 });
 
@@ -21,10 +21,10 @@ export interface DeliveryCard {
   description: string; // 1-2 sentence description
   priceRange: "$" | "$$" | "$$$";
   rating: number; // i.e. "4.5"
-  distance: string; // i.e. "2 mi"
+  deliveryTime: string; // i.e. "30–40 Min"
   deliveryPlatform: string; // i.e. "Uber Eats"
   cuisine: string; // i.e. "Italian", "Chinese"
-  deliveryTime: string; // i.e. "30–40 Min"
+  vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
   images: string[];
 }
  */

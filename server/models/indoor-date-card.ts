@@ -24,7 +24,7 @@ export interface IndoorDateCard {
   idealTime: string; // i.e. "Evening", "Late Night"
   supplies: string; // i.e. "Chocolate, Strawberries, Candles" (limit to 5 items)
   messLevel: "Clean" | "Some Cleanup" | "Very Messy";
-  vibe: string; // 1-3 comma separated adjectives
+  vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
   images: string[];
 }
  */

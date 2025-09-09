@@ -2,6 +2,7 @@ import { OpenAI } from "openai";
 import dotenv from "dotenv";
 import { validateAiOutput } from "../utils/validation-ai-output";
 import { applyFallbacks } from "../utils/fallbacks-ai-output";
+import { retrieveImages } from "../utils/img-retrieval"; 
 
 dotenv.config();
 
@@ -73,9 +74,13 @@ export async function cardGeneration(category: string, promptInput: any) {
         console.log("Applying fallbacks");
         const filteredCards = applyFallbacks(category, dataToFill);
 
+        //Retrieve images for the results
+        console.log("Retrieving images for the results");
+        const cardsWithImages = await retrieveImages(category, filteredCards, promptInput.location || 0);
+
         console.log("Done")
-        return { ok: true, data: filteredCards };
-        
+        return { ok: true, data: cardsWithImages };
+
     } catch (err: any) {
         return { ok: false, error: `Error generating card: ${err.message}` };
     }
@@ -94,7 +99,7 @@ async function determineTsInterface(category: string): Promise<string> {
             distance: string; // i.e. "2 mi"
             location: string; // (short address of general area)
             cuisine: string; // i.e. "Italian", "Mexican"
-            vibe: string; // 1-3 comma separated adjectives
+            vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
             images: string[];
             }`,
         "Takeout-Delivery": 
@@ -103,10 +108,10 @@ async function determineTsInterface(category: string): Promise<string> {
             description: string; // 1-2 sentence description
             priceRange: "$" | "$$" | "$$$";
             rating: number; // i.e. "4.5"
-            distance: string; // i.e. "2 mi"
+            deliveryTime: string; // i.e. "30–40 Min"
             deliveryPlatform: string; // i.e. "Uber Eats"
             cuisine: string; // i.e. "Italian", "Chinese"
-            deliveryTime: string; // i.e. "30–40 Min"
+            vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
             images: string[];
             }`,
         "Shows": 
@@ -118,7 +123,7 @@ async function determineTsInterface(category: string): Promise<string> {
             releaseYear: number; // i.e. "2023"
             platform: string; // i.e. "Netflix, Hulu, Max"
             genre: string; // i.e. "Drama", "Comedy"
-            vibe: string; // 1-3 comma separated adjectives
+            vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
             images: string[];
             }`,
         "Movies": 
@@ -130,7 +135,7 @@ async function determineTsInterface(category: string): Promise<string> {
             releaseYear: number; // i.e. "2023"
             platform: string; // i.e. "Netflix, Hulu, Max"
             genre: string; // i.e. "Action", "Comedy"
-            vibe: string; // 1-3 comma separated adjectives
+            vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
             images: string[];
             }`,
         "Indoor Date Activities": 
@@ -142,7 +147,7 @@ async function determineTsInterface(category: string): Promise<string> {
             idealTime: string; // i.e. "Evening", "Late Night"
             supplies: string; // i.e. "Chocolate, Strawberries, Candles" (limit to 5 items)
             messLevel: "Clean" | "Some Cleanup" | "Very Messy";
-            vibe: string; // 1-3 comma separated adjectives
+            vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
             images: string[];
             }`,
         "Outdoor Date Activities": 
@@ -154,7 +159,7 @@ async function determineTsInterface(category: string): Promise<string> {
             distance: string; // i.e. "5.2 mi"
             location: string; // (short address or general area)
             idealTime: string; // i.e. "Evening", "Late Night"
-            vibe: string; // 1-3 comma separated adjectives
+            vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
             images: string[];
             }`,
         "Things To Do Nearby": 
@@ -166,7 +171,7 @@ async function determineTsInterface(category: string): Promise<string> {
             distance: string; // i.e. "2 mi"
             location: string; // (short address or general area)
             hours: string; // i.e. "10am–8pm"
-            vibe: string; // 1-3 comma separated adjectives
+            vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
             images: string[];
             }`,
         "Weekend Trip Ideas": 
@@ -178,7 +183,7 @@ async function determineTsInterface(category: string): Promise<string> {
             lodging: string; // i.e. "Hotel", "Airbnb"
             mainAttractions: string; // i.e. "Roller Coasters, Water Rides"
             season: string; // i.e. "Summer", "Winter"
-            vibe: string; // 1-3 comma separated adjectives
+            vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
             images: string[];
             }`,
         "Games": 
@@ -190,7 +195,7 @@ async function determineTsInterface(category: string): Promise<string> {
             type: "Board Game" | "Video Game" | "Card Game";
             platform?: string; // i.e. "PS5, Xbox, PC" (if video game)
             difficulty: "Easy" | "Medium" | "Hard";
-            vibe: string; // 1-3 comma separated adjectives
+            vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
             images: string[];
             }`
 

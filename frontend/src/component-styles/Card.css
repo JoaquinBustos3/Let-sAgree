@@ -51,6 +51,7 @@
     font-weight: 700;
     margin-bottom: 0.2rem;
     max-height: 72px;
+    padding: 0 2.2rem;
 }
 
 .card-text-overlay {
@@ -88,8 +89,6 @@
     margin: 1rem 0;
     overflow-x: auto; /* Enable horizontal scrolling */
     white-space: nowrap; /* Prevent text wrapping */
-    scrollbar-width: thin; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
     padding: 4px 0; /* Space for the scrollbar */
     gap: 0.5rem; /* Space between items */
     box-sizing: border-box; /* Include padding in width calculation */
@@ -216,19 +215,13 @@
 
 .liked-indicator, .disliked-indicator {
   position: absolute;
-  bottom: calc(100% - 65%); /* Position at the bottom of the image */
-  right: 30px; /* Distance from right edge */
+  top: 1.4rem;
+  right: 27px; /* Distance from right edge */
   width: 2.5rem;
   height: 2.5rem;
   z-index: 6; /* Above other elements */
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
 }
-/* 
-.liked-indicator {
-  width: 2rem;
-  height: 2rem;
-  padding: 0 0.2rem 0.2rem 0;
-} */
 
 @media (max-width: 550px) { 
   .card {
@@ -286,11 +279,6 @@
     margin-top: 5rem;
     height: 7rem;
     width: 7rem;
-  }
-
-  .liked-indicator, .disliked-indicator {
-    top: 1.6rem;
-    right: 27px; /* Distance from right edge */
   }
 
   .liked-indicator, .disliked-indicator {

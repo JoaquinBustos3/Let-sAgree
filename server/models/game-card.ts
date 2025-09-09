@@ -24,7 +24,7 @@ export interface GameCard {
   type: "Board Game" | "Video Game" | "Card Game";
   platform?: string; // i.e. "PS5, Xbox, PC" (if video game)
   difficulty: "Easy" | "Medium" | "Hard";
-  vibe: string; // 1-3 comma separated adjectives
+  vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
   images: string[];
 }
  */
