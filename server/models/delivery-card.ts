@@ -17,14 +17,14 @@ export type DeliveryCard = z.infer<typeof deliveryCardSchema>;
 // JSON Shape of the Model
 /**
 export interface DeliveryCard {
-  name: string;
-  description: string; // 1-2 sentence description
+  name: string; // strictly the name
+  description: string; // short and concise 1-2 sentence description
   priceRange: "$" | "$$" | "$$$";
   rating: number; // i.e. "4.5"
   deliveryTime: string; // i.e. "30–40 Min"
   deliveryPlatform: string; // i.e. "Uber Eats"
   cuisine: string; // i.e. "Italian", "Chinese"
-  vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
+  vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
   images: string[];
 }
  */

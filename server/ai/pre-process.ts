@@ -26,7 +26,7 @@ const promptJsonModel =
 `export interface PromptInput {
   category:
     | "Restaurants"
-    | "Takeout-Delivery"
+    | "Delivery"
     | "Shows"
     | "Movies"
     | "Indoor Date Activities"

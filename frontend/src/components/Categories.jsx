@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../component-styles/Categories.css';
 // Import your icons
 import RestaurantIcon from '../images/restaurant.png';
-import TakeoutIcon from '../images/takeout.png';
+import DeliveryIcon from '../images/takeout.png';
 import ShowsIcon from '../images/shows.svg';
 import MoviesIcon from '../images/movies.png';
 import IndoorDateIcon from '../images/indoor-date.png';
@@ -18,7 +18,7 @@ function Categories() {
   // Define categories and their icons with URL-friendly slugs
   const categories = [
     { name: "RESTAURANTS", icon: RestaurantIcon, slug: "restaurants" },
-    { name: "TAKEOUT/DELIVERY", icon: TakeoutIcon, slug: "takeout-delivery" },
+    { name: "TAKEOUT/DELIVERY", icon: DeliveryIcon, slug: "delivery" },
     { name: "SHOWS", icon: ShowsIcon, slug: "shows" },
     { name: "MOVIES", icon: MoviesIcon, slug: "movies" },
     { name: "INDOOR DATE ACTIVITIES", icon: IndoorDateIcon, slug: "indoor-date-activities" },

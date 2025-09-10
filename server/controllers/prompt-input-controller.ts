@@ -15,12 +15,6 @@ const receivePromptInput = async (req: Request, res: Response) => {
             .status(400)
             .json({ error: "Input must be a non-empty string." });
     }
-    if (!zipCode || typeof zipCode !== "number") {
-        return res
-            .status(400)
-            .json({ error: "Zip code must be a non-empty number." });
-    }
-
     console.log("Zip code received:", zipCode);
 
     const result = await preprocessPromptInput(input, category, zipCode);

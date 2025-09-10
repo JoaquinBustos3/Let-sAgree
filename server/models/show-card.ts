@@ -17,14 +17,14 @@ export type ShowCard = z.infer<typeof showCardSchema>;
 // JSON Shape of the Model
 /**
 export interface ShowCard {
-  title: string;
-  description: string; // 1-2 sentence description
+  title: string; // strictly the name
+  description: string; // short and concise 1-2 sentence description
   seasons: number; // i.e. "2 Seasons"
   rating: string; // i.e. "8.3 IMDB" (imdb rating)
   releaseYear: number; // i.e. "2023"
   platform: string; // i.e. "Netflix, Hulu, Max"
   genre: string; // i.e. "Drama", "Comedy"
-  vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
+  vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
   images: string[];
 }
  */

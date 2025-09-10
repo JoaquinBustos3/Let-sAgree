@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import cors from "cors";
 dotenv.config({ path: __dirname + "/.env" });
 
 import express from "express";
@@ -8,6 +9,7 @@ import promptInputRouter from "./routes/prompt-input";
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.use("/categories", categoriesRouter);
 app.use("/prompt-input", promptInputRouter);

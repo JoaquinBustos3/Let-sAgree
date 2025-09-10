@@ -17,14 +17,14 @@ export type RestaurantCard = z.infer<typeof restaurantCardSchema>;
 // JSON Shape of the Model
 /**
 export interface RestaurantCard {
-  name: string;
-  description: string; // 1-2 sentence description
+  name: string; // strictly the name
+  description: string; // short and concise 1-2 sentence description
   priceRange: "$" | "$$" | "$$$";
   rating: number; // i.e. "4.5"
   distance: string; // i.e. "2 mi"
-  location: string; // (short address of general area)
+  location: string; // street address
   cuisine: string; // i.e. "Italian", "Mexican"
-  vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
+  vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
   images: string[];
 }
  */

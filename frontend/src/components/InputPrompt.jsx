@@ -14,7 +14,7 @@ function InputPrompt() {
     ?.toLowerCase()
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
-  const zipCodeCategories = ["Restaurants", "Indoor Date Activities", "Outdoor Date Activities", "Takeout/Delivery", "Things To Do Nearby", "Weekend Trip Ideas"];
+  const zipCodeCategories = ["Restaurants", "Indoor Date Activities", "Outdoor Date Activities", "Delivery", "Things To Do Nearby", "Weekend Trip Ideas"];
 
   const handleSubmit = (e) => {
     e.preventDefault();

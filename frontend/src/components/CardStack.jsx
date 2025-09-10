@@ -4,7 +4,7 @@ import '../component-styles/CardStack.css';
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks"
 
 
-function CardStack({ cardsReceived }) {
+function CardStack({ cardsReceived, category }) {
 
   const [cards, setCards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -203,7 +203,7 @@ function CardStack({ cardsReceived }) {
             currentTurn < 2 ?  
             // Add a unique key based on currentTurn to force re-rendering and animation restart
             <p key={`turn-${currentTurn}`} className="user-turn">
-              See FAQ on how to swipe on the {cards[0].type}! <strong>User {currentTurn + 1}'s Turn.</strong>
+              See FAQ on how to swipe on the {category}! <strong>User {currentTurn + 1}'s Turn.</strong>
             </p> : 
             <div className="turn3-info-container">
                 <p>Congrats! You have <strong>{cards.length} {cards.length > 1 ? "matches!" : "match!"}</strong></p>
@@ -225,6 +225,7 @@ function CardStack({ cardsReceived }) {
                 onSwipe={handleSwipe}
                 finishTurn={finishTurn}
                 turn3={handleTurn3}
+                category={category}
                 />
             ))}
             

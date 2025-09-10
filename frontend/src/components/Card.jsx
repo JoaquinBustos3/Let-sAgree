@@ -4,7 +4,7 @@ import filledHeart from '../images/heart-filled.svg';
 import xBubble from '../images/x-bubble.svg';
 import { stopPropagationProps } from '../utils/eventHelper';
 
-function Card({ data, index, currentIndex, onSwipe }) {
+function Card({ data, index, currentIndex, onSwipe, category }) {
   // State for tracking drag movement
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -13,10 +13,17 @@ function Card({ data, index, currentIndex, onSwipe }) {
   const startPos = useRef({ x: 0, y: 0 });
 
   const schemaFieldMap = {
-    Restaurants: ["name", "description", "priceRange", "rating", "distance", "location", "cuisine", "vibe"],
-    Games: ["title", "type", "description", "vibe", "playerCount", "averagePlaytime", "platform", "difficulty"],
+    Restaurants: ["name", "description", "priceRange", "rating", "distance", "location", "cuisine", "vibe", "images"],
+    Games: ["title", "description", "playerCount", "averagePlaytime", "type", "platform", "difficulty", "vibe", "images"],
+    "Weekend Trip Ideas": ["destination", "description", "cost", "distance", "lodging", "mainAttractions", "season", "vibe", "images"],
+    Movies: ["title", "description", "rating", "runtime", "releaseYear", "platform", "genre", "vibe", "images"],
+    "Delivery": ["name", "description", "priceRange", "rating", "deliveryTime", "deliveryPlatform", "cuisine", "vibe", "images"],
+    "Indoor Date Activities": ["title", "description", "cost", "duration", "idealTime", "supplies", "messLevel", "vibe", "images"],
+    "Outdoor Date Activities": ["title", "description", "cost", "duration", "distance", "location", "idealTime", "vibe", "images"],
+    Shows: ["title", "description", "seasons", "rating", "releaseYear", "platform", "genre", "vibe", "images"],
+    "Things To Do Nearby": ["name", "description", "price", "rating", "distance", "location", "hours", "vibe", "images"]
   };
-  const fields = schemaFieldMap[data.type] || [];
+  const fields = schemaFieldMap[category] || [];
   
   // Threshold for triggering a swipe action (in pixels)
   const SWIPE_THRESHOLD = 100;
@@ -167,9 +174,15 @@ function Card({ data, index, currentIndex, onSwipe }) {
       onTouchEnd={index === currentIndex ? handleDragEnd : undefined}
     >
       <div className="card-content">
-        
-        <img className="card-image" src="https://picsum.photos/200/300" alt="result"></img>
-        
+
+        <img 
+          className="card-image" 
+          src={data[fields[8]] && Array.isArray(data[fields[8]]) && data[fields[8]][0] 
+               ? data[fields[8]][0] 
+               : `https://picsum.photos/200/300`} 
+          alt="result"
+        ></img>
+
         {/* Add the liked/disliked indicator overlay here */}
         {
             (data.isLiked && data.isLiked != null) ? 
@@ -210,6 +223,7 @@ function Card({ data, index, currentIndex, onSwipe }) {
           <p>{data[fields[1]] ? data[fields[1]] : ""}</p>
         </div>
 
+        <div className="img-attribution">All rights reserved for Unsplash by Art Artette</div>
         <div className="card-stats">
           <div>{data[fields[2]] ? data[fields[2]] : ""}</div>
           •

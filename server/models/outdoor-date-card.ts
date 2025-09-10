@@ -17,14 +17,14 @@ export type OutdoorDateCard = z.infer<typeof outdoorDateCardSchema>;
 // JSON Shape of the Model
 /**
 export interface OutdoorDateCard {
-  title: string;
-  description: string; // 1-2 sentence description
+  title: string; // strictly the name
+  description: string; // short and concise 1-2 sentence description
   cost: string; // i.e. "$50-100"
   duration: string; // i.e. "1-2 Hrs"
   distance: string; // i.e. "5.2 mi"
-  location: string; // (short address or general area)
+  location: string; // street address
   idealTime: string; // i.e. "Evening", "Late Night"
-  vibe: string; // 1-3 comma separated key adjectives (tangible and intangible)
+  vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
   images: string[];
 }
  */

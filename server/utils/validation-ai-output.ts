@@ -8,6 +8,7 @@ import { indoorDateCardSchema } from "../models/indoor-date-card";
 import { outdoorDateCardSchema } from "../models/outdoor-date-card";
 import { localActivityCardSchema } from "../models/todo-nearby-card";
 import { weekendTripCardSchema } from "../models/weekend-trip-card";
+import { gameCardSchema } from "../models/game-card";
 
 /**
  * Validates the output from an OpenAI completion against a schema based on the category
@@ -107,13 +108,14 @@ function determineTsInterface(category: string): z.ZodType {
     const interfaces: Record<string, any> = {
         "Prompt Input": promptInputSchema,
         "Restaurants": restaurantCardSchema,
-        "Takeout-Delivery": deliveryCardSchema,
+        "Delivery": deliveryCardSchema,
         "Shows": showCardSchema,
         "Movies": movieCardSchema,
         "Indoor Date Activities": indoorDateCardSchema,
         "Outdoor Date Activities": outdoorDateCardSchema,
         "Things To Do Nearby": localActivityCardSchema,
-        "Weekend Trip Ideas": weekendTripCardSchema
+        "Weekend Trip Ideas": weekendTripCardSchema,
+        "Games": gameCardSchema
     };
 
     return interfaces[category] || "";
