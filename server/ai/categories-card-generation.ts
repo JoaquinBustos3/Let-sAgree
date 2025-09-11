@@ -28,7 +28,7 @@ export async function cardGeneration(category: string, promptInput: any) {
     - If location (zip code) is provided (is non 0) and the category requires a location, search online using web_search for real results centered around that zip code
     - Ideally, the 8 results should be varied and cover different aspects of the category
     - Each object should have ALL of the fields populated (except "images" field)
-    - If a field is less applicable, apply your best judgment to fill it with a reasonable value (even if it's "none" or "N/A")
+    - If a field is less applicable, apply your best judgment to fill it with a reasonable value
     - DO NOT include any sources ANYWHERE in the results
     `
 
@@ -123,6 +123,7 @@ async function determineTsInterface(category: string): Promise<string> {
             cuisine: string; // i.e. "Italian", "Chinese"
             vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
             images: string[];
+            location: string; // street address
             }`,
         "Shows": 
             `export interface ShowCard {

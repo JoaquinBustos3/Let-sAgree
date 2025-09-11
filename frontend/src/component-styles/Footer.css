@@ -19,12 +19,12 @@
   display: flex;
   width: auto;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-evenly;
   gap: 1rem; /* Space between the name and LinkedIn logo */
 }
 
-.name {
-  width: 50%;
+.footer-name {
+  width: 5rem;
   font-size: 0.68rem;
   color: black;
   font-weight: 400;
@@ -32,15 +32,23 @@
 }
 
 .footer-linkedin-logo {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.8rem;
+  height: 1.8rem;
   padding-top: 0.4rem;
+}
+
+.footer-email-icon {
+  margin-right: 0.3rem;
 }
 
 @media (max-width: 480px) {
 
   .footer-right {
     gap: 0.6rem;
+  }
+
+  .footer-email {
+    margin-right: 0.5rem;
   }
 
 }

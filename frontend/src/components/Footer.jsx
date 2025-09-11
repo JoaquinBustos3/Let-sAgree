@@ -1,6 +1,6 @@
 import '../component-styles/Footer.css';
-import logo from '../images/logo.svg'; // Replace with the actual logo file
-import linkedinLogo from '../images/linkedin-logo.svg'; // Replace with the actual LinkedIn logo file
+import logo from '../images/logo.svg'; 
+import linkedinLogo from '../images/linkedin-logo.svg'; 
 
 function Footer() {
   return (
@@ -10,7 +10,7 @@ function Footer() {
         <a href="https://www.linkedin.com/in/joaquinbustos633/" target="_blank" rel="noopener noreferrer">
           <img src={linkedinLogo} alt="LinkedIn Logo" className="footer-linkedin-logo" />
         </a>
-        <span className="name"> Created by Joaquin Bustos</span>
+        <span className="footer-name"> Created by <br />Joaquin Bustos</span>
       </div>
     </footer>
   );

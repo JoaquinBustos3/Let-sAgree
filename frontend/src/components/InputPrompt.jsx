@@ -9,21 +9,16 @@ function InputPrompt() {
   const [userInput, setUserInput] = useState('');
   const [zipCode, setZipCode] = useState('');
 
-  // Format category name: capitalize the first letter of every word
-  const formattedName = category.name
-    ?.toLowerCase()
-    .replace(/\b\w/g, (c) => c.toUpperCase());
-
   const zipCodeCategories = ["Restaurants", "Indoor Date Activities", "Outdoor Date Activities", "Delivery", "Things To Do Nearby", "Weekend Trip Ideas"];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Submitting:', { category: formattedName, input: userInput, zipCode: zipCode || 0 });
+    console.log('Submitting:', { category: category.slug, input: userInput, zipCode: zipCode || 0 });
 
     // Navigate to the card-generation route and pass data via state
     navigate('/card-generation', {
       state: {
-        category: formattedName,
+        category: category.slug,
         userInput,
         zipCode: zipCode || 0,
       },
@@ -32,7 +27,7 @@ function InputPrompt() {
   
   return (
     <div className="input-prompt-container">
-      <img src={category.icon} alt={formattedName} className="prompt-category-icon" />
+      <img src={category.icon} alt={category.slug} className="prompt-category-icon" />
       <form className="form-container" onSubmit={handleSubmit}>
 
         <div className="form-group">
@@ -40,14 +35,14 @@ function InputPrompt() {
             id="userInput"
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
-            placeholder={`Share your preferences for ${formattedName}...`}
+            placeholder={`Share your preferences for ${category.slug}...`}
             required
           />
         </div>
 
         <div className="bottom-row-form">
             <div className="form-group">
-                {zipCodeCategories.includes(formattedName) &&
+                {zipCodeCategories.includes(category.slug) &&
                     <input 
                     type="text"
                     id="zipCode"

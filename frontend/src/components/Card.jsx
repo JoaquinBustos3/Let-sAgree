@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import '../component-styles/Card.css';
 import filledHeart from '../images/heart-filled.svg';
 import xBubble from '../images/x-bubble.svg';
@@ -10,18 +10,31 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
   const [isDragging, setIsDragging] = useState(false);
   const [heartOpacity, setHeartOpacity] = useState(0);
   const [trashOpacity, setTrashOpacity] = useState(0);
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 550);
   const startPos = useRef({ x: 0, y: 0 });
+  
+  // Add window resize listener to detect mobile view
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth <= 550);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const schemaFieldMap = {
-    Restaurants: ["name", "description", "priceRange", "rating", "distance", "location", "cuisine", "vibe", "images"],
-    Games: ["title", "description", "playerCount", "averagePlaytime", "type", "platform", "difficulty", "vibe", "images"],
-    "Weekend Trip Ideas": ["destination", "description", "cost", "distance", "lodging", "mainAttractions", "season", "vibe", "images"],
-    Movies: ["title", "description", "rating", "runtime", "releaseYear", "platform", "genre", "vibe", "images"],
-    "Delivery": ["name", "description", "priceRange", "rating", "deliveryTime", "deliveryPlatform", "cuisine", "vibe", "images"],
-    "Indoor Date Activities": ["title", "description", "cost", "duration", "idealTime", "supplies", "messLevel", "vibe", "images"],
-    "Outdoor Date Activities": ["title", "description", "cost", "duration", "distance", "location", "idealTime", "vibe", "images"],
-    Shows: ["title", "description", "seasons", "rating", "releaseYear", "platform", "genre", "vibe", "images"],
-    "Things To Do Nearby": ["name", "description", "price", "rating", "distance", "location", "hours", "vibe", "images"]
+    Restaurants: ["name", "description", "priceRange", "rating", "distance", "location", "cuisine", "vibe", "images", "attribution"],
+    Games: ["title", "description", "playerCount", "averagePlaytime", "type", "platform", "difficulty", "vibe", "images", "attribution"],
+    "Weekend Trip Ideas": ["destination", "description", "cost", "distance", "lodging", "mainAttractions", "season", "vibe", "images", "attribution"],
+    Movies: ["title", "description", "rating", "runtime", "releaseYear", "platform", "genre", "vibe", "images", "attribution"],
+    "Delivery": ["name", "description", "priceRange", "rating", "deliveryTime", "deliveryPlatform", "cuisine", "vibe", "images", "attribution"],
+    "Indoor Date Activities": ["title", "description", "cost", "duration", "idealTime", "supplies", "messLevel", "vibe", "images", "attribution"],
+    "Outdoor Date Activities": ["title", "description", "cost", "duration", "distance", "location", "idealTime", "vibe", "images", "attribution"],
+    Shows: ["title", "description", "seasons", "rating", "releaseYear", "platform", "genre", "vibe", "images", "attribution"],
+    "Things To Do Nearby": ["name", "description", "price", "rating", "distance", "location", "hours", "vibe", "images", "attribution"]
   };
   const fields = schemaFieldMap[category] || [];
   
@@ -154,6 +167,39 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
       transition: isDragging ? 'none' : 'all 0.3s ease',
     };
   };
+
+  const determineAttributionMsg = () => {
+    if (!data.attribution) {
+      console.log("No attribution data found");
+      console.log(data);
+      return "";
+    }
+    else {
+
+      switch(data.attribution.provider) {
+        case "Unsplash":
+          return (
+          <p>
+            Image from{" "}
+            <a target="_blank" rel="noopener noreferrer" href={`${data.attribution.link}?utm_source=Let's_Agree&utm_medium=referral`}>
+            {data.attribution.author} 
+            </a> on{" "}
+            <a target="_blank" rel="noopener noreferrer" href="https://unsplash.com?utm_source=Let's_Agree&utm_medium=referral" > 
+            {data.attribution.provider}
+            </a>
+          </p>);
+        case "TMDB":
+          return (<p>Image provided by <a target="_blank" rel="noopener noreferrer" href={data.attribution.link}>{data.attribution.provider}</a></p>);
+        case "Foursquare":
+          return (<p>Image provided by <a target="_blank" rel="noopener noreferrer" href={data.attribution.link}>{data.attribution.provider}</a></p>);
+        case "RAWG":
+          return (<p>Image provided by <a target="_blank" rel="noopener noreferrer" href={data.attribution.link}>{data.attribution.provider}</a></p>);
+        default:
+          return data.attribution.message;
+      }
+
+    }
+  }
   
   return (
     <div 
@@ -223,7 +269,7 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
           <p>{data[fields[1]] ? data[fields[1]] : ""}</p>
         </div>
 
-        <div className="img-attribution">All rights reserved for Unsplash by Art Artette</div>
+        <div className="img-attribution">{determineAttributionMsg()}</div>
         <div className="card-stats">
           <div>{data[fields[2]] ? data[fields[2]] : ""}</div>
           •
@@ -232,7 +278,7 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
           <div>{data[fields[4]] ? data[fields[4]] : ""}</div>
         </div>
         <div className='card-second-row'>{data[fields[5]] ? data[fields[5]] : ""}</div>
-        <div {...stopPropagationProps()} className="card-final-row-info">
+        <div {...(isMobileView ? stopPropagationProps() : {})} className="card-final-row-info">
           <div>{data[fields[6]] ? data[fields[6]] : ""}</div>
           •
           <div>{data[fields[7]] ? data[fields[7]] : ""}</div>

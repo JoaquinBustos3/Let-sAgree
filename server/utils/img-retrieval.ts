@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { link } from "fs";
 import { url } from "inspector/promises";
 import fetch from "node-fetch";
 import { ca } from "zod/v4/locales";
@@ -43,6 +44,10 @@ export async function retrieveImages(category: string, results: any[], zip: numb
                     return {
                         ...item,
                         images: imageUrl ? [imageUrl] : [],
+                        attribution: {
+                            provider: "TMDB",
+                            link: "https://www.themoviedb.org/"
+                        }
                     };
 
                 }
@@ -51,6 +56,7 @@ export async function retrieveImages(category: string, results: any[], zip: numb
                     return {
                         ...item,
                         images: [],
+                        attribution: null
                     };
                 }
             })
@@ -78,7 +84,7 @@ export async function retrieveImages(category: string, results: any[], zip: numb
                     }
                 };
                 const itemName = item[Object.keys(item)[0]!];
-                const addr = (category !== "Delivery") ? item[Object.keys(item)[5]!] + ", " : "";
+                const addr = item.location ? item.location : "";
                 const location = addr ? addr : zip;
                 const categoryQuery = (category === "Delivery" || category === "Restaurants") ? "&fsq_category_ids=4d4b7105d754a06374d81259" : "";
                 const params = new URLSearchParams({
@@ -153,6 +159,10 @@ export async function retrieveImages(category: string, results: any[], zip: numb
                     return {
                         ...item,
                         images: imagesUrl,
+                        attribution: {
+                            provider: "Foursquare",
+                            link: "https://foursquare.com"
+                        }
                     };
 
                 }
@@ -161,6 +171,7 @@ export async function retrieveImages(category: string, results: any[], zip: numb
                     return {
                         ...item,
                         images: [],
+                        attribution: null
                     };
                 }
 
@@ -254,12 +265,16 @@ export async function retrieveImages(category: string, results: any[], zip: numb
                     return {
                         ...item,
                         images: data.background_image ? [data.background_image] : [],
+                        attribution: {
+                            provider: "RAWG",
+                            link: "https://rawg.io"
+                        }
                     };
 
                 }
                 catch (error) {
                     console.error("Error fetching RAWG game data:", error);
-                    return { ...item, images: [] };
+                    return { ...item, images: [], attribution: null};
                 }
             })
 
@@ -294,13 +309,31 @@ async function fetchUnsplashImages(results: any[]) {
             try {
 
                 const response = await fetch(searchImageUrl);
-                const data = await response.json() as { results: { urls: { regular: string } }[] };
+                const data = await response.json() as 
+                {
+                results: {
+                    urls: {
+                        regular: string;
+                    };
+                    user: {
+                        name: string;
+                        links: {
+                            html: string;
+                        }
+                    };
+                }[];
+                };
                 console.log("Fetched Unsplash image for:", item[Object.keys(item)[0]!], "Image URL:", data.results?.[0]?.urls.regular);
 
                 return {
-                        ...item,
-                        images: data.results?.[0]?.urls.regular ? [data.results?.[0]?.urls.regular] : [],
-                    };
+                    ...item,
+                    images: data.results?.[0]?.urls.regular ? [data.results?.[0]?.urls.regular] : [],
+                    attribution: {
+                        provider: "Unsplash",
+                        author: data.results?.[0]?.user?.name,
+                        link: data.results?.[0]?.user?.links.html
+                    }
+                };
 
             }
             catch (error) {
@@ -308,6 +341,7 @@ async function fetchUnsplashImages(results: any[]) {
                 return {
                     ...item,
                     images: [],
+                    attribution: null
                 };
             }
 

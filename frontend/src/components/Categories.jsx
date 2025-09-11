@@ -17,15 +17,15 @@ function Categories() {
 
   // Define categories and their icons with URL-friendly slugs
   const categories = [
-    { name: "RESTAURANTS", icon: RestaurantIcon, slug: "restaurants" },
-    { name: "TAKEOUT/DELIVERY", icon: DeliveryIcon, slug: "delivery" },
-    { name: "SHOWS", icon: ShowsIcon, slug: "shows" },
-    { name: "MOVIES", icon: MoviesIcon, slug: "movies" },
-    { name: "INDOOR DATE ACTIVITIES", icon: IndoorDateIcon, slug: "indoor-date-activities" },
-    { name: "OUTDOOR DATE ACTIVITIES", icon: OutdoorDateIcon, slug: "outdoor-date-activities" },
-    { name: "THINGS TO DO NEARBY", icon: NearbyIcon, slug: "things-to-do-nearby" },
-    { name: "WEEKEND TRIP IDEAS", icon: WeekendIcon, slug: "weekend-trip-ideas" },
-    { name: "GAMES", icon: GamesIcon, slug: "games" },
+    { name: "RESTAURANTS", icon: RestaurantIcon, slug: "Restaurants" },
+    { name: "TAKEOUT/DELIVERY", icon: DeliveryIcon, slug: "Delivery" },
+    { name: "SHOWS", icon: ShowsIcon, slug: "Shows" },
+    { name: "MOVIES", icon: MoviesIcon, slug: "Movies" },
+    { name: "INDOOR DATE ACTIVITIES", icon: IndoorDateIcon, slug: "Indoor Date Activities" },
+    { name: "OUTDOOR DATE ACTIVITIES", icon: OutdoorDateIcon, slug: "Outdoor Date Activities" },
+    { name: "THINGS TO DO NEARBY", icon: NearbyIcon, slug: "Things To Do Nearby" },
+    { name: "WEEKEND TRIP IDEAS", icon: WeekendIcon, slug: "Weekend Trip Ideas" },
+    { name: "GAMES", icon: GamesIcon, slug: "Games" },
   ];
 
   const handleCategoryClick = (category) => {

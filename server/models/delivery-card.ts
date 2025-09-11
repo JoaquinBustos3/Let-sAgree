@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+//This schema has an extra field (+1 field, location) compared to all the other models
+
 export const deliveryCardSchema = z.object({
   name: z.string().nullable(),
   description: z.string().nullable(),
@@ -9,7 +11,8 @@ export const deliveryCardSchema = z.object({
   deliveryPlatform: z.string().nullable(),
   cuisine: z.string().nullable(),
   vibe: z.string().nullable(),
-  images: z.array(z.string()).nullable()
+  images: z.array(z.string()).nullable(),
+  location: z.string().nullable()
 });
 
 export type DeliveryCard = z.infer<typeof deliveryCardSchema>;
@@ -26,5 +29,6 @@ export interface DeliveryCard {
   cuisine: string; // i.e. "Italian", "Chinese"
   vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
   images: string[];
+  location: string; // street address
 }
  */
