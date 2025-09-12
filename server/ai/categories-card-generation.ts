@@ -49,7 +49,7 @@ export async function cardGeneration(category: string, promptInput: any) {
         const completion = await client.responses.parse({
             model: "gpt-5-mini",
             input: [
-                { role: "system", content: "You are a JSON generator. Respond ONLY with valid JSON arrays. Do not include extra text." },
+                { role: "system", content: "You are a JSON generator. Respond ONLY with valid JSON arrays. Every field must be a plain string, number, or array — DO NOT include markdown, links, parentheses, or references to sources. All text must be self-contained." },
                 { role: "user", content: promptForAI }
             ],
             tools: [{ type: "web_search_preview" }]
@@ -77,19 +77,19 @@ export async function cardGeneration(category: string, promptInput: any) {
 
         console.log("Cards before images: ", filteredCards);
 
-        //Retrieve images for the results
-        const cardsWithImages = await retrieveImages(category, filteredCards, promptInput.location || 0);
-
-        //Sanitize description to remove any lingering sources
-        const sanitizedCards = cardsWithImages.map(card => {
+        //Sanitize fields to remove any lingering sources or unwanted info usually formatted as "( ... )"
+        const sanitizedCards = filteredCards.map(card => {
             return {
                 ...card,
                 description: card.description.split("(")[0].trim()
             }
         });
 
+        //Retrieve images for the results
+        const cardsWithImages = await retrieveImages(category, sanitizedCards, promptInput.location || 0);
+
         console.log("Done")
-        return { ok: true, data: sanitizedCards };
+        return { ok: true, data: cardsWithImages };
 
     } catch (err: any) {
         return { ok: false, error: `Error generating card: ${err.message}` };

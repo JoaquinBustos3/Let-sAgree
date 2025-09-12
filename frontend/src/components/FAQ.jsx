@@ -32,7 +32,7 @@ function FAQ() {
     },
     {
       question: "Who can I contact?",
-      answer: "For any inquiries or support, please reach out to us at LetsAgree@gmail.com."
+      answer: "For any inquiries, reviews, or support, please reach out to us at LetsAgree@gmail.com."
     }
   ];
 
@@ -46,6 +46,7 @@ function FAQ() {
 
   const handleAccessCodeChange = (e) => {
     if (e.target.value === ACCESS_CODE) {
+      console.log("Rate limit lifted")
       document.cookie = `friendKey=${ACCESS_CODE}; path=/; max-age=` + 24*60*60; //rate limit lifted for 1 day for those with the code
     }
   };

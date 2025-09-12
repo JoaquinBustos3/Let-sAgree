@@ -38,25 +38,25 @@
 }
 
 .card-content h1, .card-content p {
-    margin: 0;
-    margin-bottom: 1rem;
-    max-height: 48px;
-    overflow: auto;
-    color: white;
-    /* text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); */
+  margin: 0;
+  margin-bottom: 1rem;
+  max-height: 48px;
+  overflow: auto;
+  color: white;
+  /* text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); */
 }
 
 .card-content p {
-   font-size: 0.9rem;
-    max-height: 100px;
+  font-size: 0.9rem;
+  max-height: 110px;
 }
 
 .card-content h1 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 0.2rem;
-    max-height: 72px;
-    padding: 0 2.2rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+  max-height: 72px;
+  padding: 0 2.2rem;
 }
 
 .img-attribution {
@@ -82,7 +82,7 @@
   border-radius: 0.45rem;
 }
 
-.card-image {
+.card-image, .card-image-fallback {
     width: 99%;
     height: 67%;
     max-height: 72%;
@@ -97,6 +97,17 @@
     -webkit-user-select: none; /* Ensures no selection in WebKit browsers */
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE/Edge */
+}
+
+.card-image-fallback {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-image-fallback > img {
+  width: 3rem;
+  height: 3rem;
 }
 
 .card-stats, .card-final-row-info {

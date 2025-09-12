@@ -18,7 +18,7 @@ function InputPrompt() {
     // Navigate to the card-generation route and pass data via state
     navigate('/card-generation', {
       state: {
-        category: category.slug,
+        category: category,
         userInput,
         zipCode: zipCode || 0,
       },
@@ -50,6 +50,7 @@ function InputPrompt() {
                     onChange={(e) => setZipCode(e.target.value.replace(/\D/g, ''))}
                     placeholder="Enter zip code..."
                     maxLength={5}
+                    required
                 />}
             </div>
             <button type="submit">Find Agreements</button>

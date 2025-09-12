@@ -11,7 +11,7 @@ function CardGeneration() {
   // Initialize cards from sessionStorage and set loading state appropriately
   const [cards, setCards] = useState(() => {
     // Try to load cards from sessionStorage
-    const storageKey = `${category}-${userInput}-cards`;
+    const storageKey = `${category.slug}-${userInput}-cards`;
     const storedCards = sessionStorage.getItem(storageKey);
     
     if (storedCards) {
@@ -30,9 +30,11 @@ function CardGeneration() {
     if (cards.length > 0) return true;
     
     // Otherwise check if we've already loaded this category+input combination
-    const storageKey = `${category}-${userInput}-loaded`;
+    const storageKey = `${category.slug}-${userInput}-loaded`;
     return sessionStorage.getItem(storageKey) === 'true';
   });
+
+ const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     // Skip API call if we already have cards or if we've already loaded
@@ -50,11 +52,12 @@ function CardGeneration() {
           setIsLoading(true);
         }
         // Make a real API call to your backend
-        const response = await fetch(`/prompt-input/${category}`, {
+        const response = await fetch(`/prompt-input/${category.slug}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
+          credentials: 'include',
           body: JSON.stringify({
             input: userInput,
             zipCode: parseInt(zipCode) || 0,
@@ -62,7 +65,11 @@ function CardGeneration() {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch cards');
+          const message = response.status === 429 ? 'Sorry, you have more than 5 requests in 24 hours! Contact us for further access.' : 'An error occurred while generating your cards!';
+          setErrorMessage(message);
+          const error = new Error('Failed to fetch cards with status: ' + response.status);
+          error.status = response.status;
+          throw error;
         }
 
         const data = await response.json();
@@ -75,9 +82,9 @@ function CardGeneration() {
         
         // Save cards to sessionStorage
         try {
-          sessionStorage.setItem(`${category}-${userInput}-cards`, JSON.stringify(cardsWithType));
+          sessionStorage.setItem(`${category.slug}-${userInput}-cards`, JSON.stringify(cardsWithType));
           // Mark as loaded
-          sessionStorage.setItem(`${category}-${userInput}-loaded`, 'true');
+          sessionStorage.setItem(`${category.slug}-${userInput}-loaded`, 'true');
         } catch (storageError) {
           console.warn('Failed to save to sessionStorage:', storageError);
         }
@@ -85,19 +92,7 @@ function CardGeneration() {
         setHasLoaded(true);
         console.log('Fetched cards:', JSON.stringify(cardsWithType));
       } catch (error) {
-        console.error('Error fetching cards:', error.message);
-        // Provide fallback data for testing
-        setCards([
-          { name: 'Longer Name Card 1', description: 'Description for card 1', priceRange: '$$', rating: '4.4 stars', distance: '4.3 mi', location: '123 Main St, City, State', cuisine: 'Italian', vibe: 'fancy, cool', type: "Restaurants", isLiked: null },
-          { name: 'Longer Longer Name Card 2', description: 'Actually long description for card 2 that describes the item more clearly more more mroe more more more ', priceRange: '$', rating: '4.0 stars', distance: '2.1 mi', location: '456 Elm St, City, State', cuisine: 'Mexican, Latino', vibe: 'casual, vibrant, epic, awesome, more awesome', type: "Restaurants", isLiked: null },
-          { name: 'Card 3', description: 'Description for card 3', priceRange: '$$$', rating: '4.8 stars', distance: '3.5 mi', location: '789 Oak St, City, State', cuisine: 'Japanese', vibe: 'elegant, serene', type: "Restaurants", isLiked: null },
-          { name: 'Card 4', description: 'Description for card 4', priceRange: '$$', rating: '4.4 stars', distance: '4.3 mi', location: '123 Main St, City, State', cuisine: 'Italian', vibe: 'fancy, cool', type: "Restaurants", isLiked: null },
-          { name: 'Card 5', description: 'Description for card 5', priceRange: '$', rating: '4.0 stars', distance: '2.1 mi', location: '456 Elm St, City, State', cuisine: 'Mexican', vibe: 'casual, vibrant', type: "Restaurants", isLiked: null },
-          { name: 'Card 6', description: 'Description for card 6', priceRange: '$$$', rating: '4.8 stars', distance: '3.5 mi', location: '789 Oak St, City, State', cuisine: 'Japanese', vibe: 'elegant, serene', type: "Restaurants", isLiked: null },
-          { name: 'Card 7', description: 'Description for card 7', priceRange: '$$', rating: '4.4 stars', distance: '4.3 mi', location: '123 Main St, City, State', cuisine: 'Italian', vibe: 'fancy, cool', category: "Restaurants", isLiked: null },
-          { name: 'Card 8', description: 'Description for card 8', priceRange: '$', rating: '4.0 stars', distance: '2.1 mi', location: '456 Elm St, City, State', cuisine: 'Mexican', vibe: 'casual, vibrant', category: "Restaurants", isLiked: null },
-          { name: 'Card 9', description: 'Description for card 9', priceRange: '$$$', rating: '4.8 stars', distance: '3.5 mi', location: '789 Oak St, City, State', cuisine: 'Japanese', vibe: 'elegant, serene', category: "Restaurants", isLiked: null },
-        ]);
+        console.error('Error fetching cards: ', error.message);
       } finally {
         setIsLoading(false);
       }
@@ -112,6 +107,15 @@ function CardGeneration() {
         <h1>Finding results...</h1>
         <p>This may take a couple minutes. Please stay with us.</p>
         <img className="category-loading-icon" src={loadingIcon} alt="loading icon" />
+      </div>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <div className="card-generation-container">
+        <h1>{errorMessage}</h1>
+        <p>Please click the logo and return to the main menu.</p>
       </div>
     );
   }

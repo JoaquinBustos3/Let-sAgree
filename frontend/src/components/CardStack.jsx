@@ -203,7 +203,7 @@ function CardStack({ cardsReceived, category }) {
             currentTurn < 2 ?  
             // Add a unique key based on currentTurn to force re-rendering and animation restart
             <p key={`turn-${currentTurn}`} className="user-turn">
-              See FAQ on how to swipe on the {category}! <strong>User {currentTurn + 1}'s Turn.</strong>
+              See FAQ on how to swipe on the {category.slug}! <strong>User {currentTurn + 1}'s Turn.</strong>
             </p> : 
             <div className="turn3-info-container">
                 <p>Congrats! You have <strong>{cards.length} {cards.length > 1 ? "matches!" : "match!"}</strong></p>

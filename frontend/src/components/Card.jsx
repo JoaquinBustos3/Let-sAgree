@@ -3,6 +3,15 @@ import '../component-styles/Card.css';
 import filledHeart from '../images/heart-filled.svg';
 import xBubble from '../images/x-bubble.svg';
 import { stopPropagationProps } from '../utils/eventHelper';
+import RestaurantIcon from '../images/restaurant.png';
+import DeliveryIcon from '../images/takeout.png';
+import ShowsIcon from '../images/shows.svg';
+import MoviesIcon from '../images/movies.png';
+import IndoorDateIcon from '../images/indoor-date.png';
+import OutdoorDateIcon from '../images/outdoor-date.png';
+import NearbyIcon from '../images/nearby.png';
+import WeekendIcon from '../images/weekend.png';
+import GamesIcon from '../images/games.png';
 
 function Card({ data, index, currentIndex, onSwipe, category }) {
   // State for tracking drag movement
@@ -36,7 +45,7 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
     Shows: ["title", "description", "seasons", "rating", "releaseYear", "platform", "genre", "vibe", "images", "attribution"],
     "Things To Do Nearby": ["name", "description", "price", "rating", "distance", "location", "hours", "vibe", "images", "attribution"]
   };
-  const fields = schemaFieldMap[category] || [];
+  const fields = schemaFieldMap[category.slug] || [];
   
   // Threshold for triggering a swipe action (in pixels)
   const SWIPE_THRESHOLD = 100;
@@ -221,13 +230,26 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
     >
       <div className="card-content">
 
-        <img 
+        {data[fields[8]] && Array.isArray(data[fields[8]]) && data[fields[8]][0] ? 
+          <img 
+            className="card-image" 
+            src={data[fields[8]][0]} 
+            alt="result"
+          /> :
+          <div className="card-image-fallback">
+            <img  
+            src={category.icon} 
+            alt="result"
+          />
+          </div>
+        }
+        {/* <img 
           className="card-image" 
           src={data[fields[8]] && Array.isArray(data[fields[8]]) && data[fields[8]][0] 
                ? data[fields[8]][0] 
-               : `https://picsum.photos/200/300`} 
+               : category.icon} 
           alt="result"
-        ></img>
+        ></img> */}
 
         {/* Add the liked/disliked indicator overlay here */}
         {
