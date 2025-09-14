@@ -3,7 +3,6 @@
   margin: auto auto 3rem auto;
   padding: 0 2rem 4rem 2rem;
   background: white;
-  /* border: 1px solid #5A7D9A; */
   border-radius: 0.5rem;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
@@ -52,7 +51,6 @@
   );
   background-size: 200% 200%;
   animation: faq-gradient-shift 8s ease infinite;
-  /* color: white; */
 }
 
 @keyframes faq-gradient-shift {
@@ -78,7 +76,6 @@
   overflow: hidden;
   color: #333;
   transition: max-height 0.3s ease, padding 0.3s ease;
-  /* display: flex; */
 }
 
 .faq-answer input {

@@ -1,15 +1,7 @@
-import fs from "fs";
-import path from "path";
 import winston from "winston";
 import "winston-daily-rotate-file";
 
 const { combine, timestamp, printf, colorize, label, errors, prettyPrint } = winston.format;
-
-// Ensure logs dir exists
-const logDir = path.join(process.cwd(), "logs");
-if (!fs.existsSync(logDir)) {
-  fs.mkdirSync(logDir);
-}
 
 // Custom log format
 const myFormat = printf(({ level, message, timestamp, label, stack }) => {

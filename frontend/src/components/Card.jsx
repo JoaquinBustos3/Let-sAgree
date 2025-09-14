@@ -3,15 +3,6 @@ import '../component-styles/Card.css';
 import filledHeart from '../images/heart-filled.svg';
 import xBubble from '../images/x-bubble.svg';
 import { stopPropagationProps } from '../utils/eventHelper';
-import RestaurantIcon from '../images/restaurant.png';
-import DeliveryIcon from '../images/takeout.png';
-import ShowsIcon from '../images/shows.svg';
-import MoviesIcon from '../images/movies.png';
-import IndoorDateIcon from '../images/indoor-date.png';
-import OutdoorDateIcon from '../images/outdoor-date.png';
-import NearbyIcon from '../images/nearby.png';
-import WeekendIcon from '../images/weekend.png';
-import GamesIcon from '../images/games.png';
 
 const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 
@@ -182,7 +173,6 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
   const determineAttributionMsg = () => {
     if (!data.attribution) {
       console.log("No attribution data found");
-      console.log(data);
       return "";
     }
     else {
@@ -245,13 +235,6 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
           />
           </div>
         }
-        {/* <img 
-          className="card-image" 
-          src={data[fields[8]] && Array.isArray(data[fields[8]]) && data[fields[8]][0] 
-               ? data[fields[8]][0] 
-               : category.icon} 
-          alt="result"
-        ></img> */}
 
         {/* Add the liked/disliked indicator overlay here */}
         {

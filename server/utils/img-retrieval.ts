@@ -1,8 +1,6 @@
 import dotenv from "dotenv";
-import { link } from "fs";
-import { url } from "inspector/promises";
 import fetch from "node-fetch";
-import { ca } from "zod/v4/locales";
+import loggerInit from "../logger/index";
 
 dotenv.config();
 
@@ -11,10 +9,12 @@ const FSQ_API_KEY = process.env.FSQ_API_KEY;
 const RAWG_API_KEY = process.env.RAWG_API_KEY;
 const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_API_KEY;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const logger = loggerInit("utils/img-retrieval.ts");
+import { incrementMetric } from "./db";
 
 export async function retrieveImages(category: string, results: any[], zip: number) {
 
-    console.log("Inside retrieveImages");
+    logger.debug("Inside retrieveImages");
 
     // TMDB API
     if (category === "Movies" || category === "Shows") {
@@ -53,7 +53,7 @@ export async function retrieveImages(category: string, results: any[], zip: numb
 
                 }
                 catch (error) {
-                    console.error("Error fetching TMDB data:", error);
+                    logger.error("Error fetching TMDB data: ", error);
                     return {
                         ...item,
                         images: [],
@@ -64,11 +64,12 @@ export async function retrieveImages(category: string, results: any[], zip: numb
 
         );
 
-        console.log("Enriched results with images:", enriched);
+        await Promise.all(enriched.map(() => incrementMetric("TMDB_requests")));
+
         return enriched;
 
     }
-    // Foursquare & Google API
+    // Foursquare
     else if (category === "Restaurants" || category === "Delivery" || category === "Things To Do Nearby") {
 
         // get IDs of places first
@@ -95,7 +96,6 @@ export async function retrieveImages(category: string, results: any[], zip: numb
                     limit: "1"
                 });
                 const fsqSearchUrl = `https://places-api.foursquare.com/places/search?${params.toString()}${categoryQuery}`;
-                console.log("Fetching Foursquare ID with URL Addr:", addr, zip);
 
                 try{
 
@@ -108,14 +108,14 @@ export async function retrieveImages(category: string, results: any[], zip: numb
 
                 }
                 catch (error) {
-                    console.error("Error fetching Foursquare data:", error);
+                    logger.error("Error fetching Foursquare data/IDs: ", error);
                     FsqIDs.set(itemName, "");
                 }
 
             })
         );
 
-        console.log("Fetched Foursquare IDs:", FsqIDs.size);
+        await Promise.all(results.map(() => incrementMetric("FSQ_requests")));
 
         // then get images for each place
         const enriched = await Promise.all(
@@ -124,7 +124,6 @@ export async function retrieveImages(category: string, results: any[], zip: numb
 
                 const itemName = item[Object.keys(item)[0]!];
                 const fsqId = FsqIDs.get(itemName);
-                console.log("FSQ ID for", itemName, "is", fsqId);
                 if (!fsqId) return { ...item, images: [] };
 
                 const options = {
@@ -149,12 +148,8 @@ export async function retrieveImages(category: string, results: any[], zip: numb
                     const imagesUrl: string[] = [];
                     if (Array.isArray(data)) {
                         data.forEach(photo => {
-                            console.log(`Fetched photo URL for ${itemName}: ${photo.prefix}600x400${photo.suffix}`);
                             imagesUrl.push(`${photo.prefix}600x400${photo.suffix}`);
                         });
-                    } else {
-                        console.warn("No photos returned for", itemName);
-                        console.log("Response data for", itemName, ": ", data);
                     }
 
                     return {
@@ -168,7 +163,7 @@ export async function retrieveImages(category: string, results: any[], zip: numb
 
                 }
                 catch (error) {
-                    console.error("Error fetching Foursquare images:", error);
+                    logger.error("Error fetching Foursquare images: ", error);
                     return {
                         ...item,
                         images: [],
@@ -179,6 +174,8 @@ export async function retrieveImages(category: string, results: any[], zip: numb
             })
 
         );
+
+        await Promise.all(enriched.map(() => incrementMetric("FSQ_requests")));
 
         // filter results with images and those without into two seperate arrays
         const enrichedWithFsqImages = [];
@@ -231,17 +228,18 @@ export async function retrieveImages(category: string, results: any[], zip: numb
                     const data = await response.json() as { results: { id: number }[] };
 
                     const ID = data.results?.[0]?.id || 0;
-                    console.log("Fetched RAWG ID:", ID, "for game:", gameName);
                     GameIDs.set(gameName, ID);
                     
                 }
                 catch (error) {
-                    console.error("Error fetching RAWG data:", error);
+                    logger.error("Error fetching RAWG data/IDs: ", error);
                     GameIDs.set(gameName, -9999);
                 }
 
             })
         );
+
+        await Promise.all(videoGames.map(() => incrementMetric("RAWG_requests")));
 
         // then get images for each game
         const enriched = await Promise.all(
@@ -261,7 +259,6 @@ export async function retrieveImages(category: string, results: any[], zip: numb
 
                     const response = await fetch(fetchGameUrl);
                     const data = await response.json() as { background_image: string | null };
-                    console.log("Fetched RAWG image for game:", gameName, "Image URL:", data.background_image);
 
                     return {
                         ...item,
@@ -274,12 +271,14 @@ export async function retrieveImages(category: string, results: any[], zip: numb
 
                 }
                 catch (error) {
-                    console.error("Error fetching RAWG game data:", error);
+                    logger.error("Error fetching RAWG game data: ", error);
                     return { ...item, images: [], attribution: null};
                 }
             })
 
         );
+
+        await Promise.all(enriched.map(() => incrementMetric("RAWG_requests")));
 
         return [...enriched, ...enrichedNonVideoGames];
 
@@ -312,19 +311,18 @@ async function fetchUnsplashImages(results: any[]) {
                 const response = await fetch(searchImageUrl);
                 const data = await response.json() as 
                 {
-                results: {
-                    urls: {
-                        regular: string;
-                    };
-                    user: {
-                        name: string;
-                        links: {
-                            html: string;
-                        }
-                    };
-                }[];
+                    results: {
+                        urls: {
+                            regular: string;
+                        };
+                        user: {
+                            name: string;
+                            links: {
+                                html: string;
+                            }
+                        };
+                    }[];
                 };
-                console.log("Fetched Unsplash image for:", item[Object.keys(item)[0]!], "Image URL:", data.results?.[0]?.urls.regular);
 
                 return {
                     ...item,
@@ -338,7 +336,7 @@ async function fetchUnsplashImages(results: any[]) {
 
             }
             catch (error) {
-                console.error("Error fetching Unsplash data:", error);
+                logger.error("Error fetching Unsplash images: ", error);
                 return {
                     ...item,
                     images: [],
@@ -348,6 +346,8 @@ async function fetchUnsplashImages(results: any[]) {
 
         })
     );
+
+    await Promise.all(enriched.map(() => incrementMetric("Unsplash_requests")));
 
     return enriched;
 }

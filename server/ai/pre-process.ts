@@ -2,10 +2,12 @@ import dotenv from "dotenv";
 import { OpenAI } from "openai";
 import { cardGeneration } from "./categories-card-generation";
 import { validateAiOutput } from "../utils/validation-ai-output";
+import loggerInit from "../logger/index";
 
 dotenv.config();
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const logger = loggerInit("ai/pre-process.ts");
 
 /**
  * Preprocesses user input with AI to structure it according to the prompt schema
@@ -67,7 +69,7 @@ Location: "${location}"
         const client = new OpenAI({ apiKey: OPENAI_API_KEY });
 
         // Start timing the OpenAI call
-        const openAiLabel = `[preprocess] OpenAI call for input length=${input.length}`;
+        const openAiLabel = `OpenAI Preprocess API Call for input length=${input.length}`;
         const openAiStart = Date.now();
 
         const completion = await client.responses.parse({
@@ -77,13 +79,15 @@ Location: "${location}"
 
         // Log how long the API call took (in seconds)
         const openAiDurationSec = ((Date.now() - openAiStart) / 1000).toFixed(2);
-        console.log(`${openAiLabel} took ${openAiDurationSec}s`);
+        logger.info(`${openAiLabel} took ${openAiDurationSec}s`);
         
         // Validate the AI's output against the PromptInput schema using Zod (avoids hallucinations)
         const validated = validateAiOutput(completion, "Prompt Input");
         if (!validated.ok) {
             throw new Error(validated.error.message);
         }
+
+        logger.info("Input Preprocessing successful.");
 
         // push results downstream to generate the Category's Cards
         const result = await cardGeneration(category, validated.data);
@@ -95,6 +99,7 @@ Location: "${location}"
         return { ok: true, data: result.data };
 
     } catch (err: any) {
+        logger.error("Error in processing prompt input: ", err);
         return { ok: false, error: err.message };
     }
 }

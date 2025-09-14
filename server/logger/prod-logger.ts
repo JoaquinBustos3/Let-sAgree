@@ -1,15 +1,10 @@
-import fs from "fs";
-import path from "path";
 import winston from "winston";
 import "winston-daily-rotate-file";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const { combine, timestamp, printf, colorize, label, errors, prettyPrint } = winston.format;
-
-// Ensure logs dir exists
-const logDir = path.join(process.cwd(), "logs");
-if (!fs.existsSync(logDir)) {
-  fs.mkdirSync(logDir);
-}
 
 // Custom log format
 const myFormat = printf(({ level, message, timestamp, label, stack }) => {
@@ -31,25 +26,7 @@ const ProdLogger = (labelName: string) => {
       myFormat
     ),
     transports: [
-      new winston.transports.Console(),
-      new winston.transports.DailyRotateFile({
-        dirname: logDir,
-        filename: "app-%DATE%.log",
-        datePattern: "YYYY-MM-DD",
-        zippedArchive: true,
-        maxSize: "20m",
-        maxFiles: "14d",
-        level: "info",
-      }),
-      new winston.transports.DailyRotateFile({
-        dirname: logDir,
-        filename: "error-%DATE%.log",
-        datePattern: "YYYY-MM-DD",
-        zippedArchive: true,
-        maxSize: "20m",
-        maxFiles: "30d",
-        level: "error",
-      }),
+      new winston.transports.Console()
     ],
   });
 };

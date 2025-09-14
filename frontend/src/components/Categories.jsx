@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../component-styles/Categories.css';
-// Import your icons
 import RestaurantIcon from '../images/restaurant.png';
 import DeliveryIcon from '../images/takeout.png';
 import ShowsIcon from '../images/shows.svg';

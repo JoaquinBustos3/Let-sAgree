@@ -65,7 +65,6 @@ function CardStack({ cardsReceived, category }) {
           }
         }
         
-        console.log("Random index chosen: ", randomIndex);
         setCurrentIndex(randomIndex);
     }
     else{
@@ -79,7 +78,6 @@ function CardStack({ cardsReceived, category }) {
   }
 
   const finishTurn = () => {
-    console.log("Finishing turn of: ", currentTurn);
     //end of turn 1
     if (currentTurn == 0) {
         setMatches(tempLikedCards); //will match with tempLikedCards next turn
@@ -132,7 +130,6 @@ function CardStack({ cardsReceived, category }) {
         if (!contains(tempLikedCards, cards[currentIndex])) {
           setTempLikedCards([...tempLikedCards, cards[currentIndex]]);
         }
-        console.log(`Temp liked cards: ${tempLikedCards.map(card => card.name || card.title).join(', ')}`);
 
         // If last card, do nothing; otherwise move to next
         if (currentIndex < cards.length - 1) {
@@ -150,8 +147,6 @@ function CardStack({ cardsReceived, category }) {
             const firstKey = Object.keys(card)[0];
             return (card[firstKey] !== (cards[currentIndex][firstKey]));
         }));
-        console.log(`current index is ${currentIndex} and card is ${cards[currentIndex].name || cards[currentIndex].title}`);
-        console.log(`Temp liked cards: ${tempLikedCards.map(card => card.name || card.title).join(', ')}`);
 
         // If last card, do nothing; otherwise move to next
         if (currentIndex < cards.length - 1) {

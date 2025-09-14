@@ -39,7 +39,7 @@ function CardGeneration() {
   useEffect(() => {
     // Skip API call if we already have cards or if we've already loaded
     if (cards.length > 0 || hasLoaded) {
-      console.log("Using cached data - skipping API call");
+      console.log("Using cached data, skipping API call.");
       // Ensure loading is set to false even when using cached data
       setIsLoading(false);
       return;
@@ -90,7 +90,6 @@ function CardGeneration() {
         }
         
         setHasLoaded(true);
-        console.log('Fetched cards:', JSON.stringify(cardsWithType));
       } catch (error) {
         console.error('Error fetching cards: ', error.message);
       } finally {

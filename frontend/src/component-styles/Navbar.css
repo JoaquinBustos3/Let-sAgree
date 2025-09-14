@@ -12,12 +12,11 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem; 
-  box-sizing: border-box; /* Ensure padding is included in width */
+  box-sizing: border-box; 
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
-  /* border-bottom: 0.5px solid black; */
   transition: transform 0.3s ease-out;
   will-change: transform;
 }
@@ -41,11 +40,11 @@
   border: 0.1px solid lightgrey;
   border-radius: 0.4rem;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1); 
-  color: inherit; /* This will now work properly */
+  color: inherit; 
 }
 
 .navbar-left {
-  cursor: pointer; /* Indicate it's clickable */
+  cursor: pointer; 
 }
 
 .logo-image {
@@ -56,9 +55,9 @@
 
 .navbar-link {
   text-decoration: none;
-  color: inherit; /* Will now work properly */
+  color: inherit; 
   transition: color 0.3s;
-  position: relative; /* Enable positioning for the hover effect */
+  position: relative; 
 }
 
 .navbar-link:hover, .navbar-link:active {
@@ -66,7 +65,7 @@
 }
 
 .navbar-link:hover::before {
-  content: ""; /* Add a pseudo-element for the hover effect */
+  content: ""; 
   position: absolute;
   top: -0.3rem;
   left: -0.9rem;
@@ -74,7 +73,7 @@
   bottom: -0.3rem;
   background-color: rgba(0, 0, 0, 0.1); 
   border-radius: 0.5rem; 
-  z-index: -1; /* Place it behind the text */
+  z-index: -1; 
 }
 
 .beta-box {

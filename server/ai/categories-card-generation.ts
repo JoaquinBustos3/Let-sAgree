@@ -3,10 +3,13 @@ import dotenv from "dotenv";
 import { validateAiOutput } from "../utils/validation-ai-output";
 import { applyFallbacks } from "../utils/fallbacks-ai-output";
 import { retrieveImages } from "../utils/img-retrieval"; 
+import loggerInit from "../logger/index";
+import { incrementMetric } from "../utils/db";
 
 dotenv.config();
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const logger = loggerInit("ai/categories-card-generation.ts");
 
 /**
  * Takes the validated PromptInput and generates 15 Cards based on the selected Category
@@ -35,8 +38,8 @@ export async function cardGeneration(category: string, promptInput: any) {
 
     try {
 
-        console.log("Prompt generating the cards: ", compactPromptInput);
-        
+        logger.info(`Prompt generating the cards: ${JSON.stringify(compactPromptInput, null, 2)}`);
+
         if (!OPENAI_API_KEY) {
             throw new Error("Missing OpenAI API key in environment variables.");
         }
@@ -44,7 +47,7 @@ export async function cardGeneration(category: string, promptInput: any) {
         const client = new OpenAI({ apiKey: OPENAI_API_KEY });
 
         // Start timing the OpenAI call used for card generation
-        const openAiLabel = `[cardGeneration] OpenAI call for category=${category}`;
+        const openAiLabel = `OpenAI Card Generation API Call for category=${category}`;
         const openAiStart = Date.now();
 
         const completion = await client.responses.parse({
@@ -58,26 +61,23 @@ export async function cardGeneration(category: string, promptInput: any) {
 
         // Log how long the API call took ( in seconds)
         const openAiDurationSec = ((Date.now() - openAiStart) / 1000).toFixed(2);
-        console.log(`${openAiLabel} took ${openAiDurationSec}s`);
+        logger.info(`${openAiLabel} took ${openAiDurationSec}s`);
 
         // Validate the AI's output against the category's card schema
-        console.log("Entering validation for card generation with category: ", category);
+        logger.debug("1) Entering validation for card generation with category: ", category);
         const validated = validateAiOutput(completion, category);
         if (!validated.ok) {
             throw new Error(validated.error.message);
         }
 
-        console.log("Validated cards: ", validated.data);
-
         // Ensure we're working with an array 
         const dataToFill = Array.isArray(validated.data) ? validated.data : [validated.data];
         // Filter out cards that have missing values for critical fields
-
-        console.log("Applying fallbacks");
+        logger.debug("2) Applying fallbacks");
         const filteredCards = applyFallbacks(category, dataToFill);
+        logger.info("Applying fallbacks successful.");
 
-        console.log("Cards before images: ", filteredCards);
-
+        logger.debug("3) Sanitizing fields");
         //Sanitize fields to remove any lingering sources or unwanted info usually formatted as "( ... )"
         const sanitizedCards = filteredCards.map(item => {
             const entries = Object.entries(item);
@@ -91,14 +91,20 @@ export async function cardGeneration(category: string, promptInput: any) {
 
             return Object.fromEntries(sanitizedEntries);
         });
+        logger.info("Sanitizing fields successful.");
 
+        logger.debug("4) Retrieving images for the results");
         //Retrieve images for the results
         const cardsWithImages = await retrieveImages(category, sanitizedCards, promptInput.location || 0);
+        logger.info("Image retrieval successful.");
 
-        console.log("Done")
+        logger.debug("5) Exiting card generation");
+        logger.info(`Card Generation successful with ${cardsWithImages.length} cards.`);
+        await incrementMetric("card_gen_requests");
         return { ok: true, data: cardsWithImages };
 
     } catch (err: any) {
+        logger.error("Error generating cards: ", err);
         return { ok: false, error: `Error generating card: ${err.message}` };
     }
 }

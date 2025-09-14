@@ -1,5 +1,9 @@
 import type { Request, Response } from "express";
 import { preprocessPromptInput } from "../ai/pre-process"; // Make sure this is a named import
+import loggerInit from "../logger/index";
+import { incrementMetric } from "../utils/db";
+
+const logger = loggerInit("prompt-input-controller.ts");
 
 const receivePromptInput = async (req: Request, res: Response) => {
     const { category } = req.params;
@@ -15,7 +19,12 @@ const receivePromptInput = async (req: Request, res: Response) => {
             .status(400)
             .json({ error: "Input must be a non-empty string." });
     }
-    console.log("Zip code received:", zipCode);
+
+    logger.debug(`Received request - Category: ${category}, Input: ${input}, ZipCode: ${zipCode}`);
+
+    await incrementMetric("user_visits");
+    const replaced = category.replace(/ /g, "_");
+    await incrementMetric(`${replaced}_requests`);
 
     const result = await preprocessPromptInput(input, category, zipCode);
 
@@ -28,7 +37,7 @@ const receivePromptInput = async (req: Request, res: Response) => {
         return res.status(status).json({ error: result.error });
     }
 
-    console.log("PRINTING RETURNED VALUE FROM CONTROLLER: ", result.data);
+    logger.debug(`PRINTING FINAL VALUE FROM CONTROLLER: ${JSON.stringify(result.data, null, 2)}`);
     res.json(result.data);
 };
 
