@@ -13,6 +13,8 @@ import NearbyIcon from '../images/nearby.png';
 import WeekendIcon from '../images/weekend.png';
 import GamesIcon from '../images/games.png';
 
+const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+
 function Card({ data, index, currentIndex, onSwipe, category }) {
   // State for tracking drag movement
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -191,10 +193,10 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
           <p>
             Image from{" "}
             <a target="_blank" rel="noopener noreferrer" href={`${data.attribution.link}?utm_source=Let's_Agree&utm_medium=referral`}>
-            {data.attribution.author} 
+              {data.attribution.author} 
             </a> on{" "}
             <a target="_blank" rel="noopener noreferrer" href="https://unsplash.com?utm_source=Let's_Agree&utm_medium=referral" > 
-            {data.attribution.provider}
+              {data.attribution.provider}
             </a>
           </p>);
         case "TMDB":
@@ -209,7 +211,7 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
 
     }
   }
-  
+
   return (
     <div 
       className={`card ${getCardPositionClass()} ${isDragging ? 'dragging' : ''}`}

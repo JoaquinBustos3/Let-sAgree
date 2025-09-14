@@ -48,7 +48,7 @@ const promptForAI = `
 Map the following user input into a structured JSON object that conforms to this TypeScript interface:
 ${promptJsonModel}
 Instructions: 
-- If the category does not match the User Input (i.e. Restaurants != "Find me a movie...") or user input is completely invalid (i.e. "Find me uh") then return general results of your choosing.
+- If the category does not match the User Input (i.e. Restaurants != "Find me a movie...") or user input is completely invalid (i.e. "Find me uh") then fill the fields with general values (for general results).
 - Respond ONLY with the JSON object, no extra text.
 - For fields with restricted values (enums), use only the allowed values.
 - If there is no corresponding value for a field, use null as the value.

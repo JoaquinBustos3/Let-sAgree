@@ -6,7 +6,7 @@ export const deliveryCardSchema = z.object({
   name: z.string().nullable(),
   description: z.string().nullable(),
   priceRange: z.enum(['$', '$$', '$$$']).nullable(),
-  rating: z.number().nullable(),
+  rating: z.string().nullable(),
   deliveryTime: z.string().nullable(),
   deliveryPlatform: z.string().nullable(),
   cuisine: z.string().nullable(),
@@ -23,11 +23,11 @@ export interface DeliveryCard {
   name: string; // strictly the name
   description: string; // short and concise 1-2 sentence description
   priceRange: "$" | "$$" | "$$$";
-  rating: number; // i.e. "4.5"
+  rating: string; // i.e. "4.5 Rating"
   deliveryTime: string; // i.e. "30–40 Min"
   deliveryPlatform: string; // i.e. "Uber Eats"
   cuisine: string; // i.e. "Italian", "Chinese"
-  vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
+  vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
   images: string[];
   location: string; // street address
 }

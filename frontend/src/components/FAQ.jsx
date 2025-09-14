@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import '../component-styles/FAQ.css';
 
-const ACCESS_CODE = import.meta.env.VITE_SPECIAL_RATE_LIM_CODE;
+const TIER_1_ACCESS_CODE = import.meta.env.VITE_SPECIAL_RATE_TIER_1_LIM_CODE;
+const TIER_2_ACCESS_CODE = import.meta.env.VITE_SPECIAL_RATE_TIER_2_LIM_CODE;
+
 
 function FAQ() {
   // FAQ data with questions and answers
@@ -45,9 +47,11 @@ function FAQ() {
   };
 
   const handleAccessCodeChange = (e) => {
-    if (e.target.value === ACCESS_CODE) {
+    const code = e.target.value == TIER_1_ACCESS_CODE ? TIER_1_ACCESS_CODE :
+                 e.target.value == TIER_2_ACCESS_CODE ? TIER_2_ACCESS_CODE : null;
+    if (code) {
       console.log("Rate limit lifted")
-      document.cookie = `friendKey=${ACCESS_CODE}; path=/; max-age=` + 24*60*60; //rate limit lifted for 1 day for those with the code
+      document.cookie = `friendKey=${encodeURIComponent(code)}; path=/; max-age=${24*60*60}; SameSite=Lax`; //rate limit lifted for 1 day for those with the code
     }
   };
 

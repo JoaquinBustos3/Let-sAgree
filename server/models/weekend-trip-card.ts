@@ -24,7 +24,7 @@ export interface WeekendTripCard {
   lodging: string; // i.e. "Hotel", "Airbnb"
   mainAttractions: string; // i.e. "Roller Coasters, Water Rides"
   season: string; // i.e. "Summer", "Winter"
-  vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
+  vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
   images: string[];
 }
  */

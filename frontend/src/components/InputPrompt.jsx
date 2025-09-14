@@ -9,7 +9,7 @@ function InputPrompt() {
   const [userInput, setUserInput] = useState('');
   const [zipCode, setZipCode] = useState('');
 
-  const zipCodeCategories = ["Restaurants", "Indoor Date Activities", "Outdoor Date Activities", "Delivery", "Things To Do Nearby", "Weekend Trip Ideas"];
+  const zipCodeCategories = ["Restaurants", "Outdoor Date Activities", "Delivery", "Things To Do Nearby", "Weekend Trip Ideas"];
 
   const handleSubmit = (e) => {
     e.preventDefault();

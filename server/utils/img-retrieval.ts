@@ -10,6 +10,7 @@ const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const FSQ_API_KEY = process.env.FSQ_API_KEY;
 const RAWG_API_KEY = process.env.RAWG_API_KEY;
 const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_API_KEY;
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
 export async function retrieveImages(category: string, results: any[], zip: number) {
 
@@ -67,7 +68,7 @@ export async function retrieveImages(category: string, results: any[], zip: numb
         return enriched;
 
     }
-    // Foursquare API
+    // Foursquare & Google API
     else if (category === "Restaurants" || category === "Delivery" || category === "Things To Do Nearby") {
 
         // get IDs of places first
@@ -180,11 +181,11 @@ export async function retrieveImages(category: string, results: any[], zip: numb
         );
 
         // filter results with images and those without into two seperate arrays
-        const enrichedWithImages = [];
+        const enrichedWithFsqImages = [];
         const missingImages = [];
         for (const item of enriched) {
             if (item.images.length !== 0) {
-                enrichedWithImages.push(item);
+                enrichedWithFsqImages.push(item);
             } else {
                 missingImages.push(item);
             }
@@ -196,8 +197,8 @@ export async function retrieveImages(category: string, results: any[], zip: numb
             unsplashResults = await fetchUnsplashImages(missingImages);
         }
 
-        return [...enrichedWithImages, ...unsplashResults];
-        return enriched;
+        // return [...enrichedWithFsqImages, ...unsplashResults];
+        return [...enrichedWithFsqImages, ...unsplashResults];
 
     }
     // RAWG API

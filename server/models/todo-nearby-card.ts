@@ -4,7 +4,7 @@ export const localActivityCardSchema = z.object({
   name: z.string().nullable(),
   description: z.string().nullable(),
   price: z.string().nullable(),
-  rating: z.number().nullable(),
+  rating: z.string().nullable(),
   distance: z.string().nullable(),
   location: z.string().nullable(),
   hours: z.string().nullable(),
@@ -20,11 +20,11 @@ export interface LocalActivityCard {
   name: string; // strictly the name
   description: string; // short and concise 1-2 sentence description
   price: string; // i.e. "$50-100"
-  rating: number; // i.e. "4.5"
+  rating: string; // i.e. "4.5 Rating"
   distance: string; // i.e. "2 mi"
   location: string; // street address
   hours: string; // i.e. "10am–8pm"
-  vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
+  vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
   images: string[];
 }
  */

@@ -24,7 +24,7 @@ export interface MovieCard {
   releaseYear: number; // i.e. "2023"
   platform: string; // i.e. "Netflix, Hulu, Max"
   genre: string; // i.e. "Action", "Comedy"
-  vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
+  vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
   images: string[];
 }
  */

@@ -29,6 +29,7 @@ export async function cardGeneration(category: string, promptInput: any) {
     - Ideally, the 8 results should be varied and cover different aspects of the category
     - Each object should have ALL of the fields populated (except "images" field)
     - If a field is less applicable, apply your best judgment to fill it with a reasonable value
+    - The "vibe" field should describe the item plainly (i.e. "restaurant"), then characteristically (i.e. "chinese"), then intangibly (i.e. "low light, romantic")
     - DO NOT include any sources ANYWHERE in the results
     `
 
@@ -78,11 +79,17 @@ export async function cardGeneration(category: string, promptInput: any) {
         console.log("Cards before images: ", filteredCards);
 
         //Sanitize fields to remove any lingering sources or unwanted info usually formatted as "( ... )"
-        const sanitizedCards = filteredCards.map(card => {
-            return {
-                ...card,
-                description: card.description.split("(")[0].trim()
-            }
+        const sanitizedCards = filteredCards.map(item => {
+            const entries = Object.entries(item);
+            
+            const sanitizedEntries = entries.map(([key, value], index) => {
+                if (index < 7) {
+                    return [key, sanitizeValue(value)];
+                }
+                return [key, value]; // leave remaining fields unchanged like images
+            });
+
+            return Object.fromEntries(sanitizedEntries);
         });
 
         //Retrieve images for the results
@@ -96,6 +103,13 @@ export async function cardGeneration(category: string, promptInput: any) {
     }
 }
 
+const sanitizeValue = (val: unknown): unknown => {
+  if (val && typeof val === "string") {
+    return val.split("(")[0]?.trim(); // val is guaranteed to be string here
+  }
+  return val;
+};
+
 async function determineTsInterface(category: string): Promise<string> {
 
     const interfaces: Record<string, string> = {
@@ -105,11 +119,11 @@ async function determineTsInterface(category: string): Promise<string> {
             name: string; // strictly the name
             description: string; // short and concise 1-2 sentence description
             priceRange: "$" | "$$" | "$$$";
-            rating: number; // i.e. "4.5"
+            rating: string; // i.e. "4.5 Rating"
             distance: string; // i.e. "2 mi"
             location: string; // street address
             cuisine: string; // i.e. "Italian", "Mexican"
-            vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
+            vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
             images: string[];
             }`,
         "Delivery": 
@@ -117,11 +131,11 @@ async function determineTsInterface(category: string): Promise<string> {
             name: string; // strictly the name
             description: string; // short and concise 1-2 sentence description
             priceRange: "$" | "$$" | "$$$";
-            rating: number; // i.e. "4.5"
+            rating: string; // i.e. "4.5 Rating"
             deliveryTime: string; // i.e. "30–40 Min"
             deliveryPlatform: string; // i.e. "Uber Eats"
             cuisine: string; // i.e. "Italian", "Chinese"
-            vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
+            vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
             images: string[];
             location: string; // street address
             }`,
@@ -129,12 +143,12 @@ async function determineTsInterface(category: string): Promise<string> {
             `export interface ShowCard {
             title: string; // strictly the name
             description: string; // short and concise 1-2 sentence description
-            seasons: number; // i.e. "2 Seasons"
+            seasons: string; // i.e. "2 Seasons"
             rating: string; // i.e. "8.3 IMDB" (imdb rating)
             releaseYear: number; // i.e. "2023"
             platform: string; // i.e. "Netflix, Hulu, Max"
             genre: string; // i.e. "Drama", "Comedy"
-            vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
+            vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
             images: string[];
             }`,
         "Movies": 
@@ -146,7 +160,7 @@ async function determineTsInterface(category: string): Promise<string> {
             releaseYear: number; // i.e. "2023"
             platform: string; // i.e. "Netflix, Hulu, Max"
             genre: string; // i.e. "Action", "Comedy"
-            vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
+            vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
             images: string[];
             }`,
         "Indoor Date Activities": 
@@ -158,7 +172,7 @@ async function determineTsInterface(category: string): Promise<string> {
             idealTime: string; // i.e. "Evening", "Late Night"
             supplies: string; // i.e. "Chocolate, Strawberries, Candles" (limit to 5 items)
             messLevel: "Clean" | "Some Cleanup" | "Very Messy";
-            vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
+            vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
             images: string[];
             }`,
         "Outdoor Date Activities": 
@@ -170,7 +184,7 @@ async function determineTsInterface(category: string): Promise<string> {
             distance: string; // i.e. "5.2 mi"
             location: string; // street address
             idealTime: string; // i.e. "Evening", "Late Night"
-            vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
+            vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
             images: string[];
             }`,
         "Things To Do Nearby": 
@@ -178,11 +192,11 @@ async function determineTsInterface(category: string): Promise<string> {
             name: string; // strictly the name
             description: string; // short and concise 1-2 sentence description
             price: string; // i.e. "$50-100"
-            rating: number; // i.e. "4.5"
+            rating: string; // i.e. "4.5 Rating"
             distance: string; // i.e. "2 mi"
             location: string; // street address
             hours: string; // i.e. "10am–8pm"
-            vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
+            vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
             images: string[];
             }`,
         "Weekend Trip Ideas": 
@@ -194,7 +208,7 @@ async function determineTsInterface(category: string): Promise<string> {
             lodging: string; // i.e. "Hotel", "Airbnb"
             mainAttractions: string; // i.e. "Roller Coasters, Water Rides"
             season: string; // i.e. "Summer", "Winter"
-            vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
+            vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
             images: string[];
             }`,
         "Games": 
@@ -206,7 +220,7 @@ async function determineTsInterface(category: string): Promise<string> {
             type: "Board Game" | "Video Game" | "Card Game";
             platform: string; // i.e. "PS5, Xbox, PC" (if video game)
             difficulty: "Easy" | "Medium" | "Hard";
-            vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
+            vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
             images: string[];
             }`
 

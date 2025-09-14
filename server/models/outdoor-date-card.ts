@@ -24,7 +24,7 @@ export interface OutdoorDateCard {
   distance: string; // i.e. "5.2 mi"
   location: string; // street address
   idealTime: string; // i.e. "Evening", "Late Night"
-  vibe: string; // 1 noun and 3 key adjectives (2 tangible and 1 intangible) derived from description and title, comma separated
+  vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
   images: string[];
 }
  */
