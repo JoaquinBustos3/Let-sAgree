@@ -105,6 +105,11 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
   // Handle start of drag/touch
   const handleDragStart = (e) => {
     if (index !== currentIndex) return; // Only allow dragging the current card
+
+    if (isMobileView && e.type.includes('touch')) {
+      e.preventDefault();
+      document.body.style.overflow = 'hidden';
+    }
     
     setIsDragging(true);
     
@@ -154,6 +159,10 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
   // Handle end of drag/touch
   const handleDragEnd = () => {
     if (!isDragging) return;
+
+    if (isMobileView) {
+      document.body.style.overflow = '';
+    }
     
     // Determine direction and if threshold was met
     if (Math.abs(dragOffset.x) > Math.abs(dragOffset.y)) {
