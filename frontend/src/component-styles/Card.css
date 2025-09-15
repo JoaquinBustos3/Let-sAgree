@@ -16,6 +16,7 @@
   /* Ensure all cards have a minimum visibility */
   user-select: none; /* Prevent text selection during drag */
   touch-action: none; /* Prevent browser handling of touch gestures */
+  overscroll-behavior: contain;
 }
 
 .card.dragging {
