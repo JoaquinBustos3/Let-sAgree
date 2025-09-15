@@ -119,8 +119,11 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
   const handleDragMove = (e) => {
     if (!isDragging) return;
     
-    // Prevent default to stop scrolling while dragging
-    e.preventDefault();
+    // Prevent default scrolling behavior on mobile
+    if (isMobileView) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     
     // Handle both mouse and touch events
     const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
@@ -224,6 +227,7 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
       className={`card ${getCardPositionClass()} ${isDragging ? 'dragging' : ''}`}
       style={{
         zIndex: 1000 - getDistance(),
+        touchAction: isMobileView ? 'none' : 'auto',
         ...(isDragging ? getDragStyle() : {
           transform: `translateX(${getXOffset()}%) scale(${getScaleFactor()})`,
         }),
@@ -294,7 +298,7 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
         </div>
 
         <div className="img-attribution">{determineAttributionMsg()}</div>
-        <div className="card-stats">
+        <div {...(isMobileView ? stopPropagationProps() : {})} className="card-stats">
           <div>{data[fields[2]] ? data[fields[2]] : ""}</div>
           •
           <div>{data[fields[3]] ? data[fields[3]] : ""}</div>
