@@ -1,0 +1,42 @@
+.root-background {
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; 
+  align-items: center;
+  background-color: inherit;
+  overflow-y: auto; 
+  background-color: #EDF3F7;
+}
+
+.root-background.prompt-page {
+  background: linear-gradient(
+    -45deg,
+    #7FA1BA,
+    #9CBDCF,
+    #7FA1BA,
+    #5E809A
+  );
+  background-size: 200% 200%;
+  animation: root-gradient-shift 8s ease infinite;
+  transition: opacity 0.3s ease;
+}
+
+@keyframes root-gradient-shift {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+.description-wrapper {
+  width: 85%;
+}

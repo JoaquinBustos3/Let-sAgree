@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+.navbar {
+  font-family: Inter, sans-serif; 
+  font-weight: 400;
+  font-size: 1rem;
+  width: 100%;
+  height: 4rem;
+  background-color: #EDF3F7;
+  color: #6c6c6c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem; 
+  box-sizing: border-box; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: transform 0.3s ease-out;
+  will-change: transform;
+}
+
+.navbar.blue{
+  background-color: inherit;
+  color: white;
+}
+
+.navbar-left,
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.navbar-right {
+  gap: 2rem;
+  padding: 0.3rem 1.5rem;
+  border: 0.1px solid lightgrey;
+  border-radius: 0.4rem;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1); 
+  color: inherit; 
+}
+
+.navbar-left {
+  cursor: pointer; 
+}
+
+.logo-image {
+  width: 2.2rem;
+  height: 2.2rem; 
+  padding: 0.15rem 0;
+}
+
+.navbar-link {
+  text-decoration: none;
+  color: inherit; 
+  transition: color 0.3s;
+  position: relative; 
+}
+
+.navbar-link:hover, .navbar-link:active {
+  color: #aaa;
+}
+
+.navbar-link:hover::before {
+  content: ""; 
+  position: absolute;
+  top: -0.3rem;
+  left: -0.9rem;
+  right: -0.9rem;
+  bottom: -0.3rem;
+  background-color: rgba(0, 0, 0, 0.1); 
+  border-radius: 0.5rem; 
+  z-index: -1; 
+}
+
+.beta-box {
+  background-color: transparent; 
+  color: #333;
+  padding: 0.3rem 0.8rem;
+  border: 2px solid black; 
+  border-radius: 1rem;
+  font-size: 0.95rem;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.beta-box:hover, .beta-box:active {
+  animation: gentle-pulse 3s ease-in-out infinite;
+}
+
+@keyframes gentle-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .navbar {
+    justify-items: auto;
+    font-size: 0.9rem;
+    padding: 1rem 1rem;
+  }
+
+  .navbar-right {
+    gap: 1rem;
+    padding: 0.3rem 1rem;
+  }
+
+  .logo-image {
+    width: 1.8rem;
+    height: 1.8rem; 
+  }
+
+  .beta-box {
+    padding: 0.1rem 0.6rem;
+  }
+
+  .navbar-link:hover::before {
+    top: -0.2rem;
+    left: -0.5rem;
+    right: -0.5rem;
+    bottom: -0.2rem;
+  }
+
+body {
+  -webkit-touch-callout: none;
+}
+
+}
