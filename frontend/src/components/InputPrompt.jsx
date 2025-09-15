@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../component-styles/InputPrompt.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 /**
  * InputPrompt Component
  * 
@@ -29,6 +31,7 @@ function InputPrompt() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Submitting:', { category: category.slug, input: userInput, zipCode: zipCode || 0 });
+    console.log('BASE URL: ', API_BASE_URL);
 
     // Navigate to the card-generation route and pass data via state
     navigate('/card-generation', {
