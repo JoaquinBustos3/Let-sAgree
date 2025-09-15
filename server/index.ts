@@ -98,7 +98,7 @@ app.get("/", (req: Request, res: Response) => {
     res.send("Hello world!");
 });
 
-app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
-  logger.info("Server started on port 3000 - App is live!");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  logger.info(`Server running on port ${PORT}`);
 });
