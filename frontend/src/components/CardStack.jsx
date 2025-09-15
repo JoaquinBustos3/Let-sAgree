@@ -3,8 +3,30 @@ import Card from './Card';
 import '../component-styles/CardStack.css';
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks"
 
-
-function CardStack({ cardsReceived }) {
+/**
+ * CardStack Component
+ * 
+ * Manages a stack of swipeable cards and the turn-based interaction flow between two users.
+ * This component handles the core game logic including:
+ * - Two-turn swiping system where each user likes/dislikes cards
+ * - Tracking matches between users' choices
+ * - Final decision phase with options to:
+ *   1. Choose current card
+ *   2. Get random selection from matches
+ *   3. Start new round with matched cards
+ * 
+ * The component maintains different states for:
+ * - Current turn (0 = User 1, 1 = User 2, 2 = Final decision)
+ * - Temporary liked cards for current user
+ * - Matched cards between both users
+ * - Navigation through card stack
+ * 
+ * @param {Object} props
+ * @param {Array} props.cardsReceived - Array of card objects to display
+ * @param {Object} props.category - Category object containing slug and other metadata
+ * @returns {JSX.Element} Stack of cards with turn indicators and control buttons
+ */
+function CardStack({ cardsReceived, category }) {
 
   const [cards, setCards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -65,7 +87,6 @@ function CardStack({ cardsReceived }) {
           }
         }
         
-        console.log("Random index chosen: ", randomIndex);
         setCurrentIndex(randomIndex);
     }
     else{
@@ -79,7 +100,6 @@ function CardStack({ cardsReceived }) {
   }
 
   const finishTurn = () => {
-    console.log("Finishing turn of: ", currentTurn);
     //end of turn 1
     if (currentTurn == 0) {
         setMatches(tempLikedCards); //will match with tempLikedCards next turn
@@ -132,7 +152,6 @@ function CardStack({ cardsReceived }) {
         if (!contains(tempLikedCards, cards[currentIndex])) {
           setTempLikedCards([...tempLikedCards, cards[currentIndex]]);
         }
-        console.log(`Temp liked cards: ${tempLikedCards.map(card => card.name || card.title).join(', ')}`);
 
         // If last card, do nothing; otherwise move to next
         if (currentIndex < cards.length - 1) {
@@ -150,8 +169,6 @@ function CardStack({ cardsReceived }) {
             const firstKey = Object.keys(card)[0];
             return (card[firstKey] !== (cards[currentIndex][firstKey]));
         }));
-        console.log(`current index is ${currentIndex} and card is ${cards[currentIndex].name || cards[currentIndex].title}`);
-        console.log(`Temp liked cards: ${tempLikedCards.map(card => card.name || card.title).join(', ')}`);
 
         // If last card, do nothing; otherwise move to next
         if (currentIndex < cards.length - 1) {
@@ -203,7 +220,7 @@ function CardStack({ cardsReceived }) {
             currentTurn < 2 ?  
             // Add a unique key based on currentTurn to force re-rendering and animation restart
             <p key={`turn-${currentTurn}`} className="user-turn">
-              See FAQ on how to swipe on the {cards[0].type}! <strong>User {currentTurn + 1}'s Turn.</strong>
+              See FAQ on how to swipe on the {category.slug}! <strong>User {currentTurn + 1}'s Turn.</strong>
             </p> : 
             <div className="turn3-info-container">
                 <p>Congrats! You have <strong>{cards.length} {cards.length > 1 ? "matches!" : "match!"}</strong></p>
@@ -225,6 +242,7 @@ function CardStack({ cardsReceived }) {
                 onSwipe={handleSwipe}
                 finishTurn={finishTurn}
                 turn3={handleTurn3}
+                category={category}
                 />
             ))}
             

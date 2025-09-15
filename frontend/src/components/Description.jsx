@@ -1,6 +1,20 @@
 import "../component-styles/Description.css";
 import { smoothScrollTo } from "../utils/scrollUtils";
 
+/**
+ * Description Component
+ * 
+ * Renders the landing page's main description section with the app's value proposition
+ * and a call-to-action button. Features:
+ * - Large heading explaining the app's purpose
+ * - Concise explanation of the app's workflow
+ * - Interactive "Let's Agree!" button that smoothly scrolls to categories
+ * 
+ * The component uses the smoothScrollTo utility for animated scrolling
+ * and includes keyboard accessibility for the CTA button.
+ * 
+ * @returns {JSX.Element} Description section with heading, text, and CTA button
+ */
 function Description() {
   // Use the shared utility function
   const scrollToCategories = () => {

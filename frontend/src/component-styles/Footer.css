@@ -1,30 +1,30 @@
 .footer-container {
-  width: 95%; /* Footer spans 95% of the width */
+  width: 95%; 
   height: 4rem;
   position: relative;
   border-top: 0.1px solid black;
-  margin: 0 auto; /* Center the footer horizontally */
+  margin: 0 auto; 
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Space out the elements */
+  justify-content: space-between; 
 }
 
 .footer-logo {
   width: 1.5rem;
   height: 1.5rem;
-  object-fit: contain; /* Ensure the logo fits nicely */
+  object-fit: contain; 
 }
 
 .footer-right {
   display: flex;
   width: auto;
   align-items: center;
-  justify-content: flex-end;
-  gap: 1rem; /* Space between the name and LinkedIn logo */
+  justify-content: space-evenly;
+  gap: 1rem; 
 }
 
-.name {
-  width: 50%;
+.footer-name {
+  width: 5rem;
   font-size: 0.68rem;
   color: black;
   font-weight: 400;
@@ -32,15 +32,23 @@
 }
 
 .footer-linkedin-logo {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.8rem;
+  height: 1.8rem;
   padding-top: 0.4rem;
+}
+
+.footer-email-icon {
+  margin-right: 0.3rem;
 }
 
 @media (max-width: 480px) {
 
   .footer-right {
     gap: 0.6rem;
+  }
+
+  .footer-email {
+    margin-right: 0.5rem;
   }
 
 }

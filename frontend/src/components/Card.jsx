@@ -1,22 +1,61 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import '../component-styles/Card.css';
 import filledHeart from '../images/heart-filled.svg';
 import xBubble from '../images/x-bubble.svg';
 import { stopPropagationProps } from '../utils/eventHelper';
 
-function Card({ data, index, currentIndex, onSwipe }) {
+const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+
+/**
+ * Card Component
+ * 
+ * Displays an individual recommendation card with swipeable functionality.
+ * This component renders a card with image, description, and metadata based on its category.
+ * It supports drag gestures for swiping left/right (dislike/like) and implements
+ * visual effects for position, scale, and opacity based on its position in the stack.
+ * 
+ * @param {Object} props
+ * @param {Object} props.data - The card data with category-specific fields
+ * @param {number} props.index - The card's index in the overall stack
+ * @param {number} props.currentIndex - The index of the currently active card
+ * @param {Function} props.onSwipe - Callback function when user swipes (accepts direction)
+ * @param {Object} props.category - The category object with slug and icon
+ * 
+ * @returns {JSX.Element|null} A card component or null if the card is too far from currentIndex
+ */
+function Card({ data, index, currentIndex, onSwipe, category }) {
   // State for tracking drag movement
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [heartOpacity, setHeartOpacity] = useState(0);
   const [trashOpacity, setTrashOpacity] = useState(0);
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 550);
   const startPos = useRef({ x: 0, y: 0 });
+  
+  // Add window resize listener to detect mobile view
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth <= 550);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const schemaFieldMap = {
-    Restaurants: ["name", "description", "priceRange", "rating", "distance", "location", "cuisine", "vibe"],
-    Games: ["title", "type", "description", "vibe", "playerCount", "averagePlaytime", "platform", "difficulty"],
+    Restaurants: ["name", "description", "priceRange", "rating", "distance", "location", "cuisine", "vibe", "images", "attribution"],
+    Games: ["title", "description", "playerCount", "averagePlaytime", "type", "platform", "difficulty", "vibe", "images", "attribution"],
+    "Weekend Trip Ideas": ["destination", "description", "cost", "distance", "lodging", "mainAttractions", "season", "vibe", "images", "attribution"],
+    Movies: ["title", "description", "rating", "runtime", "releaseYear", "platform", "genre", "vibe", "images", "attribution"],
+    "Delivery": ["name", "description", "priceRange", "rating", "deliveryTime", "deliveryPlatform", "cuisine", "vibe", "images", "attribution"],
+    "Indoor Date Activities": ["title", "description", "cost", "duration", "idealTime", "supplies", "messLevel", "vibe", "images", "attribution"],
+    "Outdoor Date Activities": ["title", "description", "cost", "duration", "distance", "location", "idealTime", "vibe", "images", "attribution"],
+    Shows: ["title", "description", "seasons", "rating", "releaseYear", "platform", "genre", "vibe", "images", "attribution"],
+    "Things To Do Nearby": ["name", "description", "price", "rating", "distance", "location", "hours", "vibe", "images", "attribution"]
   };
-  const fields = schemaFieldMap[data.type] || [];
+  const fields = schemaFieldMap[category.slug] || [];
   
   // Threshold for triggering a swipe action (in pixels)
   const SWIPE_THRESHOLD = 100;
@@ -147,7 +186,39 @@ function Card({ data, index, currentIndex, onSwipe }) {
       transition: isDragging ? 'none' : 'all 0.3s ease',
     };
   };
-  
+
+  const determineAttributionMsg = () => {
+    if (!data.attribution) {
+      console.log("No attribution data found");
+      return "";
+    }
+    else {
+
+      switch(data.attribution.provider) {
+        case "Unsplash":
+          return (
+          <p>
+            Image from{" "}
+            <a target="_blank" rel="noopener noreferrer" href={`${data.attribution.link}?utm_source=Let's_Agree&utm_medium=referral`}>
+              {data.attribution.author} 
+            </a> on{" "}
+            <a target="_blank" rel="noopener noreferrer" href="https://unsplash.com?utm_source=Let's_Agree&utm_medium=referral" > 
+              {data.attribution.provider}
+            </a>
+          </p>);
+        case "TMDB":
+          return (<p>Image provided by <a target="_blank" rel="noopener noreferrer" href={data.attribution.link}>{data.attribution.provider}</a></p>);
+        case "Foursquare":
+          return (<p>Image provided by <a target="_blank" rel="noopener noreferrer" href={data.attribution.link}>{data.attribution.provider}</a></p>);
+        case "RAWG":
+          return (<p>Image provided by <a target="_blank" rel="noopener noreferrer" href={data.attribution.link}>{data.attribution.provider}</a></p>);
+        default:
+          return data.attribution.message;
+      }
+
+    }
+  }
+
   return (
     <div 
       className={`card ${getCardPositionClass()} ${isDragging ? 'dragging' : ''}`}
@@ -167,9 +238,21 @@ function Card({ data, index, currentIndex, onSwipe }) {
       onTouchEnd={index === currentIndex ? handleDragEnd : undefined}
     >
       <div className="card-content">
-        
-        <img className="card-image" src="https://picsum.photos/200/300" alt="result"></img>
-        
+
+        {data[fields[8]] && Array.isArray(data[fields[8]]) && data[fields[8]][0] ? 
+          <img 
+            className="card-image" 
+            src={data[fields[8]][0]} 
+            alt="result"
+          /> :
+          <div className="card-image-fallback">
+            <img  
+            src={category.icon} 
+            alt="result"
+          />
+          </div>
+        }
+
         {/* Add the liked/disliked indicator overlay here */}
         {
             (data.isLiked && data.isLiked != null) ? 
@@ -210,6 +293,7 @@ function Card({ data, index, currentIndex, onSwipe }) {
           <p>{data[fields[1]] ? data[fields[1]] : ""}</p>
         </div>
 
+        <div className="img-attribution">{determineAttributionMsg()}</div>
         <div className="card-stats">
           <div>{data[fields[2]] ? data[fields[2]] : ""}</div>
           •
@@ -218,7 +302,7 @@ function Card({ data, index, currentIndex, onSwipe }) {
           <div>{data[fields[4]] ? data[fields[4]] : ""}</div>
         </div>
         <div className='card-second-row'>{data[fields[5]] ? data[fields[5]] : ""}</div>
-        <div {...stopPropagationProps()} className="card-final-row-info">
+        <div {...(isMobileView ? stopPropagationProps() : {})} className="card-final-row-info">
           <div>{data[fields[6]] ? data[fields[6]] : ""}</div>
           •
           <div>{data[fields[7]] ? data[fields[7]] : ""}</div>

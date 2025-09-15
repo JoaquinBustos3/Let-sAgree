@@ -17,14 +17,14 @@ export type IndoorDateCard = z.infer<typeof indoorDateCardSchema>;
 // JSON Shape of the Model
 /**
 export interface IndoorDateCard {
-  title: string;
-  description: string; // 1-2 sentence description
+  title: string; // strictly the name
+  description: string; // short and concise 1-2 sentence description
   cost: string; // i.e. "$50-100"
   duration: string; // i.e. "1-2 Hrs"
   idealTime: string; // i.e. "Evening", "Late Night"
   supplies: string; // i.e. "Chocolate, Strawberries, Candles" (limit to 5 items)
   messLevel: "Clean" | "Some Cleanup" | "Very Messy";
-  vibe: string; // 1-3 comma separated adjectives
+  vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
   images: string[];
 }
  */

@@ -17,14 +17,14 @@ export type MovieCard = z.infer<typeof movieCardSchema>;
 // JSON Shape of the Model
 /**
 export interface MovieCard {
-  title: string;
-  description: string; // 1-2 sentence description
+  title: string; // strictly the name
+  description: string; // short and concise 1-2 sentence description
   rating: string; // i.e. "7.5 IMDB" (imdb rating)
   runtime: string; // i.e. "2h 30m"
   releaseYear: number; // i.e. "2023"
   platform: string; // i.e. "Netflix, Hulu, Max"
   genre: string; // i.e. "Action", "Comedy"
-  vibe: string; // 1-3 comma separated adjectives
+  vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
   images: string[];
 }
  */

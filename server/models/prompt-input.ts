@@ -3,7 +3,7 @@ import { z } from "zod";
 export const promptInputSchema = z.object({
   category: z.enum([
     "Restaurants",
-    "Takeout-Delivery",
+    "Delivery",
     "Shows",
     "Movies",
     "Indoor Date Activities",
@@ -34,7 +34,7 @@ export type PromptInput = z.infer<typeof promptInputSchema>;
   export interface PromptInput {
   category:
     | "Restaurants"
-    | "Takeout/Delivery"
+    | "Delivery"
     | "Shows"
     | "Movies"
     | "Indoor Date Activities"

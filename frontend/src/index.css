@@ -31,6 +31,13 @@ body {
 
 * {
   box-sizing: border-box;
+  /* Hide scrollbars for all elements */
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
 }
 
 @media (max-width: 480px) {

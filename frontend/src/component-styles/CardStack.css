@@ -12,7 +12,7 @@
   position: absolute;
   bottom: -45px; /* Position below the cards instead of overlapping */
   left: 50%;
-  transform: translateX(-50%); /* Center horizontally */
+  transform: translateX(-50%); 
   background-color: rgba(255, 255, 255, 0.8);
   padding: 5px 12px;
   border-radius: 0.5rem;
@@ -37,9 +37,9 @@
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    position: relative; /* Add position relative */
-    z-index: 200; /* Give it a high z-index */
-    pointer-events: auto; /* Ensure clicks work */
+    position: relative; 
+    z-index: 200; 
+    pointer-events: auto; 
     overflow: scroll;
 }
 
@@ -59,10 +59,10 @@
   color: #333;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin-bottom: 0.6rem;
-  position: relative; /* Add position relative */
-  z-index: 201; /* Give buttons even higher z-index */
-  pointer-events: auto; /* Ensure clicks work */
-  cursor: pointer; /* Explicitly set cursor */
+  position: relative; 
+  z-index: 201; 
+  pointer-events: auto; 
+  cursor: pointer; 
 }
 
 .no-matches-block {
@@ -128,14 +128,14 @@
 
   .turn3-info-container {
     flex-direction: column;
-    bottom: 0; /* Change from -2.5rem which might be causing issues */
-    z-index: 1000; /* Much higher z-index on mobile */
+    bottom: 0; 
+    z-index: 1000; 
   }
 
   .turn3-buttons-container {
     position: relative;
-    z-index: 1001; /* Higher than container */
-    margin-top: 0.5rem; /* Add some spacing */
+    z-index: 1001; 
+    margin-top: 0.5rem; 
   }
 
   .user-turn, .turn3-info-container, .final-agreement {
@@ -150,8 +150,8 @@
   .card-button {
     font-size: 0.9rem;
     padding: 8px 11px; 
-    z-index: 1002; /* Ensure they're at the top layer */
-    transform: translateZ(0); /* Force hardware acceleration */
+    z-index: 1002; 
+    transform: translateZ(0); 
   }
 
   .card-button.no-matches {

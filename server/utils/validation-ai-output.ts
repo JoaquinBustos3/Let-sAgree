@@ -8,6 +8,10 @@ import { indoorDateCardSchema } from "../models/indoor-date-card";
 import { outdoorDateCardSchema } from "../models/outdoor-date-card";
 import { localActivityCardSchema } from "../models/todo-nearby-card";
 import { weekendTripCardSchema } from "../models/weekend-trip-card";
+import { gameCardSchema } from "../models/game-card";
+import loggerInit from "../logger/index";
+
+const logger = loggerInit("utils/validation-ai-output.ts");
 
 /**
  * Validates the output from an OpenAI completion against a schema based on the category
@@ -26,14 +30,15 @@ import { weekendTripCardSchema } from "../models/weekend-trip-card";
  */
 export function validateAiOutput(completion: any, category: string) {
     try {
-        
+
+        logger.debug("Inside validateAiOutput");
+
         // Extract and check for the AI's text response
         const aiResponse = completion.output_text;
         if (!aiResponse) {
             throw new Error("No response from OpenAI. Likely from mismatch Category and User Input (i.e. Restaurants != 'Find me a movie...').");
         }
 
-        console.log("Parsing AI response as JSON")
         // Try to parse the AI's response as JSON
         let parsed: unknown;
         try {
@@ -42,7 +47,6 @@ export function validateAiOutput(completion: any, category: string) {
             throw new Error("AI response is not valid JSON.");
         }
         
-        console.log("validating parse JSON against ZOD Schema");
         // Validate with Zod
         let selectSchema = determineTsInterface(category);
         if (!selectSchema) {
@@ -59,9 +63,9 @@ export function validateAiOutput(completion: any, category: string) {
 
             // LOGGING - Loop through objects to see issues in each
             if (isArrayInput && Array.isArray(parsed)) {
-                console.error(`Validation failed for category: ${category}`);
-                console.error(`Total items: ${parsed.length}`);
-                
+                logger.error(`Validation failed for category: ${category}`);
+                logger.error(`Total items: ${parsed.length}`);
+
                 // Count of valid/invalid items
                 let validCount = 0;
                 let invalidCount = 0;
@@ -74,18 +78,18 @@ export function validateAiOutput(completion: any, category: string) {
                         validCount++;
                     } else {
                         invalidCount++;
-                        console.error(`------- Item #${index} failed validation -------`);
-                        console.error(`Item content:`, JSON.stringify(item, null, 2));
-                        console.error(`Validation errors:`, JSON.stringify(itemValidation.error.issues, null, 2));
+                        logger.error(`------- Item #${index} failed validation -------`);
+                        logger.error(`Item content: ${JSON.stringify(item, null, 2)}`);
+                        logger.error(`Validation errors: ${JSON.stringify(itemValidation.error.issues, null, 2)}`);
                     }
                 });
-                
-                console.error(`Summary: ${validCount} valid items, ${invalidCount} invalid items`);
-                
+
+                logger.error(`Summary: ${validCount} valid items, ${invalidCount} invalid items`);
+
             } else {
                 // Single object validation failure
-                console.error(`Single object validation failed for category: ${category}`);
-                console.error(`Object content:`, JSON.stringify(parsed, null, 2));
+                logger.error(`Single object validation failed for category: ${category}`);
+                logger.error(`Object content: ${JSON.stringify(parsed, null, 2)}`);
             }
 
             throw new Error(
@@ -94,11 +98,12 @@ export function validateAiOutput(completion: any, category: string) {
             );
         }
 
+        logger.info(`Validation successful for category: ${category}`);
         // Return the validated data
         return { ok: true, data: validated.data };
 
     } catch (error: any) {
-        console.error("AI output validation failed:", error);
+        logger.error("AI output validation failed: ", error);
         return { ok: false, error: error.message };
     }
 }
@@ -107,13 +112,14 @@ function determineTsInterface(category: string): z.ZodType {
     const interfaces: Record<string, any> = {
         "Prompt Input": promptInputSchema,
         "Restaurants": restaurantCardSchema,
-        "Takeout-Delivery": deliveryCardSchema,
+        "Delivery": deliveryCardSchema,
         "Shows": showCardSchema,
         "Movies": movieCardSchema,
         "Indoor Date Activities": indoorDateCardSchema,
         "Outdoor Date Activities": outdoorDateCardSchema,
         "Things To Do Nearby": localActivityCardSchema,
-        "Weekend Trip Ideas": weekendTripCardSchema
+        "Weekend Trip Ideas": weekendTripCardSchema,
+        "Games": gameCardSchema
     };
 
     return interfaces[category] || "";

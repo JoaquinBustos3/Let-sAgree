@@ -17,14 +17,14 @@ export type WeekendTripCard = z.infer<typeof weekendTripCardSchema>;
 // JSON Shape of the Model
 /**
 export interface WeekendTripCard {
-  destination: string;
-  description: string; // 1-2 sentence description
+  destination: string; // strictly the name
+  description: string; // short and concise 1-2 sentence description
   cost: string; // i.e. "$500-1000"
   distance: string; // i.e. "100 mi"
   lodging: string; // i.e. "Hotel", "Airbnb"
   mainAttractions: string; // i.e. "Roller Coasters, Water Rides"
   season: string; // i.e. "Summer", "Winter"
-  vibe: string; // 1-3 comma separated adjectives
+  vibe: string; // 2 nouns and 2 key adjectives (2 tangible and 2 intangible) derived from description and title, comma separated
   images: string[];
 }
  */

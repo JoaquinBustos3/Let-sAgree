@@ -1,8 +1,8 @@
 .categories-container {
-    width: 85%; /* Take up most of the screen */
-    height: 90vh; /* Dynamically size based on viewport height */
-    margin: 3rem auto; /* Reduced margin to come in sooner */
-    border-radius: 0.5rem; /* Rounded edges */
+    width: 85%; 
+    height: 90vh; 
+    margin: 3rem auto; 
+    border-radius: 0.5rem; 
     background-color: white;
     border: 1px solid #5A7D9A;
     display: flex;
@@ -12,15 +12,15 @@
 }
 
 .inner-container {
-    width: 99%; /* Fill the container except the edges */
+    width: 99%; 
     height: 98%;
     border-radius: 0.3rem;
-    background-color: white; /* Match container background for consistent look */
+    background-color: white; 
     position: relative;
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 columns */
     grid-template-rows: repeat(3, 1fr); /* 3 rows */
-    gap: 0.5rem; /* Thin gap between boxes */
+    gap: 0.5rem; 
     box-sizing: border-box;
     z-index: 1;
 }
@@ -40,7 +40,7 @@
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
-    overflow: hidden; /* Keep gradient contained */
+    overflow: hidden; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1;
 }
@@ -62,8 +62,8 @@
     );
     background-size: 200% 200%;
     animation: gradient-shift 8s ease infinite;
-    z-index: -1; /* Behind the content */
-    transition: opacity 0.3s ease; /* Add transition for smooth hover effect */
+    z-index: -1; 
+    transition: opacity 0.3s ease; 
 }
 
 @keyframes gradient-shift {
@@ -79,7 +79,6 @@
 }
 
 .box:hover::before {
-    /* Change the gradient colors on hover instead of using background-color */
     background: linear-gradient(
         -45deg,
         #4F6C88,

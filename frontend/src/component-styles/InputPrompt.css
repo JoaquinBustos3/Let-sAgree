@@ -68,13 +68,13 @@
 
 .form-group textarea {
   flex-grow: 1; 
-  height: 150px !important; /* Use !important to override any conflicting styles */
+  height: 150px !important; 
   min-height: 150px; 
-  max-height: 150px; /* Add max-height to constrain it */
+  max-height: 150px; 
   resize: none;
-  overflow-y: auto; /* Add scrolling for overflow text */
-  flex-basis: 150px; /* Add flex-basis to ensure consistent height */
-  box-sizing: border-box; /* Ensure padding doesn't affect height */
+  overflow-y: auto; 
+  flex-basis: 150px; 
+  box-sizing: border-box; 
 }
 
 .form-group textarea::placeholder, .form-group input::placeholder {
