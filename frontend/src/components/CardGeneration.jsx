@@ -4,6 +4,24 @@ import '../component-styles/CardGeneration.css';
 import loadingIcon from '../images/loading.png';
 import CardStack from './CardStack';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+/**
+ * CardGeneration Component
+ * 
+ * Manages the card generation process based on user input and selected category.
+ * This component handles API requests to generate cards, caches results in sessionStorage,
+ * displays loading states, and handles error scenarios.
+ * 
+ * The component follows these steps:
+ * 1. Check if cards are already cached in sessionStorage
+ * 2. If not cached, fetch cards from the API based on category and user input
+ * 3. Display loading state during API calls
+ * 4. Handle potential errors including rate limiting (429)
+ * 5. Render the CardStack when cards are available
+ * 
+ * @returns {JSX.Element} Loading indicator, error message, or CardStack component
+ */
 function CardGeneration() {
   const location = useLocation();
   const { category, userInput, zipCode } = location.state || {};
@@ -52,7 +70,7 @@ function CardGeneration() {
           setIsLoading(true);
         }
         // Make a real API call to your backend
-        const response = await fetch(`/prompt-input/${category.slug}`, {
+        const response = await fetch(`${API_BASE_URL}/prompt-input/${category.slug}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

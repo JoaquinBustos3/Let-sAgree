@@ -12,6 +12,23 @@ const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 const logger = loggerInit("utils/img-retrieval.ts");
 import { incrementMetric } from "./db";
 
+/**
+ * Retrieves images for generated cards based on category type and enriches the data
+ * 
+ * This function takes an array of generated cards and fetches relevant images
+ * from the appropriate API based on the category:
+ * - Movies/Shows: Uses TMDB API to get movie/show poster images
+ * - Restaurants/Delivery/Things To Do Nearby: Uses Foursquare API with fallback to Unsplash
+ * - Games: Uses RAWG API for video games, Unsplash for non-video games
+ * - All others: Uses Unsplash API
+ *
+ * The function also adds attribution information for each image source.
+ * 
+ * @param category - The category of the cards (e.g. "Movies", "Restaurants")
+ * @param results - The array of card objects to be enriched with images
+ * @param zip - Optional zip code for location-based searches
+ * @returns An array of the same objects enriched with images and attribution
+ */
 export async function retrieveImages(category: string, results: any[], zip: number) {
 
     logger.debug("Inside retrieveImages");
@@ -290,6 +307,20 @@ export async function retrieveImages(category: string, results: any[], zip: numb
 
 }
 
+/**
+ * Fetches images from Unsplash API based on keywords extracted from the 'vibe' field
+ * 
+ * This helper function is used to get images for cards that either:
+ * - Belong to a category that uses Unsplash as primary image source
+ * - Failed to get images from their primary API (fallback mechanism)
+ * 
+ * It extracts keywords from the 'vibe' field (index 7) of each item,
+ * queries Unsplash for a relevant image, and adds proper attribution
+ * including the photographer's name and profile link.
+ * 
+ * @param results - Array of card objects that need images
+ * @returns Array of the same objects enriched with Unsplash images and attribution
+ */
 async function fetchUnsplashImages(results: any[]) {
 
     const enriched = await Promise.all(

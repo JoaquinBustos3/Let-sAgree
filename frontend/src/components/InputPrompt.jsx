@@ -2,6 +2,21 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../component-styles/InputPrompt.css';
 
+/**
+ * InputPrompt Component
+ * 
+ * Collects user preferences for a selected category through a form interface.
+ * Features:
+ * - Text area for detailed preferences
+ * - Optional zip code input for location-based categories
+ * - Category icon display
+ * - Form validation and submission handling
+ * 
+ * The component automatically shows/hides the zip code input based on
+ * whether the selected category requires location information.
+ * 
+ * @returns {JSX.Element} Form with textarea, optional zip input, and submit button
+ */
 function InputPrompt() {
   const location = useLocation();
   const navigate = useNavigate();

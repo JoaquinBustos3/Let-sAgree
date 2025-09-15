@@ -4,6 +4,21 @@ import "../component-styles/Navbar.css";
 import logo from "../images/logo.svg"; 
 import { smoothScrollTo } from "../utils/scrollUtils";
 
+/**
+ * Navbar Component
+ * 
+ * Responsive navigation bar with scroll-based show/hide behavior.
+ * Features:
+ * - Auto-hiding on scroll down, revealing on scroll up
+ * - Smooth scrolling to page sections
+ * - Logo with home navigation
+ * - Optional blue theme variant
+ * - Beta indicator
+ * 
+ * @param {Object} props
+ * @param {boolean} props.isBlue - Toggle blue theme variant
+ * @returns {JSX.Element} Navigation bar with logo, links and beta indicator
+ */
 function Navbar({ isBlue }) {
   const navigate = useNavigate(); // Initialize the navigate function
   const [hideAmount, setHideAmount] = useState(0); // 0-1 value for partial hiding

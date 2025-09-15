@@ -5,6 +5,22 @@ import { incrementMetric } from "../utils/db";
 
 const logger = loggerInit("prompt-input-controller.ts");
 
+/**
+ * Processes user input prompts to generate category-specific card recommendations
+ * 
+ * This controller function handles POST requests with the user preferences and handles no input scenarios. It sends to
+ * and returns from the AI processing pipeline after the pipeline:
+ * 
+ * 1. Validates category and input parameters
+ * 2. Increments user visit and category-specific metrics
+ * 3. Pre-processes the input and sends it to the AI model
+ * 4. Handles errors with appropriate status codes (422 for validation, 500 for server errors)
+ * 5. Returns the generated card recommendations
+ * 
+ * @param req - Express request object containing category in params and input/zipCode in body
+ * @param res - Express response object used to send back JSON results or error messages
+ * @returns JSON response with generated cards or error message
+ */
 const receivePromptInput = async (req: Request, res: Response) => {
     const { category } = req.params;
     const { input, zipCode } = req.body;

@@ -2,6 +2,17 @@ import '../component-styles/Footer.css';
 import logo from '../images/logo.svg'; 
 import linkedinLogo from '../images/linkedin-logo.svg'; 
 
+/**
+ * Footer Component
+ * 
+ * Renders the application footer containing branding and creator information.
+ * Features:
+ * - App logo display
+ * - Creator attribution
+ * - LinkedIn profile link with logo
+ * 
+ * @returns {JSX.Element} Footer with logo, creator info, and social link
+ */
 function Footer() {
   return (
     <footer className="footer-container">

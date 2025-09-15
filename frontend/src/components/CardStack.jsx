@@ -3,7 +3,29 @@ import Card from './Card';
 import '../component-styles/CardStack.css';
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks"
 
-
+/**
+ * CardStack Component
+ * 
+ * Manages a stack of swipeable cards and the turn-based interaction flow between two users.
+ * This component handles the core game logic including:
+ * - Two-turn swiping system where each user likes/dislikes cards
+ * - Tracking matches between users' choices
+ * - Final decision phase with options to:
+ *   1. Choose current card
+ *   2. Get random selection from matches
+ *   3. Start new round with matched cards
+ * 
+ * The component maintains different states for:
+ * - Current turn (0 = User 1, 1 = User 2, 2 = Final decision)
+ * - Temporary liked cards for current user
+ * - Matched cards between both users
+ * - Navigation through card stack
+ * 
+ * @param {Object} props
+ * @param {Array} props.cardsReceived - Array of card objects to display
+ * @param {Object} props.category - Category object containing slug and other metadata
+ * @returns {JSX.Element} Stack of cards with turn indicators and control buttons
+ */
 function CardStack({ cardsReceived, category }) {
 
   const [cards, setCards] = useState([]);

@@ -6,6 +6,23 @@ import { stopPropagationProps } from '../utils/eventHelper';
 
 const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 
+/**
+ * Card Component
+ * 
+ * Displays an individual recommendation card with swipeable functionality.
+ * This component renders a card with image, description, and metadata based on its category.
+ * It supports drag gestures for swiping left/right (dislike/like) and implements
+ * visual effects for position, scale, and opacity based on its position in the stack.
+ * 
+ * @param {Object} props
+ * @param {Object} props.data - The card data with category-specific fields
+ * @param {number} props.index - The card's index in the overall stack
+ * @param {number} props.currentIndex - The index of the currently active card
+ * @param {Function} props.onSwipe - Callback function when user swipes (accepts direction)
+ * @param {Object} props.category - The category object with slug and icon
+ * 
+ * @returns {JSX.Element|null} A card component or null if the card is too far from currentIndex
+ */
 function Card({ data, index, currentIndex, onSwipe, category }) {
   // State for tracking drag movement
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });

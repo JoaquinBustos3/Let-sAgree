@@ -4,7 +4,20 @@ import '../component-styles/FAQ.css';
 const TIER_1_ACCESS_CODE = import.meta.env.VITE_SPECIAL_RATE_TIER_1_LIM_CODE;
 const TIER_2_ACCESS_CODE = import.meta.env.VITE_SPECIAL_RATE_TIER_2_LIM_CODE;
 
-
+/**
+ * FAQ Component
+ * 
+ * Renders an expandable FAQ section with common questions and answers about the app.
+ * Also includes a special access code input field for rate limit tier upgrades.
+ * 
+ * Features:
+ * - Expandable/collapsible FAQ items
+ * - Access code validation for tier 1 and tier 2 rate limits
+ * - Cookie-based rate limit persistence
+ * - Contact information for support
+ * 
+ * @returns {JSX.Element} FAQ section with expandable items and access code input
+ */
 function FAQ() {
   // FAQ data with questions and answers
   const faqItems = [

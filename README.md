@@ -95,6 +95,7 @@ UNSPLASH_API_KEY=
 RATE_LIM_TIER_1_ACCESS_CODE=
 RATE_LIM_TIER_2_ACCESS_CODE=
 DEV_CORS_URL=
+PROD_CORS_URL=
 NODE_ENV= # "Production" or "Development"
 DATABASE_URL=
 
@@ -102,6 +103,7 @@ DATABASE_URL=
 VITE_SPECIAL_RATE_TIER_1_LIM_CODE=
 VITE_SPECIAL_RATE_TIER_2_LIM_CODE=
 VITE_GOOGLE_API_KEY=
+VITE_API_BASE_URL= # Empty string to use the proxy in development, filled value for production
 ```
 
 ## 🗄 Database Schema

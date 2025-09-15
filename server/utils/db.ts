@@ -14,7 +14,7 @@ const pool = new Pool({
 // Export the pool so other modules can reuse it
 export { pool };
 
-// Helper to increment a metric
+// Helper to increment a metric in the DB
 export async function incrementMetric(metricName: string) {
   try {
     await pool.query(

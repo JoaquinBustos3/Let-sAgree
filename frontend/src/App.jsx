@@ -9,6 +9,23 @@ import CardGeneration from './components/CardGeneration.jsx';
 import FAQ from './components/FAQ.jsx';
 import Footer from './components/Footer.jsx';
 
+/**
+ * App Component
+ * 
+ * Root component that handles routing and layout for the entire application.
+ * Features:
+ * - Three main routes: home, category input, and card generation
+ * - Scroll-based opacity animation for description
+ * - Consistent navigation and footer across routes
+ * - Theme variants for different pages (blue/default navbar)
+ * 
+ * Routes:
+ * - / : Home page with description, categories, and FAQ
+ * - /category/:categoryName : Input preferences for selected category
+ * - /card-generation : Display and interact with generated cards
+ * 
+ * @returns {JSX.Element} Root application component with routing
+ */
 function App() {
   const [descriptionOpacity, setDescriptionOpacity] = useState(1);
 

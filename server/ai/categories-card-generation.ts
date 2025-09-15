@@ -12,7 +12,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const logger = loggerInit("ai/categories-card-generation.ts");
 
 /**
- * Takes the validated PromptInput and generates 15 Cards based on the selected Category
+ * Takes the validated PromptInput and generates 8 Cards based on the selected Category and the PromptInput criteria
  * 
  * @param promptInput - The validated input data
  * @returns Object indicating success/failure and 8 generated Cards with all critical fields populated

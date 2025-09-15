@@ -16,6 +16,8 @@ import { incrementMetric } from "./utils/db";
 const TIER_1 = process.env.RATE_LIM_TIER_1_ACCESS_CODE;
 const TIER_2 = process.env.RATE_LIM_TIER_2_ACCESS_CODE;
 const DEV_CORS_URL = process.env.DEV_CORS_URL;
+const PROD_CORS_URL = process.env.PROD_CORS_URL;
+const isProduction = process.env.NODE_ENV === 'Production';
 
 const app = express();
 
@@ -23,7 +25,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(cors({
   credentials: true,
-  origin: DEV_CORS_URL
+  origin: isProduction ? PROD_CORS_URL : DEV_CORS_URL
 }));
 
 const limiterTierFree = rateLimit({

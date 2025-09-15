@@ -8,5 +8,5 @@ export default defineConfig({
     proxy: {
       '/prompt-input': 'http://localhost:3000',
     },
-  },
+  }
 })

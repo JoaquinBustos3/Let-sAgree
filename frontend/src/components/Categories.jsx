@@ -11,6 +11,23 @@ import NearbyIcon from '../images/nearby.png';
 import WeekendIcon from '../images/weekend.png';
 import GamesIcon from '../images/games.png';
 
+/**
+ * Categories Component
+ * 
+ * Displays a grid of available categories that users can choose from to start
+ * their decision-making process. Each category is represented by an icon and name,
+ * styled as a clickable box in the grid layout.
+ * 
+ * The component maintains a predefined list of categories with:
+ * - Display name (uppercase for visual consistency)
+ * - Icon image
+ * - URL-friendly slug for routing
+ * 
+ * When a category is clicked, it navigates to that category's input page
+ * while passing the category data through route state.
+ * 
+ * @returns {JSX.Element} Grid of category boxes with icons and names
+ */
 function Categories() {
   const navigate = useNavigate();
 
