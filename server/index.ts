@@ -23,6 +23,8 @@ const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
+// Trust Render's proxy so rate limiter sees real client IP
+app.set("trust proxy", 1);
 app.use(cors({
   credentials: true,
   origin: isProduction ? PROD_CORS_URL : DEV_CORS_URL

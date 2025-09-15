@@ -208,6 +208,7 @@ function CardStack({ cardsReceived, category }) {
                 onSwipe={handleSwipe}
                 finishTurn={finishTurn}
                 turn3={handleTurn3}
+                category={category}
                 />
             </div>
         </>
