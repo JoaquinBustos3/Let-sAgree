@@ -87,6 +87,11 @@ const limiterTier2 = rateLimit({
     }
 });
 
+app.use((req: Request, res: Response, next) => {
+    logger.info(`Received request - ${req.method} ${req.url}`);
+    next();
+});
+
 app.use(limiterTierFree);
 app.use(limiterTier1);
 app.use(limiterTier2);
