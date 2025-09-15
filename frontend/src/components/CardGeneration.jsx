@@ -70,6 +70,7 @@ function CardGeneration() {
           setIsLoading(true);
         }
         // Make a real API call to your backend
+        console.log("Base URL: ", API_BASE_URL);
         const response = await fetch(`${API_BASE_URL}/prompt-input/${category.slug}`, {
           method: 'POST',
           headers: {
