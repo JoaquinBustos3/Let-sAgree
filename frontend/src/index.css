@@ -29,6 +29,11 @@ body {
   background: #EDF3F7;
 }
 
+a {
+  color: #0000EE;
+  text-decoration: none;
+}
+
 * {
   box-sizing: border-box;
   /* Hide scrollbars for all elements */

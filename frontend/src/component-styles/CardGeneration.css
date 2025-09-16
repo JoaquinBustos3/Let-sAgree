@@ -89,6 +89,7 @@
     justify-content: center;
     align-items: center;
     padding: 1.3rem 0;
+    margin-top: 2rem;
   }
   
   .card-generation-container::before {
@@ -99,5 +100,9 @@
 @media (min-height: 600px) and (max-height: 799px) {
   .card-generation-container {
     padding-bottom: 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 }
