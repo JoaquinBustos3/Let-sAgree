@@ -82,7 +82,7 @@ function App() {
             isBlue={false}
             />
             <CardGeneration />
-            <Footer />
+            {/* <Footer /> */}
           </div>
         } />
       </Routes>

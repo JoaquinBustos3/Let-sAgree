@@ -58,7 +58,7 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
   const fields = schemaFieldMap[category.slug] || [];
   
   // Threshold for triggering a swipe action (in pixels)
-  const SWIPE_THRESHOLD = 100;
+  const SWIPE_THRESHOLD = 50;
 
   // Calculate position class based on relation to currentIndex
   const getCardPositionClass = () => {
@@ -135,7 +135,8 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
     const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
     
     const deltaX = clientX - startPos.current.x;
-    const deltaY = clientY - startPos.current.y;
+    // const deltaY = clientY - startPos.current.y;
+    const deltaY = isMobileView ? 0 : clientY - startPos.current.y;
     
     setDragOffset({ x: deltaX, y: deltaY });
     
@@ -160,21 +161,31 @@ function Card({ data, index, currentIndex, onSwipe, category }) {
   const handleDragEnd = () => {
     if (!isDragging) return;
 
+    //mobile
     if (isMobileView) {
       document.body.style.overflow = '';
-    }
-    
-    // Determine direction and if threshold was met
-    if (Math.abs(dragOffset.x) > Math.abs(dragOffset.y)) {
-      // Horizontal swipe takes priority for previous/next navigation
+
+      // On mobile, only consider horizontal swipes
       if (Math.abs(dragOffset.x) > SWIPE_THRESHOLD) {
         onSwipe(dragOffset.x > 0 ? 'right' : 'left');
       }
-    } else {
-      // Vertical swipe for accept/reject
-      if (Math.abs(dragOffset.y) > SWIPE_THRESHOLD) {
-        onSwipe(dragOffset.y > 0 ? 'down' : 'up');
+    } 
+    //desktop
+    else {
+
+      // Determine direction and if threshold was met
+      if (Math.abs(dragOffset.x) > Math.abs(dragOffset.y)) {
+        // Horizontal swipe takes priority for previous/next navigation
+        if (Math.abs(dragOffset.x) > SWIPE_THRESHOLD) {
+          onSwipe(dragOffset.x > 0 ? 'right' : 'left');
+        }
+      } else {
+        // Vertical swipe for accept/reject
+        if (Math.abs(dragOffset.y) > SWIPE_THRESHOLD) {
+          onSwipe(dragOffset.y > 0 ? 'down' : 'up');
+        }
       }
+
     }
     
     // Reset heart and trash opacity

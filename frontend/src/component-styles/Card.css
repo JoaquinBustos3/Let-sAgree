@@ -252,10 +252,11 @@
 
 @media (max-width: 550px) { 
   .card {
-    width: 75%;
+    width: 90%;
     height: 80%;
     left: 50%;
-    margin-left: -37.5%;
+    margin-left: -45%;
+    opacity: 1!important;
   }
 
   .card-content h1, .card-content p {
@@ -282,12 +283,12 @@
 
   /* Move previous cards closer */
   .card-previous {
-    transform: translateX(-14%) scale(0.94) !important; /* Closer positioning */
+    transform: translateX(0%) scale(0.94) !important; /* Closer positioning */
   }
 
   /* Move next cards closer */
   .card-next {
-    transform: translateX(14%) scale(0.94) !important; /* Closer positioning */
+    transform: translateX(0%) scale(0.94) !important; /* Closer positioning */
   }
 
   /* Hide the third row of cards (cards at distance 2 or greater) */
