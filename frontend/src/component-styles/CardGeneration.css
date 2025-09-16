@@ -88,6 +88,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 1.3rem 0;
   }
   
   .card-generation-container::before {

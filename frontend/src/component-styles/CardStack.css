@@ -25,6 +25,27 @@
 .end-turn-button {
     background-color: #7FA1BA;
     color: white;
+    animation: growEndTurnButton 2s forwards;
+    opacity: 0;
+    transform: translateX(-50%) scale(0.8);
+}
+
+@keyframes growEndTurnButton {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.2);
+  }
+  80% {
+    transform: translateX(-50%) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
 }
 
 .end-turn-button:hover, .card-button:hover {
@@ -152,7 +173,7 @@
   }
 
   .user-turn{
-    font-size: 0.95rem!important;
+    font-size: 0.9rem!important;
   }
 
   .card-button {
