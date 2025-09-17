@@ -43,6 +43,10 @@
 
 @media (max-width: 480px) {
 
+  .footer-container {
+    /* display: none; */
+  }
+
   .footer-right {
     gap: 0.6rem;
   }

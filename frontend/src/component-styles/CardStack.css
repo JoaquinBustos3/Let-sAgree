@@ -22,9 +22,50 @@
   z-index: 100; /* Lower z-index so it's not above cards */
 }
 
+.stack-right-arrow {
+  width: 2.5rem;
+  height: 2.5rem;
+  position: absolute;
+  bottom: -5px;
+  left: 64%;
+}
+
+.stack-left-arrow {
+  width: 2.5rem;
+  height: 2.5rem;
+  position: absolute;
+  bottom: -5px;
+  right: 64%;
+}
+
+.stack-left-arrow:hover, .stack-right-arrow:hover {
+  animation: growHeader 0.5s forwards;
+}
+
 .end-turn-button {
     background-color: #7FA1BA;
     color: white;
+    animation: growEndTurnButton 2s forwards;
+    opacity: 0;
+    transform: translateX(-50%) scale(0.8);
+}
+
+@keyframes growEndTurnButton {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.2);
+  }
+  80% {
+    transform: translateX(-50%) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
 }
 
 .end-turn-button:hover, .card-button:hover {
@@ -122,6 +163,10 @@
 
 @media (max-width: 550px) {  
 
+  .card-stack {
+    height: 100%;
+  }
+
   .stack-indicator, .end-turn-button {
     bottom: 0;
   }
@@ -129,6 +174,7 @@
   .turn3-info-container {
     flex-direction: column;
     bottom: 0; 
+    gap: 0rem;
     z-index: 1000; 
   }
 
@@ -143,8 +189,12 @@
     bottom: -2.5rem;
   }
 
-  .user-turn, .turn3-info-container > p{
+  .turn3-info-container > p{
     font-size: 1rem!important;
+  }
+
+  .user-turn{
+    font-size: 0.9rem!important;
   }
 
   .card-button {

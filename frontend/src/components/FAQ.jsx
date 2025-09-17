@@ -31,7 +31,7 @@ function FAQ() {
     },
     {
       question: "Which way do I swipe?",
-      answer: "Swiping left indicates a dislike, while swiping right indicates a like. Swiping up simply navigates to the next card without indicating a like or dislike, while swiping down navigates to the previous card."
+      answer: "Swiping left indicates a dislike, while swiping right indicates a like. Swiping up simply navigates to the next card without indicating a like or dislike, while swiping down navigates to the previous card. On mobile, using the left and right arrows replaces swiping up and down."
     },
     {
       question: "How accurate are the recommendations?",
