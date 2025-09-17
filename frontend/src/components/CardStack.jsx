@@ -262,7 +262,7 @@ function CardStack({ cardsReceived, category }) {
             ))}
             
             <div className="stack-indicator-container">
-              {isMobileView && currentTurn != 2 && <img onClick={() => handleSwipe('down')} className="stack-left-arrow" src={LeftArrow} alt="Left Arrow Navigation"/>}
+              {isMobileView && <img onClick={() => handleSwipe('down')} className="stack-left-arrow" src={LeftArrow} alt="Left Arrow Navigation"/>}
               {
                   (currentIndex === cards.length - 1 && currentTurn != 2) ? 
                   (
@@ -276,7 +276,7 @@ function CardStack({ cardsReceived, category }) {
                       </div>
                   )
               }
-              {isMobileView && currentTurn != 2 && <img onClick={() => handleSwipe('up')} className="stack-right-arrow" src={RightArrow} alt="Right Arrow Navigation"/>}
+              {isMobileView && <img onClick={() => handleSwipe('up')} className="stack-right-arrow" src={RightArrow} alt="Right Arrow Navigation"/>}
             </div>
         </div>
     </>
