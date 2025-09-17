@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Card from './Card';
 import '../component-styles/CardStack.css';
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks"
+import RightArrow from '../images/Transfer_right.svg';
+import LeftArrow from '../images/Transfer_left.svg';
 
 /**
  * CardStack Component
@@ -36,12 +38,24 @@ function CardStack({ cardsReceived, category }) {
   const [tempLikedCards, setTempLikedCards] = useState([]);
   const [matches, setMatches] = useState([]);   
   const [prevMatches, setPrevMatches] = useState([]);  //used to try again when there are no matches in the round
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 550);
 
   useEffect(() => {
     if (cardsReceived && cardsReceived.length > 0) {
       setCards(cardsReceived);
     }
   }, [cardsReceived]);
+
+  useEffect(() => {
+      const handleResize = () => {
+        setIsMobileView(window.innerWidth <= 550);
+      };
+      
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []);
 
   //determines if arr contains object with same first key value as obj
   const contains = (arr, obj) => {
@@ -128,7 +142,7 @@ function CardStack({ cardsReceived, category }) {
 
   const handleSwipe = (direction) => {
     switch(direction) {
-      case 'up': //left
+      case 'up': 
         // Next card
         if (currentIndex < cards.length - 1) {
           setCurrentIndex(currentIndex + 1);
@@ -136,14 +150,14 @@ function CardStack({ cardsReceived, category }) {
         //reached last card
         break;
         
-      case 'down': //right
+      case 'down': 
         // Previous card
         if (currentIndex > 0) {
           setCurrentIndex(currentIndex - 1);
         }
         break;
         
-      case 'right': { //up
+      case 'right': { 
         // Mark as liked and accept current card
         setCards(cards.map((card, index) => 
           index === currentIndex ? { ...card, isLiked: true } : card
@@ -160,7 +174,7 @@ function CardStack({ cardsReceived, category }) {
 
         break;
     }
-      case 'left': //down
+      case 'left': 
         // Mark as disliked and reject current card
         setCards(cards.map((card, index) => 
           index === currentIndex ? { ...card, isLiked: false } : card
@@ -247,19 +261,23 @@ function CardStack({ cardsReceived, category }) {
                 />
             ))}
             
-            {
-                (currentIndex === cards.length - 1 && currentTurn != 2) ? 
-                (
-                    <div onClick={() => finishTurn()} className="end-turn-button">
-                        Finish Turn
-                    </div>
-                ) : 
-                (
-                    <div className="stack-indicator">
-                        {currentIndex + 1} of {cards.length}
-                    </div>
-                )
-            }
+            <div className="stack-indicator-container">
+              {isMobileView && currentTurn != 2 && <img onClick={() => handleSwipe('down')} className="stack-left-arrow" src={LeftArrow} alt="Left Arrow Navigation"/>}
+              {
+                  (currentIndex === cards.length - 1 && currentTurn != 2) ? 
+                  (
+                      <div onClick={() => finishTurn()} className="end-turn-button">
+                          Finish Turn
+                      </div>
+                  ) : 
+                  (
+                      <div className="stack-indicator">
+                          {currentIndex + 1} of {cards.length}
+                      </div>
+                  )
+              }
+              {isMobileView && currentTurn != 2 && <img onClick={() => handleSwipe('up')} className="stack-right-arrow" src={RightArrow} alt="Right Arrow Navigation"/>}
+            </div>
         </div>
     </>
   );
