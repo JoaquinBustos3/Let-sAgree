@@ -68,9 +68,6 @@ function CardStack({ cardsReceived, category }) {
   }
 
   const handleRetry = () => {
-    //refresh the page to populate cards - for those who have been waiting for their results outside of the browser
-    window.location.reload();
-
     setCurrentIndex(0);
     setCurrentTurn(0);
     setMatches([]);
@@ -196,15 +193,25 @@ function CardStack({ cardsReceived, category }) {
     }
   };
   
-  // Show better loading indicator when cards array is empty
+  //3 cases for empty cards)
+  // - no cards received yet (loading)
+  // - no matches found between users (show no matches UI)
+  // - user left browser and came back (they need to refresh page)
+
+  // Show loading indicator when cards array is empty
   if (!cards || cards.length === 0) {
     return (
       <div className="no-cards">
         {cardsReceived ? 
         <div className='no-matches-block'>
-            <strong>No Matches...</strong>
-            Let's try again. There's something we can agree on!
-            <div onClick={() => handleRetry()} className='card-button no-matches'> Try Again </div>
+
+            {currentTurn == 2 ? <strong>No Matches...</strong> : <strong>Refresh Page!</strong>}
+
+            {currentTurn == 2 ? "Let's try again. There's something we can agree on!" 
+            : "It's been a while since you left. Please refresh the page to see your results."}
+
+            {currentTurn == 2 ? <div onClick={() => handleRetry()} className='card-button no-matches'> Try Again </div> : null}
+
         </div> : 
         <div><strong>Loading cards...</strong></div>
         }
