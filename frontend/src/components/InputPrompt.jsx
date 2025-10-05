@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../component-styles/InputPrompt.css';
 
@@ -42,6 +42,19 @@ function InputPrompt() {
       },
     });
   };
+
+  // simple API call to wake up possibly inactive free tier Render instance
+  useEffect(() => {
+    const wakeUpServer = async () => {
+      try {
+        await fetch(`${API_BASE_URL}/wake-up`);
+      } catch (error) {
+        console.error("Error waking up server:", error);
+      }
+    };
+
+    wakeUpServer();
+  }, []);
   
   return (
     <div className="input-prompt-container">

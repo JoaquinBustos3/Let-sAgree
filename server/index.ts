@@ -35,6 +35,12 @@ app.use(cors({
   origin: isProduction ? PROD_CORS_URL : DEV_CORS_URL
 }));
 
+// used to spin up possibly inactive Render free tier instance
+app.get("/wake-up", (req: Request, res: Response) => {
+    logger.info("Waking up server...");
+    res.send("Hello world!");
+});
+
 /**
  * Simple cache middleware for /prompt-input:
  * - Only applies to POST requests
@@ -162,10 +168,6 @@ app.use(limiterTier2);
 
 app.use("/categories", categoriesRouter);
 app.use("/prompt-input", promptInputRouter);
-
-app.get("/", (req: Request, res: Response) => {
-    res.send("Hello world!");
-});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
