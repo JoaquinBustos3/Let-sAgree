@@ -8,25 +8,26 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function CardGeneration() {
   const location = useLocation();
-  const { category, userInput, zipCode } = location.state || {};
 
-  // Persist category slug and user input in sessionStorage
+  // Persisted keys for category and user input
   const [categorySlug, setCategorySlug] = useState(() => {
-    return category?.slug || sessionStorage.getItem('categorySlug') || '';
+    return location.state?.category?.slug || sessionStorage.getItem('categorySlug') || '';
   });
   const [userInputState, setUserInputState] = useState(() => {
-    return userInput || sessionStorage.getItem('userInput') || '';
+    return location.state?.userInput || sessionStorage.getItem('userInput') || '';
   });
   const [zipCodeState, setZipCodeState] = useState(() => {
-    return zipCode || sessionStorage.getItem('zipCode') || '';
+    return location.state?.zipCode || sessionStorage.getItem('zipCode') || '';
   });
 
+  // Persist state when navigating normally
   useEffect(() => {
-    if (category?.slug) sessionStorage.setItem('categorySlug', category.slug);
-    if (userInput) sessionStorage.setItem('userInput', userInput);
-    if (zipCode) sessionStorage.setItem('zipCode', zipCode);
-  }, [category, userInput, zipCode]);
+    if (location.state?.category?.slug) sessionStorage.setItem('categorySlug', location.state.category.slug);
+    if (location.state?.userInput) sessionStorage.setItem('userInput', location.state.userInput);
+    if (location.state?.zipCode) sessionStorage.setItem('zipCode', location.state.zipCode);
+  }, [location.state]);
 
+  // Build storage keys
   const storageKeyCards = `${categorySlug}-${userInputState}-cards`;
   const storageKeyLoaded = `${categorySlug}-${userInputState}-loaded`;
 
@@ -46,7 +47,7 @@ function CardGeneration() {
   const isFetchingRef = useRef(false);
 
   const fetchData = async () => {
-    if (isFetchingRef.current) return;
+    if (isFetchingRef.current || !categorySlug || !userInputState) return;
     isFetchingRef.current = true;
     setIsLoading(true);
     setErrorMessage('');
@@ -63,9 +64,10 @@ function CardGeneration() {
       });
 
       if (!response.ok) {
-        const message = response.status === 429
-          ? 'Sorry, you have more than 5 requests in 24 hours! Contact us for further access.'
-          : 'An error occurred while generating your cards!';
+        const message =
+          response.status === 429
+            ? 'Sorry, you have more than 5 requests in 24 hours! Contact us for further access.'
+            : 'An error occurred while generating your cards!';
         setErrorMessage(message);
         throw new Error(`Failed to fetch cards with status: ${response.status}`);
       }
@@ -90,10 +92,9 @@ function CardGeneration() {
     }
   };
 
+  // Fetch on mount if needed
   useEffect(() => {
-    if (cards.length === 0 && !hasLoaded) {
-      fetchData();
-    }
+    if (cards.length === 0 && !hasLoaded) fetchData();
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible' && cards.length === 0 && !hasLoaded) {
@@ -104,6 +105,15 @@ function CardGeneration() {
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [categorySlug, userInputState, zipCodeState, cards.length, hasLoaded]);
+
+  // Delay render until we have category and input
+  if (!categorySlug || !userInputState) {
+    return (
+      <div className="card-generation-container">
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -126,7 +136,7 @@ function CardGeneration() {
 
   return (
     <div className="card-generation-container">
-      <CardStack cardsReceived={cards} category={category} />
+      <CardStack cardsReceived={cards} category={{ slug: categorySlug }} />
     </div>
   );
 }
