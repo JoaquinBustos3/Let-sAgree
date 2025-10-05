@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      '/wake-up': 'http://localhost:3000',
       '/prompt-input': 'http://localhost:3000',
     },
   }

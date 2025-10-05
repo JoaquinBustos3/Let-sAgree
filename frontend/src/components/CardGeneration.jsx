@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import '../component-styles/CardGeneration.css';
 import loadingIcon from '../images/loading.png';
@@ -52,78 +52,92 @@ function CardGeneration() {
     return sessionStorage.getItem(storageKey) === 'true';
   });
 
- const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // A ref to avoid re-running multiple fetches simultaneously
+  const isFetchingRef = useRef(false);
+
+  const fetchData = async () => {
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
+
+    try {
+      setIsLoading(true);
+      // Make a real API call to your backend
+      console.log("Base URL: ", API_BASE_URL);
+      const response = await fetch(`${API_BASE_URL}/prompt-input/${category.slug}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          input: userInput,
+          zipCode: parseInt(zipCode) || 0,
+        }),
+      });
+
+      if (!response.ok) {
+        const message = response.status === 429 ? 'Sorry, you have more than 5 requests in 24 hours! Contact us for further access.' : 'An error occurred while generating your cards!';
+        setErrorMessage(message);
+        const error = new Error('Failed to fetch cards with status: ' + response.status);
+        error.status = response.status;
+        throw error;
+      }
+
+      const data = await response.json();
+      //include category type in each card
+      const cardsWithType = data.map(card => ({
+          ...card,
+          isLiked: null
+      }))
+      setCards(cardsWithType);
+      
+      // Save cards to sessionStorage
+      try {
+        sessionStorage.setItem(`${category.slug}-${userInput}-cards`, JSON.stringify(cardsWithType));
+        // Mark as loaded
+        sessionStorage.setItem(`${category.slug}-${userInput}-loaded`, 'true');
+      } catch (storageError) {
+        console.warn('Failed to save to sessionStorage:', storageError);
+      }
+      
+      setHasLoaded(true);
+    } catch (error) {
+      console.error('Error fetching cards: ', error.message);
+    } finally {
+      setIsLoading(false);
+      isFetchingRef.current = false;
+    }
+  };
 
   useEffect(() => {
-    // Skip API call if we already have cards or if we've already loaded
+    
+    // If we already have cards, no need to fetch again
     if (cards.length > 0 || hasLoaded) {
-      console.log("Using cached data, skipping API call.");
-      // Ensure loading is set to false even when using cached data
       setIsLoading(false);
       return;
     }
-    
-    const fetchData = async () => {
-      try {
-        // Only set loading state if we don't have cards yet
-        if (cards.length === 0) {
-          setIsLoading(true);
-        }
-        // Make a real API call to your backend
-        console.log("Base URL: ", API_BASE_URL);
-        const response = await fetch(`${API_BASE_URL}/prompt-input/${category.slug}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-          body: JSON.stringify({
-            input: userInput,
-            zipCode: parseInt(zipCode) || 0,
-          }),
-        });
+    fetchData();
 
-        if (!response.ok) {
-          const message = response.status === 429 ? 'Sorry, you have more than 5 requests in 24 hours! Contact us for further access.' : 'An error occurred while generating your cards!';
-          setErrorMessage(message);
-          const error = new Error('Failed to fetch cards with status: ' + response.status);
-          error.status = response.status;
-          throw error;
-        }
-
-        const data = await response.json();
-        //include category type in each card
-        const cardsWithType = data.map(card => ({
-            ...card,
-            isLiked: null
-        }))
-        setCards(cardsWithType);
-        
-        // Save cards to sessionStorage
-        try {
-          sessionStorage.setItem(`${category.slug}-${userInput}-cards`, JSON.stringify(cardsWithType));
-          // Mark as loaded
-          sessionStorage.setItem(`${category.slug}-${userInput}-loaded`, 'true');
-        } catch (storageError) {
-          console.warn('Failed to save to sessionStorage:', storageError);
-        }
-        
-        setHasLoaded(true);
-      } catch (error) {
-        console.error('Error fetching cards: ', error.message);
-      } finally {
-        setIsLoading(false);
+    // Add event listener for when user returns to tab
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && !hasLoaded && !isFetchingRef.current) {
+        console.log("Tab resumed, checking again...");
+        fetchData();
       }
     };
 
-    fetchData();
-  }, [category, userInput, zipCode, cards.length, hasLoaded]);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+
+  }, [category, userInput, zipCode, hasLoaded]);
 
   if (isLoading) {
     return (
       <div className="card-generation-container">
         <h1>Finding results...</h1>
-        <p>This may take a couple minutes. Please stay with us.</p>
+        <p>This may take a couple minutes. You can leave and return!</p>
         <img className="category-loading-icon" src={loadingIcon} alt="loading icon" />
       </div>
     );

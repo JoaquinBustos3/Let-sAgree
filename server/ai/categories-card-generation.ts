@@ -34,6 +34,7 @@ export async function cardGeneration(category: string, promptInput: any) {
     - If a field is less applicable, apply your best judgment to fill it with a reasonable value
     - The "vibe" field should describe the item plainly (i.e. "restaurant"), then characteristically (i.e. "chinese"), then intangibly (i.e. "low light, romantic")
     - DO NOT include any sources ANYWHERE in the results
+    - Only find REAL results that exist, do NOT make up results
     `
 
     try {

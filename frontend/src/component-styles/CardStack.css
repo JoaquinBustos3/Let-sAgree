@@ -140,6 +140,8 @@
     animation: growHeader 2s forwards;
     opacity: 0;
     transform: scale(0.8);
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
 }
 
 /* Header growing animation */
