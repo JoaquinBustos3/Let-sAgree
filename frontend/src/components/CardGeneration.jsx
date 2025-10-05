@@ -6,105 +6,84 @@ import CardStack from './CardStack';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-/**
- * CardGeneration Component
- * 
- * Manages the card generation process based on user input and selected category.
- * This component handles API requests to generate cards, caches results in sessionStorage,
- * displays loading states, and handles error scenarios.
- * 
- * The component follows these steps:
- * 1. Check if cards are already cached in sessionStorage
- * 2. If not cached, fetch cards from the API based on category and user input
- * 3. Display loading state during API calls
- * 4. Handle potential errors including rate limiting (429)
- * 5. Render the CardStack when cards are available
- * 
- * @returns {JSX.Element} Loading indicator, error message, or CardStack component
- */
 function CardGeneration() {
   const location = useLocation();
   const { category, userInput, zipCode } = location.state || {};
-  
-  // Initialize cards from sessionStorage and set loading state appropriately
+
+  // Persist category slug and user input in sessionStorage
+  const [categorySlug, setCategorySlug] = useState(() => {
+    return category?.slug || sessionStorage.getItem('categorySlug') || '';
+  });
+  const [userInputState, setUserInputState] = useState(() => {
+    return userInput || sessionStorage.getItem('userInput') || '';
+  });
+  const [zipCodeState, setZipCodeState] = useState(() => {
+    return zipCode || sessionStorage.getItem('zipCode') || '';
+  });
+
+  useEffect(() => {
+    if (category?.slug) sessionStorage.setItem('categorySlug', category.slug);
+    if (userInput) sessionStorage.setItem('userInput', userInput);
+    if (zipCode) sessionStorage.setItem('zipCode', zipCode);
+  }, [category, userInput, zipCode]);
+
+  const storageKeyCards = `${categorySlug}-${userInputState}-cards`;
+  const storageKeyLoaded = `${categorySlug}-${userInputState}-loaded`;
+
+  // Initialize cards from sessionStorage
   const [cards, setCards] = useState(() => {
-    // Try to load cards from sessionStorage
-    const storageKey = `${category.slug}-${userInput}-cards`;
-    const storedCards = sessionStorage.getItem(storageKey);
-    
-    if (storedCards) {
-      console.log("Found cached cards in sessionStorage");
-      return JSON.parse(storedCards);
-    }
-    return [];
+    const storedCards = sessionStorage.getItem(storageKeyCards);
+    return storedCards ? JSON.parse(storedCards) : [];
   });
-  
-  // Only set isLoading to true if we don't have cards yet
+
   const [isLoading, setIsLoading] = useState(cards.length === 0);
-
-  // Track if the API call has been made - use sessionStorage to persist across refreshes
   const [hasLoaded, setHasLoaded] = useState(() => {
-    // If we already have cards, consider it loaded
     if (cards.length > 0) return true;
-    
-    // Otherwise check if we've already loaded this category+input combination
-    const storageKey = `${category.slug}-${userInput}-loaded`;
-    return sessionStorage.getItem(storageKey) === 'true';
+    return sessionStorage.getItem(storageKeyLoaded) === 'true';
   });
 
-  const [errorMessage, setErrorMessage] = useState("");
-
-  // A ref to avoid re-running multiple fetches simultaneously
+  const [errorMessage, setErrorMessage] = useState('');
   const isFetchingRef = useRef(false);
 
   const fetchData = async () => {
     if (isFetchingRef.current) return;
     isFetchingRef.current = true;
+    setIsLoading(true);
+    setErrorMessage('');
 
     try {
-      setIsLoading(true);
-      // Make a real API call to your backend
-      console.log("Base URL: ", API_BASE_URL);
-      const response = await fetch(`${API_BASE_URL}/prompt-input/${category.slug}`, {
+      const response = await fetch(`${API_BASE_URL}/prompt-input/${categorySlug}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
-          input: userInput,
-          zipCode: parseInt(zipCode) || 0,
+          input: userInputState,
+          zipCode: parseInt(zipCodeState) || 0,
         }),
       });
 
       if (!response.ok) {
-        const message = response.status === 429 ? 'Sorry, you have more than 5 requests in 24 hours! Contact us for further access.' : 'An error occurred while generating your cards!';
+        const message = response.status === 429
+          ? 'Sorry, you have more than 5 requests in 24 hours! Contact us for further access.'
+          : 'An error occurred while generating your cards!';
         setErrorMessage(message);
-        const error = new Error('Failed to fetch cards with status: ' + response.status);
-        error.status = response.status;
-        throw error;
+        throw new Error(`Failed to fetch cards with status: ${response.status}`);
       }
 
       const data = await response.json();
-      //include category type in each card
-      const cardsWithType = data.map(card => ({
-          ...card,
-          isLiked: null
-      }))
+      const cardsWithType = data.map(card => ({ ...card, isLiked: null }));
       setCards(cardsWithType);
-      
-      // Save cards to sessionStorage
+
       try {
-        sessionStorage.setItem(`${category.slug}-${userInput}-cards`, JSON.stringify(cardsWithType));
-        // Mark as loaded
-        sessionStorage.setItem(`${category.slug}-${userInput}-loaded`, 'true');
+        sessionStorage.setItem(storageKeyCards, JSON.stringify(cardsWithType));
+        sessionStorage.setItem(storageKeyLoaded, 'true');
       } catch (storageError) {
         console.warn('Failed to save to sessionStorage:', storageError);
       }
-      
+
       setHasLoaded(true);
     } catch (error) {
-      console.error('Error fetching cards: ', error.message);
+      console.error('Error fetching cards:', error.message);
     } finally {
       setIsLoading(false);
       isFetchingRef.current = false;
@@ -112,26 +91,19 @@ function CardGeneration() {
   };
 
   useEffect(() => {
-    
-    // If we already have cards, no need to fetch again
-    if (cards.length > 0 || hasLoaded) {
-      setIsLoading(false);
-      return;
+    if (cards.length === 0 && !hasLoaded) {
+      fetchData();
     }
-    fetchData();
 
-    // Add event listener for when user returns to tab
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible' && !hasLoaded && !isFetchingRef.current) {
-        console.log("Tab resumed, checking again...");
+      if (document.visibilityState === 'visible' && cards.length === 0 && !hasLoaded) {
         fetchData();
       }
     };
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
-
-  }, [category, userInput, zipCode, hasLoaded]);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [categorySlug, userInputState, zipCodeState, cards.length, hasLoaded]);
 
   if (isLoading) {
     return (
@@ -154,10 +126,7 @@ function CardGeneration() {
 
   return (
     <div className="card-generation-container">
-      <CardStack 
-      cardsReceived={cards} 
-      category={category}
-      />
+      <CardStack cardsReceived={cards} category={category} />
     </div>
   );
 }
