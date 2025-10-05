@@ -41,6 +41,7 @@ app.use(cors({
  * - Hashes the `input` field (JSON.stringify(input)) with sha256
  * - If cached result exists -> return it immediately
  * - Otherwise wrap res.json so that successful responses (200) will be cached
+ * - Does not trigger rate limiter for cache hits
  */
 app.use("/prompt-input", (req: Request, res: Response, next: NextFunction) => {
   // Only care about POST requests that include an `input` field in the body
