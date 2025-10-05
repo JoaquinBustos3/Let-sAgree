@@ -68,6 +68,9 @@ function CardStack({ cardsReceived, category }) {
   }
 
   const handleRetry = () => {
+    //refresh the page to populate cards - for those who have been waiting for their results outside of the browser
+    window.location.reload();
+
     setCurrentIndex(0);
     setCurrentTurn(0);
     setMatches([]);
